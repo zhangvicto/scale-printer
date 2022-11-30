@@ -12,7 +12,7 @@ class Particle:
 
 
 # Function for creating new particle
-def newParticle(xguess, xmax, xmin, rp, particles): 
+def newParticle(xguess, xmax, xmin, rp): 
     # Generate initial values for position and velocity
     pos = np.random.uniform(max(xguess-rp/2, xmin), min(xguess-rp/2, xmax))
     vel = np.random.uniform(-abs(xmax-xmin), abs(xmax-xmin))
@@ -23,8 +23,13 @@ def newParticle(xguess, xmax, xmin, rp, particles):
     # Add initial position to new particle's positions array
     p.positions.append(pos)
 
-    # Add particle to particle array
-    particles.append(p)
-
     # Return index of the object
-    return particles.index(p)
+    return p
+
+# Deviation of measurement from desired value
+def diff(xm, xd): 
+    return abs(xm-xd)/xd
+
+# Consistency (average deviation)
+def consist(array): 
+    return np.std(array)
