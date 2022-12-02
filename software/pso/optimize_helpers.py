@@ -33,3 +33,8 @@ def diff(xm, xd):
 # Consistency (average deviation)
 def consist(array): 
     return np.std(array)
+
+def r(): 
+
+def p():
+    
