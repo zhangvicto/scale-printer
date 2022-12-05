@@ -1,27 +1,19 @@
-from optimize_helpers import newParticle, diff, consist
+from optimize_helpers import Particle, accuracy, consist
 import numpy as np
 
 # Settings
 numIteration = 20 # should be determined by gcode
 numParticles = 10 # not sure
 
-# global optimum - updated every iteration
-gbestX = 0
-
 # Array of particle objects
 particles = []
-
-# Tuning parameters
-kv = 0.5
-kp = 1
-kg = 2
 
 # Variables MIN MAX
 TeMax = 260
 TeMin = 200
 
 TbMax = 80
-TeMin = 40
+TbMin = 40
 
 VpMax = 80
 VpMin = 10
@@ -29,30 +21,34 @@ VpMin = 10
 EfMax = 0.8
 EfMin = 1.2
 
+xmax = [TeMax, TbMax, VpMax, EfMax]
+xmin = [TeMin, TbMin, VpMin, EfMin]
+xguess = []
+
+numDimensions = len(xmax)
+
 # Inertia weights?
 
 # Optimization functions
 
-# Generate Velocity for next iteration
-def generateVelocity(index, particles): 
-    return kv*particles[index].vel + kp*np.random.uniform(0, 1)*(xpbi-particles[index].x) + kg*np.random.uniform(0, 1)*(pxgi-particles[index].x)
 
 # Execute iteration
-def optimize(inputs): #inputs should be the fitness of last iteration
+def optimize(func, xmax, xmin, xguess, numDimensions): #inputs should be the fitness of last iteration
+    
+    # global optimum
+    x_best_g = []
+
     for i in range(numParticles):
         # Add new particle to particle array
-
-        # Extrusion Temp
-        particles.append(newParticle())
-
-
+        particles.append(Particle(xmax[i], xmin[i], xguess[i], numDimensions))
 
     for i in range(numIteration): 
 
         # For each iteration, iterate through all particles and collect data
-        for j in range(numParticles): # How many particles do we want?
+        for j in range(numParticles):
+            
             # Generate new values for the next iteration based on previous iteration
-            particles[i].x =+ generateVelocity(i, particles)
+            particles[i].updateVelocity(x_best_g)
 
         # of iteration 
         # compare global op to local
@@ -61,7 +57,7 @@ def optimize(inputs): #inputs should be the fitness of last iteration
 # Fitness Functions
 def fitness(mass, widths, lengths, mass_desired, width_desired, length_desired): # width is a list of measurements for the plane or cube
 
-    return 0.2*consist(widths, lengths) + 0.2*diff(average(widths), width_desired)+ 0.1*diff(average(lengths), length_desired) + 0.5*diff(mass, mass_desired)
+    return 0.2*consist(widths, lengths) + 0.2*accuracy(average(widths), width_desired)+ 0.1*accuracy(average(lengths), length_desired) + 0.5*accuracy(mass, mass_desired)
 
 def average(list): 
     for i in list: 

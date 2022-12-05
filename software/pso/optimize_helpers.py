@@ -1,40 +1,59 @@
 import numpy as np
 
+# Tuning parameters
+kv = 0.5
+kp = 1
+kg = 2
+
 # Particle object
 class Particle: 
-    def __init__(self, pos, vel, index): 
-        x = pos # position
-        # y = 0 
-        v = vel # velocity
-        index = index
-    pbest = 0 # personal best 
-    positions = []
+    def __init__(self, xmax, xmin, xguess, numDimensions): 
+        self.x_i = [] # position
+        self.v_i = [] # velocity
+        self.x_best_p = [] # personal(local) best position
+        self.f_best_p = [] # local best fitness
 
+        # Generate Initial Values
+        for i in range(0, numDimensions): 
+            pos = np.random.uniform(max(xguess[i]-r(xmax[i], xmin[i])*p(xmax[i], xmin[i], xguess[i])/2, xmin), min(xguess-range(xmax[i], xmin)*p(xmax[i], xmin[i], xguess[i])/2, xmax[i]))
+            self.v_i.append(pos)
+            
+            vel = np.random.uniform(-abs(xmax[i]-xmin[i]), abs(xmax[i]-xmin[i]))
+            self.x_i.append(vel)
 
-# Function for creating new particle
-def newParticle(xguess, xmax, xmin, rp): 
-    # Generate initial values for position and velocity
-    pos = np.random.uniform(max(xguess-rp/2, xmin), min(xguess-rp/2, xmax))
-    vel = np.random.uniform(-abs(xmax-xmin), abs(xmax-xmin))
+        # Functions
 
-    # Create new particle based on the initial parameters
-    p = Particle(pos, vel)
+        # Evaluate Fitness
+        def evaluate(self, func): 
+            self.f_best_p = func()
 
-    # Add initial position to new particle's positions array
-    p.positions.append(pos)
+        # Generate Velocity for next iteration
+        def updateVelocity(self, x_best_g): 
+            for i in range(0, numDimensions): 
+                self.v_i[i] = kv*self.v_i[i] + kp*np.random.uniform(0, 1)*(self.x_best_p[i]-self.x_i[i]) + kg*np.random.uniform(0, 1)*(x_best_g[i]-self.x_i[i])
+            
+        def updatePosition(self): 
+            for i in range(0, numDimensions): 
+                self.x_i[i] =+ self.v_i[i]
 
-    # Return index of the object
-    return p
+                if self.x_i[i] > xmax[i]: 
+                    self.x_i[i] = xmax[i]
+                    print('Max reached')
+
+                if self.x_i[i] < xmin[i]: 
+                    self.x_i[i] = xmin[i]
+                    print('Min reached')
+                    
+def r(max, min): 
+    return abs(max - min)
+
+def p(max, min, guess):
+    return (max-guess)/max + (guess-min)/min
 
 # Deviation of measurement from desired value
-def diff(xm, xd): 
+def accuracy(xm, xd): 
     return abs(xm-xd)/xd
 
 # Consistency (average deviation)
 def consist(array): 
     return np.std(array)
-
-def r(): 
-
-def p():
-    
