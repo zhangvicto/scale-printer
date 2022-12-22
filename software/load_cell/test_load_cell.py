@@ -8,9 +8,9 @@ import RPi.GPIO as GPIO  # import GPIO
 GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
 readings_to_average = 10
-sck_pin = 20
-dout_pins = [26]
-weight_multiples = [-5176]
+sck_pin = 2
+dout_pins = [3, 4]
+weight_multiples = [-5176, -5176]
 
 # create hx711 instance
 hx711 = HX711(dout_pins=dout_pins,
@@ -21,6 +21,7 @@ hx711 = HX711(dout_pins=dout_pins,
               log_level='CRITICAL')
 # reset ADC, zero it
 hx711.reset()
+
 try:
     hx711.zero(readings_to_average)
 except Exception as e:
