@@ -4,9 +4,9 @@ from hx711_multi import HX711
 from time import perf_counter
 
 readings_to_average = 10
-sck_pin = 1
-dout_pins = [2, 3, 4, 14, 15]
-weight_multiples = [-5176, -5500, -5690, -5484, -5455]
+sck_pin = 26
+dout_pins = [20, 3, 4, 14]
+weight_multiples = [-5176, -5500, -5690, -5484]
 
 # create hx711 instance
 hx711 = HX711(dout_pins=dout_pins,
