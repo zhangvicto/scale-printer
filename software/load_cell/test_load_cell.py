@@ -10,7 +10,7 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 readings_to_average = 10
 sck_pin = 26
 dout_pins = [20]
-weight_multiples = [-5176, -5500, -5690, -5484, -5455]
+weight_multiples = [-5176]
 
 # create hx711 instance
 hx711 = HX711(dout_pins=dout_pins,
@@ -22,7 +22,7 @@ hx711 = HX711(dout_pins=dout_pins,
 # reset ADC, zero it
 hx711.reset()
 try:
-    hx711.zero(readings_to_average=readings_to_average*3)
+    hx711.zero(readings_to_average)
 except Exception as e:
     print(e)
 # uncomment below loop to see raw 2's complement and read integers
