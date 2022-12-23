@@ -1,6 +1,7 @@
 # Particle Swarm Optimization of 3D Printing Parameters on Open-Source Commercial 3D Printer
----
-<img src="/image/" alt="image" />
+
+<img src="/image/printer.jpg" alt="printer" />
+(still a WIP)
 
 # Current Progress
 - [x] Mechanical Design
@@ -8,7 +9,7 @@
 - [x] Test Camera
 - [ ] Test Dimensional Measurement {20%}
 - [ ] PSO Implementation {60%}
-- [ ] Documentation {20%}
+- [ ] Documentation {30%}
 - [ ] Refinement 
 
 # Hardware
@@ -22,10 +23,9 @@ Load Cell Configuration:
 
 ## Bill of Materials
 Found in repo. 
-Total cost excluding printer is CAD $100.0.
+Total cost excluding printer is CAD $100.00.
 
 # Software
---- 
 Flowchart: 
 <img src="/image/flowchart.png" alt="flowchart" />
 
@@ -43,22 +43,47 @@ Load cell measurement is taken and averaged. Measurement is taken after every it
 ## Gcode Generation
 The Gcode for each interation is generated automatically, using PSO results from the previous run. 
 
-# The Build (More detailed instructions in paper in the future)
+# The Build 
+(More detailed instructions in paper in the future)
 1. Mount all mechanical components
 2. Electrical wiring for all load cells and Raspberry Pi
 3. Setup Raspberry Pi with any OS that supports Python
-4. Git pull repo
+4. git pull repo
+
+## Wiring Diagram 
+(coming soon)
 
 # User Instructions
-SSH into the Raspberry Pi and start the script. 
+
+## Requirements
+Before running any calibration sequence, the required libraries must be installed for Python. 
+
+If pip is not installed, install it first. 
+```
+sudo apt-get pip3
+```
+
+Then go to the subdirectory where the scripts are located.
 ```
 cd scale-printer/software
 ```
+
+Run install the requirements using pip.
+```
+pip3 install -r requirements.txt
+```
+
+## Start the Iteration
+SSH into the Raspberry Pi and start the script. 
+(Assuming you are still in the /softare subdirectory, if not, go to the proper directory)
 ```
 python setup.py
 ```
 
-Proceed with the instructions. Select your desired calibration method (line, plane, cube). Wait and let the printer do its magic!
+Proceed with the instructions. Select your desired calibration method (line, plane, cube). Now just wait and let the printer do its magic!
+
+## Calibrating Sensors
+All the load cells will be calibrated before the actual print calibration sequence. Ensure that you are getting correct values for the weights. If they are not right, then there may be wiring or issues with the power supply.  
 
 
 # Open-Source Licenses
