@@ -1,7 +1,7 @@
 # Particle Swarm Optimization of 3D Printing Parameters on Open-Source Commercial 3D Printer
 
 <img src="/image/printer.jpg" alt="printer" />
-(still a WIP)
+(still WIP)
 
 # Current Progress
 - [x] Mechanical Design
@@ -73,7 +73,7 @@ Run install the requirements using pip.
 pip3 install -r requirements.txt
 ```
 
-## Start the Iteration
+## Begin Optimization
 SSH into the Raspberry Pi and start the script. 
 (Assuming you are still in the /softare subdirectory, if not, go to the proper directory)
 ```
@@ -87,8 +87,6 @@ All the load cells will be calibrated before the actual print calibration sequen
 
 
 # Open-Source Licenses
----
 <img src="/image/oshw_facts.png" alt="licenses" />
 
-# Thank you
 Thank you to Dr. Joshua Pearce, the Western University FAST Research Lab, and the Thompson Endowment for supporting this project. 
