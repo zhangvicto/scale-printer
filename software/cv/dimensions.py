@@ -1,8 +1,8 @@
 import cv2
 import time
-from picamera import PiCamera
+from picamera2 import PiCamera2
 
-camera = PiCamera()
+picam2 = PiCamera2()
 time.sleep(2)
-camera.capture("/dimensions.jpg")
+picam2.start_and_capture_file("test.jpg")
 
