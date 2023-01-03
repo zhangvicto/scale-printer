@@ -1,8 +1,8 @@
-# import cv2
-# import time
-from picamera2 import Picamera2
+import cv2
 
-picam2 = Picamera2()
+cap = cv2.VideoCapture(0)
+ret, frame = cap.read()
+if ret:
+    cv2.imwrite('test.jpg')
 
-picam2.start_and_capture_file('test.jpg', show_preview=False)
-
+cap.release()
