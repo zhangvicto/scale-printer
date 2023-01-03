@@ -13,6 +13,9 @@ img = cv2.imread('test.jpg')
 
 img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
-edges = cv2.Canny(image=img_blur, threshold1=100, threshold2=200)
 
-cv2.imwrite('edges.jpg', edges, [cv2.IMWRITE_JPEG_QUALITY, 100]) # write to a file
+cv2.imwrite('blur.jpg', img_blur) # write to a file
+
+edges = cv2.Canny(image=img_blur, threshold1=100, threshold2=200) # Canny Edge Detection
+
+cv2.imwrite('edges.jpg', edges) # write to a file
