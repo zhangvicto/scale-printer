@@ -5,21 +5,22 @@ from pso.optimization import optimize
 GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
 #MAIN BLOCK
+# Choose Calibration Type GCODE (Line or Plane)
+mode = input('Choose a calibration mode, L, P, or C')
 
-# Choose Gcode (Line or Plane)
-input('Choose a calibration mode, L, P, or C')
+if mode == "L": 
+    numIterations = 20
+elif mode == "P" or mode == "C": 
+    numIterations = 10
 
-# Start print once the inputs are confirmed
-optimize()
-
-# Run through first PSO iteration
-    # Once print finishes, check weight, check dimensions
-    # 
+for i in range(numIterations): 
+    # Start print once the inputs are confirmed
+    # Run through first PSO iteration
+    optimize()
 
 # Check for 
 
 # Generate gcode for next iteration
-
 
 
 GPIO.cleanup()

@@ -1,6 +1,6 @@
-# install opencv "pip install opencv-python"
 import cv2
- 
+from picamera import PiCamera
+
 # distance from camera to object(face) measured
 # centimeter
 Known_distance = 76.2

@@ -1,8 +1,9 @@
-from optimize_helpers import Particle, accuracy, consist
+from pso.optimize_helpers import Particle, accuracy, consist
 import numpy as np
+from load_cell.mass import load_cell_setup, measure_mass
+from cv.camera import measure_dim
 
 # Settings
-numIteration = 20 # should be determined by gcode
 numParticles = 10 # not sure
 
 # Array of particle objects
@@ -42,16 +43,23 @@ def optimize(func, xmax, xmin, xguess, numDimensions): #inputs should be the fit
         # Add new particle to particle array
         particles.append(Particle(xmax[i], xmin[i], xguess[i], numDimensions))
 
-    for i in range(numIteration): 
+        # Once print finishes, check weight, 
+        load_cell_setup()
+        mass = measure_mass()
 
-        # For each iteration, iterate through all particles and collect data
-        for j in range(numParticles):
+        # check dimensions
+        measure_dim()
+
+
+    # For each iteration, iterate through all particles and collect data
+    for j in range(numParticles):
             
-            # Generate new values for the next iteration based on previous iteration
-            particles[i].updateVelocity(x_best_g)
+        # Generate new values for the next iteration based on previous iteration
+        particles[j].updateVelocity(x_best_g)
+        particles[j].updatePosition()
 
         # of iteration 
-        # compare global op to local
+        # compare global op to local+
 
 
 # Fitness Functions

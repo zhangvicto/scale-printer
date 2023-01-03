@@ -6,7 +6,32 @@ CUR_Z = 0
 RETRACTED = False
 
 
-# variables
+# Variables
+SPEED_FIRSTLAYER = 0 
+SPEED_TRAVEL = 0 
+SPEED_PERIMETER = 0 
+# NUM_PATTERNS = 0 
+CENTER_X = 0 
+CENTER_Y = 0 
+PRINT_DIR = 0 
+HEIGHT_LAYER = 0.3
+HEIGHT_FIRSTLAYER = 0.2
+LINE_WIDTH = 0.5
+LINE_SPACING = 0
+EXTRUSION_RATIO = 1 # exxtrusion width
+EXT_MULT = 0 
+ANCHOR_LAYER_LINE_WIDTH = 
+ANCHOR_LAYER_LINE_SPACING = 
+ANCHOR_PERIMETERS = 
+RETRACT_DIST = 0.56
+SPEED_RETRACT = 
+SPEED_UNRETRACT = 
+EXTRUDER_NAME = "PSO Printer"
+ZHOP_ENABLE = True
+ZHOP_HEIGHT = 
+# PA_START = 
+# PA_END = 
+# PA_STEP = 
 
 settings = {
     'firstLayerSpeed': SPEED_FIRSTLAYER,
@@ -37,7 +62,30 @@ settings = {
     'paStep': PA_STEP
 }
 
-def gcode_gen(type, settings): 
+# Gcode generation
+
+# LINE
+# |||||||||||||||
+# |||||||||||||||
+# |||||||||||||||
+# |||||||||||||||
+# |||||||||||||||
+
+# PLANE
+# [ ] [ ] [ ] [ ] 
+# [ ] [ ] [ ] [ ]
+# [ ] [ ] [ ] [ ]
+# [ ] [ ] [ ] [ ]
+# [ ] [ ] [ ] [ ]
+
+# Cube
+# [ ]         [ ] 
+#    [ ]   [ ]
+#       [ ] 
+#    [ ]   [ ]
+# [ ]         [ ]
+
+def gcode_gen(type, x, y, settings): #x, y, indicate the position of the print
     gcode = ''
     start_gcode = ''
     end_gcode = ''
@@ -46,7 +94,7 @@ def gcode_gen(type, settings):
 
     # generate line or plane
     if type == 'L': 
-        gcode += genLine()
+        gcode += genLine(x,y,settings)
     elif type == 'P':
         gcode += genPlane()
     elif type == 'C':
@@ -59,11 +107,12 @@ def gcode_gen(type, settings):
     return gcode
 
 
-def genLine(): 
+def genLine(x, y, settings): 
     # initial z position
     moveToZ( ,settings)
 
     # print line 
+    createLine(x,y,settings)
 
     return ''
 
