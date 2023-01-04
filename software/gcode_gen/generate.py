@@ -173,7 +173,11 @@ def genStart(nozzleD, Te, Tb, Vp):
 
 def genEnd(): 
     # Park and Reset Flow
-    gcode = "G1 Z9 F720 ; Move print head up \nG1 X0 Y200 F3600 ; park \nG1 Z57 F720 ; Move print head further up \nG4 ; wait \nM221 S100 ; reset flow\n\n"
+    # Park Location
+    x = 200
+    y = 200
+
+    gcode = "G1 Z9 F720 ; Move print head up \nG1 X{} Y{} F3600 ; park \nG1 Z57 F720 ; Move print head further up \nG4 ; wait \nM221 S100 ; reset flow\n\n".format(x,y)
 
     # Turn Everything Off
     gcode += "M104 S0 ; turn off temperature\n"
