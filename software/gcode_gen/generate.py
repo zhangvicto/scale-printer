@@ -193,8 +193,8 @@ def genLine(iter, settings):
      # Initial xy pos
     gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': '; Moving to line position\n'})
 
-
     # Print line 
+    gcode += "; printing line start id:0 copy 0 \n"
     gcode += createLine(to_x=TO_X, to_y=line_length, settings=settings, optional={'comment': '; Create Line \n'})
 
     # Set Progresss
