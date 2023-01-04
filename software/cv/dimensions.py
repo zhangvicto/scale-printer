@@ -20,14 +20,14 @@ def image_process():
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
     cv2.imwrite('blur.jpg', img_blur) # write to a file
 
-    edges = cv2.Canny(image=img_blur, threshold1=50, threshold2=200) # Canny Edge Detection
+    edges = cv2.Canny(image=img_blur, threshold1=40, threshold2=200) # Canny Edge Detection
     # cv2.imwrite('edges.jpg', edges) # write to a file
 
     # img = cv2.imread('edges.jpg')
     contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(edges, contours[0], -1, color=(255,255,255), thickness=1)
+    cv2.drawContours(img, contours[0], -1, color=(255,255,255), thickness=1)
     time.sleep(1) # give time to prevent a green image
-    cv2.imwrite("output.jpg", edges)
+    cv2.imwrite("output.jpg", img)
 
 # def analyze_edge(): 
 
