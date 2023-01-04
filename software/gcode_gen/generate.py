@@ -11,7 +11,7 @@ RETRACTED = False
 # Variables
 BED_X = 200
 BED_Y = 250
-FILAMENT_DIAMETER = 0.75 # mm
+FILAMENT_DIAMETER = 1.75 # mm
 NOZZLE_DIAMETER = 0.4 # mm
 LINE_WIDTH = 0.5 # mm
 SPEED_FIRSTLAYER = 40*60
@@ -184,7 +184,7 @@ def genLine(iter, settings):
     TO_X = iter*10
     TO_Y = settings['lineSpacing']
     TO_Z = HEIGHT_FIRSTLAYER
-    line_length = 200
+    line_length = 150
 
     gcode = ''
 
@@ -333,6 +333,8 @@ def createLine(to_x, to_y, settings, optional):
 
     length = getDistance(CUR_X, CUR_Y, to_x, to_y)
     ext = round(optArgs['extRatio'] * optArgs['extMult'] * abs(length), 5)
+    print(optArgs['extMult'])
+    print(abs(length))
     print(ext)
     gcode = 'G1 X' + str(round(rotateX(to_x, settings['centerX'], to_y, settings['centerY'], settings['printDir']), 4)) + ' Y' + str(round(rotateY(to_x, settings['centerX'], to_y, settings['centerY'], settings['printDir']), 4)) + ' E' + str(ext) + ' F' + str(optArgs['speed']) + optArgs['comment']
 
