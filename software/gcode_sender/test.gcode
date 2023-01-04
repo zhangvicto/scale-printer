@@ -196,7 +196,8 @@ G0 X10.0 Y0.4356 F4800; Moving to line position
 G1 Z0.2 F720 ; Z hop return
 G1 E0.8 F1800 ; Un-retract
 ; printing line start id:0 copy 0 
-G1 X10.0 Y200.0 E67.7582 F2400; Create Line 
+G1 X10 F1000 ; intro line 
+G1 Y200 E67.7582 F1000 ; intro line
 M73 P100 R0
 M73 Q100 S0
 

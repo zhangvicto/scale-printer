@@ -199,7 +199,7 @@ def genLine(iter, settings):
     gcode += createLine(to_x=TO_X, to_y=line_length, settings=settings, optional={'comment': '; Create Line \n'})
 
     # Set Progresss
-    gcode += "M73 P100 R0\nM73 Q100 S0\n"
+    # gcode += "M73 P100 R0\nM73 Q100 S0\n"
 
     gcode += "\n\n"
 
