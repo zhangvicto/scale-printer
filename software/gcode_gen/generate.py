@@ -154,7 +154,7 @@ def genStart(nozzleD, Te, Tb, Vp):
     gcode += "G1 Z{} F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'])
 
     # Level again, set flow, set other
-    gcode += "G92 E0 \nM221 S95 ; Set flow\n\n"
+    gcode += "G92 E0 \nM221 S95\n\n; Don't change E values below. Excessive value can damage the printer.\n\n"
 
     gcode += "M907 E538 ; set extruder motor current\n"
     gcode += "G21 ; set units to millimeters\n"
@@ -188,11 +188,14 @@ def genLine(iter, settings):
     gcode = ''
 
     # Printing Z position
-    gcode += moveToZ(TO_Z, settings)
-    gcode += ";AFTER_LAYER_CHANGE\n;0.2\n"
+    # gcode += ";AFTER_LAYER_CHANGE\n;0.2\n"
 
      # Initial xy pos
     gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': '; Moving to line position\n'})
+    gcode += moveToZ(TO_Z, settings)
+
+    # Set Acceleration
+    gcode += "M204 S800\n"
 
     # Print line 
     gcode += "; printing line start id:0 copy 0 \n"
