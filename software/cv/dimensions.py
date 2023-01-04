@@ -38,7 +38,8 @@ def analyze_edge():
     img = cv2.imread('blur.jpg')
     edges = cv2.Canny(img, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
     contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    contours = sorted(contours, key=cv2.contourArea, reverse=True)
+    for contour in contours: 
+        print(cv2.contourArea(contour))
     # Now we find the largest contour and highlight it 
     cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
     cv2.imwrite("highlight.jpg", img)
