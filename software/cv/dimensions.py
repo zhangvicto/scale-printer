@@ -40,7 +40,7 @@ def analyze_edge():
     contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
     # Now we find the largest contour and highlight it 
-    cv2.drawContours(img, contours[0], -1, color=(255,255,255), thickness=1)
+    cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
     cv2.imwrite("highlight.jpg", img)
 
 capture()
