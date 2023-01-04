@@ -9,32 +9,11 @@ numParticles = 10 # not sure
 # Array of particle objects
 particles = []
 
-# Variables MIN MAX
-TeMax = 260
-TeMin = 200
-
-TbMax = 80
-TbMin = 40
-
-VpMax = 80
-VpMin = 10
-
-EfMax = 0.8
-EfMin = 1.2
-
-xmax = [TeMax, TbMax, VpMax, EfMax]
-xmin = [TeMin, TbMin, VpMin, EfMin]
-xguess = []
-
-numDimensions = len(xmax)
-
 # Inertia weights?
-
-# Optimization functions
 
 
 # Execute iteration
-def optimize(func, xmax, xmin, xguess, numDimensions): #inputs should be the fitness of last iteration
+def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be the fitness of last iteration
     
     # global optimum
     x_best_g = []
@@ -44,11 +23,11 @@ def optimize(func, xmax, xmin, xguess, numDimensions): #inputs should be the fit
         particles.append(Particle(xmax[i], xmin[i], xguess[i], numDimensions))
 
         # Once print finishes, check weight, 
-        load_cell_setup()
         mass = measure_mass()
 
         # check dimensions
-        measure_dim()
+        widths = measure_dim()[0]
+        lengths = measure_dim()[1]
 
 
     # For each iteration, iterate through all particles and collect data
@@ -58,8 +37,11 @@ def optimize(func, xmax, xmin, xguess, numDimensions): #inputs should be the fit
         particles[j].updateVelocity(x_best_g)
         particles[j].updatePosition()
 
-        # of iteration 
-        # compare global op to local+
+        # compare global op to local op
+        
+    fitness(mass, widths, lengths, 0.33, 0.546, 200)
+
+    return 
 
 
 # Fitness Functions

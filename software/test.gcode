@@ -25,4 +25,15 @@ M221 S{if layer_height<0.075}100{else}95{endif}
 
 ; Don't change E values below. Excessive value can damage the printer.
 {if print_settings_id=~/.*(DETAIL @MK3|QUALITY @MK3).*/}M907 E430 ; set extruder motor current{endif}
-{if print_settings_id=~/.*(SPEED @MK3|DRAFT @MK3).*/}M907 E538 ; set extruder motor current{endif}
+{if print_settings_id=~/.*(SPEED @MK3|DRAFT @MK3).*/}M907 E538 ; set extruder motor current{endif}G0 Z0.0 F10800 Move to z height
+G1 X0.0 Y0.0 E0.0 F3000Create Line{if max_layer_z < max_print_height}G1 Z{z_offset+min(max_layer_z+1, max_print_height)} F720 ; Move print head up{endif}
+G1 X0 Y200 F3600 ; park
+{if max_layer_z < max_print_height}G1 Z{z_offset+min(max_layer_z+49, max_print_height)} F720 ; Move print head further up{endif}
+G4 ; wait
+M221 S100 ; reset flow
+M900 K0 ; reset LA
+{if print_settings_id=~/.*(DETAIL @MK3|QUALITY @MK3|@0.25 nozzle MK3).*/}M907 E538 ; reset extruder motor current{endif}
+M104 S0 ; turn off temperature
+M140 S0 ; turn off heatbed
+M107 ; turn off fan
+M84 ; disable motors
