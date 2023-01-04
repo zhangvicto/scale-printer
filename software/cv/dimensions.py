@@ -21,13 +21,15 @@ def image_process():
     cv2.imwrite('blur.jpg', img_blur) # write to a file
 
     edges = cv2.Canny(image=img_blur, threshold1=50, threshold2=200) # Canny Edge Detection
-    cv2.imwrite('edges.jpg', edges) # write to a file
+    # cv2.imwrite('edges.jpg', edges) # write to a file
 
-def analyze_edge(): 
-    img = cv2.imread('edges.jpg')
-    contours = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    # img = cv2.imread('edges.jpg')
+    contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     cv2.drawContours(img, contours[0], color=(255,255,255), thicknes=0.5)
     cv2.imwrite("output.jpg", img)
+
+# def analyze_edge(): 
+    
 
 capture()
 image_process()
