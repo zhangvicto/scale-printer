@@ -26,7 +26,8 @@ def image_process():
 def analyze_edge(): 
     img = cv2.imread('edges.jpg')
     contours = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    cv2.imwrite("output.jpg", contours)
+    cv2.drawContours(img, contours[0], color=(255,255,255), thicknes=0.5)
+    cv2.imwrite("output.jpg", img)
 
 capture()
 image_process()
