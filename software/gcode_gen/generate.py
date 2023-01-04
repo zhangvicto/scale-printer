@@ -175,7 +175,7 @@ def genEnd():
     # Turn Everything Off
     gcode += "M104 S0 ; turn off temperature\n"
     gcode += "M140 S0 ; turn off heatbed\n"
-    gcode += "M107 ; turn off fan \nM73 P100 R0 \nM73 Q100 S0\nM84 ; disable motors \n\n"
+    gcode += "M107 ; turn off fan \nM84 ; disable motors \nM73 P100 R0 \nM73 Q100 S0\n\n"
 
     return gcode
 
@@ -189,10 +189,11 @@ def genLine(iter, settings):
 
     # Printing Z position
     # gcode += ";AFTER_LAYER_CHANGE\n;0.2\n"
-
-     # Initial xy pos
-    gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': '; Moving to line position\n'})
     gcode += moveToZ(TO_Z, settings)
+
+    # Initial xy pos
+    gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': '; Moving to line position\n'})
+    
 
     # Set Acceleration
     gcode += "M204 S800\n"
@@ -200,7 +201,7 @@ def genLine(iter, settings):
     # Print line 
     gcode += "; printing line start id:0 copy 0 \n"
     gcode += createLine(to_x=TO_X, to_y=line_length, settings=settings, optional={'comment': '; Create Line \n'})
-
+    gcode += "; stop printing line id:0 copy 0\n"
     # Set Progresss
     # gcode += "M73 P100 R0\nM73 Q100 S0\n"
 

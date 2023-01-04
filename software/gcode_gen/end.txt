@@ -3,9 +3,9 @@
 ; filament used [g] = 0.26
 ; filament cost = 0.01
 ; total filament used [g] = 0.25
-; total filament cost = 0.08
-; estimated printing time (normal mode) = 00m17s
-; estimated printing time (silent mode) = 00m17s
+; total filament cost = 0.01
+; estimated printing time (normal mode) = 00m 17s
+; estimated printing time (silent mode) = 00m 17s
 
 ; prusaslicer_config = begin
 ; avoid_crossing_perimeters = 0
