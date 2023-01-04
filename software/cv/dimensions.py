@@ -25,9 +25,9 @@ def image_process():
 
     # img = cv2.imread('edges.jpg')
     contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(img, contours[0], -1, color=(255,255,255), thickness=1)
+    cv2.drawContours(img_cropped, contours[0], -1, color=(255,255,255), thickness=1)
     time.sleep(1) # give time to prevent a green image
-    cv2.imwrite("output.jpg", img)
+    cv2.imwrite("output.jpg", img_cropped)
 
 # def analyze_edge(): 
 
