@@ -11,7 +11,7 @@ if ret:
 cap.release() # release
 
 img = cv2.imread('test.jpg')
-img_rotate = cv2(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
 img_cropped = img_rotate[0:1000, 0,1000] # crop
 img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
 img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
