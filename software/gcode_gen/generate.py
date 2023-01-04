@@ -119,6 +119,57 @@ def gcode_gen(type, iter, settings): #x, y, indicate the position of the print
     
     return gcode
 
+# PRUSA SPECIFIC GCODE GENERATION
+def genStart(nozzleD, Te, Tb, Vp): 
+    gcode = ";START_GCODE\n"
+
+    # Setting Accelerations etc
+    gcode += "M73 P0 R24 \nM73 Q0 S24 \nM201 X1000 Y1000 Z200 E5000 ; sets maximum accelerations, mm/sec^2 \n"
+    gcode += "M203 X200 Y200 Z12 E120 ; sets maximum feedrates, mm / sec\n"
+    gcode += "M204 P1250 R1250 T1250 ; sets acceleration (P, T) and retract acceleration (R), mm/sec^2 \n"
+    gcode += "M205 X8.00 Y8.00 Z0.40 E4.50 ; sets the jerk limits, mm/sec\n"
+    gcode += "M205 S0 T0 ; sets the minimum extruding and travel feed rate, mm/sec \n"
+    gcode += "M107\n"
+    # NO LINEAR ADVANCE IS SET
+
+    # Basic Settings
+    gcode += 'M862.3 P "MK3S" ; printer model check\n'
+    gcode += "M862.1 P{} ; nozzle diameter check\n".format(nozzleD)
+    gcode += "M115 U3.11.0 ; tell printer latest fw version\n"
+    gcode += "G90 ; use absolute coordinates\n"
+    gcode += "M83 ; extruder relative mode\n"
+    gcode += "M104 S{} ; set extruder temp\n".format(Te)
+    # gcode += "M140 S{} ; set bed temp\n".format(Tb)
+    # gcode += "M190 S{} ; wait for bed temp\n".format(Tb)
+    gcode += "M109 S{} ; wait for extruder temp\n".format(Te)
+    gcode += "G28 W ; home all without mesh bed level\n"
+    gcode += "G80 ; mesh bed leveling\n"
+
+    # Intro line
+    gcode += "G1 Z0.3 F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n"
+
+    # Level again, set flow
+    gcode += "G92 E0 \nM221 S95 ; Set flow\n"
+
+    # Home again
+    gcode += "G92 E0.0\n\n"
+
+    return gcode
+
+def genEnd(): 
+    gcode = ";END_GCODE\n"
+    # Wipe
+    gcode += ";WIPE_START \nG1 F8640;_WIPE \nG1 X106.746 Y118.207 E-.76 \n;WIPE_END \nG1 E-.04 F2100 \nG1 Z8.4 F720 \nM107\n"
+    
+    # Park and Reset Flow
+    gcode += "G1 Z9 F720 ; Move print head up \nG1 X0 Y200 F3600 ; park \nG1 Z57 F720 ; Move print head further up \nG4 ; wait \nM221 S100 ; reset flow\n\n"
+
+    # Turn Everything Off
+    gcode += "M104 S0 ; turn off temperature\n"
+    # gcode += "M140 S0 ; turn off heatbed"
+    gcode += "M107 ; turn off fan \nM84 ; disable motors \nM73 P100 R0 \nM73 Q100 S0"
+
+    return gcode
 
 def genLine(iter, settings): 
     TO_X = iter*10
@@ -139,6 +190,8 @@ def genLine(iter, settings):
     # print line 
     gcode += createLine(to_x=TO_X, to_y=line_length, settings=settings, optional={'comment': '; Create Line \n'})
 
+    gcode += "\n"
+
     return gcode
 
 def genPlane(): 
@@ -157,6 +210,7 @@ def moveToZ(to_z, settings):
     gcode = ''
     gcode += 'G0 Z' + str(round(to_z, 3)) + ' F' + str(settings['moveSpeed']) + ' ; Move to z height\n'
     CUR_Z = to_z # Update global position
+
     return gcode
 
 def moveToXY(to_x, to_y, settings, optional): 
@@ -274,11 +328,8 @@ def createLine(to_x, to_y, settings, optional):
     return gcode
 
 with open("test.gcode", "w") as f:
-    start = open("start.txt", "r").read()
-    end = open("end.txt", "r").read()
-
-    f.write(start)
+    f.write(genStart(0.4, 230, 60, settings['moveSpeed']))
     f.write(gcode_gen('L', 1, settings))
-    f.write(end)
+    f.write(genEnd())
 
     f.close()
