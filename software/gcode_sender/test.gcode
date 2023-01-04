@@ -13,17 +13,19 @@ M115 U3.11.0 ; tell printer latest fw version
 G90 ; use absolute coordinates
 M83 ; extruder relative mode
 M104 S230 ; set extruder temp
+M140 S0 ; set bed temp
 M109 S230 ; wait for extruder temp
 G28 W ; home all without mesh bed level
 G80 ; mesh bed leveling
+
 G1 Z0.3 F720 
 G1 Y-3 F1000 ; go outside print area 
 G92 E0 
 G1 X60 E9 F1000 ; intro line 
 G1 X100 E9 F1000 ; intro line
+
 G92 E0 
 M221 S95 ; Set flow
-G92 E0.0
 
 G0 Z0.2 F10800 ; Move to z height
 G1 E-0.8 F1800 ; Retract
@@ -34,13 +36,6 @@ G1 E0.8 F1800 ; Un-retract
 G1 X10.0 Y200.0 E67.7582 F2400; Create Line 
 
 ;END_GCODE
-;WIPE_START 
-G1 F8640;_WIPE 
-G1 X106.746 Y118.207 E-.76 
-;WIPE_END 
-G1 E-.04 F2100 
-G1 Z8.4 F720 
-M107
 G1 Z9 F720 ; Move print head up 
 G1 X0 Y200 F3600 ; park 
 G1 Z57 F720 ; Move print head further up 

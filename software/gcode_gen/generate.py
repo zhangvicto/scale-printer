@@ -139,27 +139,24 @@ def genStart(nozzleD, Te, Tb, Vp):
     gcode += "G90 ; use absolute coordinates\n"
     gcode += "M83 ; extruder relative mode\n"
     gcode += "M104 S{} ; set extruder temp\n".format(Te)
-    # gcode += "M140 S{} ; set bed temp\n".format(Tb)
+    gcode += "M140 S{} ; set bed temp\n".format(Tb)
     # gcode += "M190 S{} ; wait for bed temp\n".format(Tb)
     gcode += "M109 S{} ; wait for extruder temp\n".format(Te)
     gcode += "G28 W ; home all without mesh bed level\n"
-    gcode += "G80 ; mesh bed leveling\n"
+    gcode += "G80 ; mesh bed leveling\n\n"
 
     # Intro line
-    gcode += "G1 Z0.3 F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n"
+    gcode += "G1 Z0.3 F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n\n"
 
     # Level again, set flow
-    gcode += "G92 E0 \nM221 S95 ; Set flow\n"
-
-    # Home again
-    gcode += "G92 E0.0\n\n"
+    gcode += "G92 E0 \nM221 S95 ; Set flow\n\n"
 
     return gcode
 
 def genEnd(): 
     gcode = ";END_GCODE\n"
-    # Wipe
-    gcode += ";WIPE_START \nG1 F8640;_WIPE \nG1 X106.746 Y118.207 E-.76 \n;WIPE_END \nG1 E-.04 F2100 \nG1 Z8.4 F720 \nM107\n"
+    # # Wipe
+    # gcode += ";WIPE_START \nG1 F8640;_WIPE \nG1 X106.746 Y118.207 E-.76 \n;WIPE_END \nG1 E-.04 F2100 \nG1 Z8.4 F720 \nM107\n"
     
     # Park and Reset Flow
     gcode += "G1 Z9 F720 ; Move print head up \nG1 X0 Y200 F3600 ; park \nG1 Z57 F720 ; Move print head further up \nG4 ; wait \nM221 S100 ; reset flow\n\n"
@@ -328,7 +325,7 @@ def createLine(to_x, to_y, settings, optional):
     return gcode
 
 with open("test.gcode", "w") as f:
-    f.write(genStart(0.4, 230, 60, settings['moveSpeed']))
+    f.write(genStart(0.4, 230, 0, settings['moveSpeed']))
     f.write(gcode_gen('L', 1, settings))
     f.write(genEnd())
 
