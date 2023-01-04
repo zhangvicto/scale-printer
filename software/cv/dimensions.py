@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import time
 
 cap = cv2.VideoCapture(0) #setup
@@ -9,9 +10,10 @@ if ret:
 
 cap.release() # release
 
-img = cv2.imread('test.jpg') 
-
-img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img = cv2.imread('test.jpg')
+img_rotate = cv2(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+img_cropped = img_rotate[0:1000, 0,1000] # crop
+img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
 img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
 
 cv2.imwrite('blur.jpg', img_blur) # write to a file

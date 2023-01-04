@@ -15,6 +15,8 @@ particles = []
 # Execute iteration
 def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be the fitness of last iteration
     
+    fitness = func(mass, widths, lengths, 0.33, 0.5, 200)
+
     # global optimum
     x_best_g = []
 
@@ -38,9 +40,7 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be t
         particles[j].updatePosition()
 
         # compare global op to local op
-        
-    fitness(mass, widths, lengths, 0.33, 0.546, 200)
-
+    
     return 
 
 
