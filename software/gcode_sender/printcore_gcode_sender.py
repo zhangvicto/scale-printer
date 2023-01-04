@@ -5,7 +5,7 @@ from printrun import gcoder
 import time
 
 p=printcore('/dev/ttyACM0', 115200) # or p.printcore('COM3',115200) on Windows
-gcode=[i.strip() for i in open('gcode.gcode')] # or pass in your own array of gcode lines instead of reading from a file
+gcode=[i.strip() for i in open('test.gcode')] # or pass in your own array of gcode lines instead of reading from a file
 gcode = gcoder.LightGCode(gcode)
 
 # startprint silently exits if not connected yet
