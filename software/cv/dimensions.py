@@ -20,7 +20,7 @@ def image_process():
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
     cv2.imwrite('blur.jpg', img_blur) # write to a file
 
-    edges = cv2.Canny(image=img_blur, threshold1=40, threshold2=200) # Canny Edge Detection
+    edges = cv2.Canny(image=img_blur, threshold1=30, threshold2=200) # Canny Edge Detection
     # cv2.imwrite('edges.jpg', edges) # write to a file
 
     # img = cv2.imread('edges.jpg')
