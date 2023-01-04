@@ -31,4 +31,4 @@ def analyze_edge():
 
 capture()
 image_process()
-analyze_edge
+analyze_edge()
