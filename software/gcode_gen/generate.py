@@ -24,11 +24,12 @@ PRINT_DIR = 0
 HEIGHT_LAYER = 0.3
 HEIGHT_FIRSTLAYER = 0.2
 
-EXTRUSION_RATIO = LINE_WIDTH * HEIGHT_LAYER / (pow(FILAMENT_DIAMETER / 2, 2) * math.pi)
+EXTRUSION_RATIO = LINE_WIDTH * HEIGHT_LAYER / (pow(FILAMENT_DIAMETER/2, 2) * math.pi)
+print(EXTRUSION_RATIO)
 RETRACT_DIST = 0.8
 EXTRUDER_NAME = "PSO Printer"
 ZHOP_ENABLE = True
-ZHOP_HEIGHT = 0.1
+ZHOP_HEIGHT = 0.2
 ANCHOR_LAYER_LINE_RATIO = 1
 XY_ROUND = 4
 Z_ROUND = 3
@@ -192,7 +193,7 @@ def genLine(iter, settings):
     gcode += moveToZ(TO_Z, settings)
 
     # Initial xy pos
-    gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': '; Moving to line position\n'})
+    gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': ' ; Moving to line position\n'})
     
 
     # Set Acceleration
@@ -200,7 +201,7 @@ def genLine(iter, settings):
 
     # Print line 
     gcode += "; printing line start id:0 copy 0 \n"
-    gcode += createLine(to_x=TO_X, to_y=line_length, settings=settings, optional={'comment': '; Create Line \n'})
+    gcode += createLine(to_x=TO_X, to_y=line_length, settings=settings, optional={'comment': ' ; Create Line \n'})
     gcode += "; stop printing line id:0 copy 0\n"
     # Set Progresss
     # gcode += "M73 P100 R0\nM73 Q100 S0\n"

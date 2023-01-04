@@ -197,7 +197,7 @@ G1 Z0.2 F720 ; Z hop return
 G1 E0.8 F1800 ; Un-retract
 M204 S800
 ; printing line start id:0 copy 0 
-G1 X10.0 Y200.0 E67.7582 F2400; Create Line 
+G1 X10.0 Y200.0 E6.7758 F2400; Create Line 
 ; stop printing line id:0 copy 0
 
 
