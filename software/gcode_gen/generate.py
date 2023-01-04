@@ -133,9 +133,9 @@ def genStart(nozzleD, Te, Tb, Vp):
     gcode += "M205 X8.00 Y8.00 Z0.40 E4.50 ; sets the jerk limits, mm/sec\n"
     gcode += "M205 S0 T0 ; sets the minimum extruding and travel feed rate, mm/sec \n"
     gcode += "M107\n"
-    # NO LINEAR ADVANCE IS SET
 
     # Basic Settings
+    gcode += ";TYPE:Custom\n"
     gcode += 'M862.3 P "MK3S" ; printer model check\n'
     gcode += "M862.1 P{} ; nozzle diameter check\n".format(nozzleD)
     gcode += "M115 U3.11.0 ; tell printer latest fw version\n"
@@ -149,24 +149,30 @@ def genStart(nozzleD, Te, Tb, Vp):
     gcode += "G80 ; mesh bed leveling\n\n"
 
     # Intro line
-    gcode += "G1 Z0.3 F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n\n"
+    gcode += "G1 Z{} F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'])
 
-    # Level again, set flow
+    # Level again, set flow, set other
     gcode += "G92 E0 \nM221 S95 ; Set flow\n\n"
+
+    gcode += "M907 E538 ; set extruder motor current\n"
+    gcode += "G21 ; set units to millimeters\n"
+    gcode += "G90 ; use absolute coordinates\n"
+    gcode += "M83 ; use relative distances for extrusion\n"
+    gcode += "M900 K0 ; Filament gcode LA 1.5\n"
+    gcode += "M107\n"
+
+    #Layer Change
+    gcode += ";LAYER_CHANGE\n;Z:0.2\n;HEIGHT:0.2\n;BEFORE_LAYER_CHANGE\nG92 E0.0\n;0.2\n\n\n"
 
     return gcode
 
 def genEnd(): 
-    gcode = ";END_GCODE\n"
-    # # Wipe
-    # gcode += ";WIPE_START \nG1 F8640;_WIPE \nG1 X106.746 Y118.207 E-.76 \n;WIPE_END \nG1 E-.04 F2100 \nG1 Z8.4 F720 \nM107\n"
-    
     # Park and Reset Flow
-    gcode += "G1 Z9 F720 ; Move print head up \nG1 X0 Y200 F3600 ; park \nG1 Z57 F720 ; Move print head further up \nG4 ; wait \nM221 S100 ; reset flow\n\n"
+    gcode = "G1 Z9 F720 ; Move print head up \nG1 X0 Y200 F3600 ; park \nG1 Z57 F720 ; Move print head further up \nG4 ; wait \nM221 S100 ; reset flow\n\n"
 
     # Turn Everything Off
     gcode += "M104 S0 ; turn off temperature\n"
-    # gcode += "M140 S0 ; turn off heatbed"
+    gcode += "M140 S0 ; turn off heatbed\n"
     gcode += "M107 ; turn off fan \nM84 ; disable motors \nM73 P100 R0 \nM73 Q100 S0\n\n"
 
     return gcode
@@ -179,18 +185,23 @@ def genLine(iter, settings):
 
     gcode = ''
 
-    # initial z position
-    gcode += moveToZ(TO_Z ,settings)
+    # Initial Z position
+    gcode += moveToZ(TO_Z+0.1, settings)
+    gcode += ";AFTER_LAYER_CHANGE\n;0.2\n"
 
-    # initial xy pos
-    # START_X = CENTER_X - (250 / 2)
-    # START_Y = CENTER_Y - (210 / 2)
+    # Initial xy pos
     gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': '; Moving to line position\n'})
 
-    # print line 
+    # Printing Z position
+    gcode += moveToZ(TO_Z, settings)
+
+    # Print line 
     gcode += createLine(to_x=TO_X, to_y=line_length, settings=settings, optional={'comment': '; Create Line \n'})
 
-    gcode += "\n"
+    # Set Progresss
+    gcode += "M73 P100 R0\nM73 Q100 S0\n"
+
+    gcode += "\n\n"
 
     return gcode
 
@@ -234,8 +245,6 @@ def moveToXY(to_x, to_y, settings, optional):
 
     gcode += 'G0 X' + str(round(rotateX(to_x, settings['centerX'], to_y, settings['centerY'], settings['printDir']), settings['xyRound'])) + ' Y' + str(round(rotateY(to_x, settings['centerX'], to_y, settings['centerY'], settings['printDir']), settings['xyRound'])) +' F' + str(settings['moveSpeed']) + optArgs['comment']
   
-
-
     CUR_X = to_x # update global position vars
     CUR_Y = to_y
 
