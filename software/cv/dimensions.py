@@ -70,9 +70,13 @@ def analyze_edge():
         for i in range(0, len(lines)):
             # calculate distance between all lines
             for j in range(i+1, len(lines)): 
-                difference.append(abs(lines[j] - lines[i])) 
+                distX = abs(hough_coord(lines, j)[0] - hough_coord(lines, i))[0]
+                distY = abs(hough_coord(lines, j)[1] - hough_coord(lines, i))[1]
+
+                difference.append(max(distX, distY))
+
         print(difference)
-        print(max(difference.all()))
+        print(max(difference))
 
     cv2.imwrite("lines.jpg", cEdges)
 
@@ -95,6 +99,19 @@ def analyze_edge():
     # length = # code here to find pixel size of the printed part
 
     # return width*distanceX/200, length*distanceY/200
+
+# Compute Hough Line Coordinate
+def hough_coord(lines, i):
+    rho = lines[i][0][0]
+    theta = lines[i][0][1]
+    a = math.cos(theta)
+    b = math.sin(theta)
+    x0 = a * rho
+    y0 = b * rho
+    pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
+    pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
+
+    return [x0, y0]
 
 capture()
 image_process()
