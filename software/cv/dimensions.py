@@ -93,8 +93,9 @@ def analyze_edge():
     # Using Contours
     contours, h = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
-    cv2.imwrite('contours.jpg', contours)
-    
+    cv2.drawContours(edges, contours, -1, (0,0,255), 1)
+    cv2.imwrite("contours.jpg", edges)
+
     for contour in contours: 
         print(cv2.contourArea(contour)) # Calculate contour area
     # Now we find the largest contour and highlight it 
