@@ -18,7 +18,7 @@ def image_process():
     img = cv2.imread('test.jpg')
     img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # print(img_rotate.shape[:2]) # output dimensions
-    img_cropped = img_rotate[0:480, 0:480] # crop
+    img_cropped = img_rotate[0:400, 0:480] # crop
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
@@ -36,12 +36,15 @@ def image_process():
 def analyze_edge(): 
     img = cv2.imread('blur.jpg')
     edges = cv2.Canny(img, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
-    contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    print(contours)
+    
+    # Using contours?
+    # contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     # for contour in contours: 
     #     print(cv2.contourArea(contour))
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
+
+    # Using Houghlines
     lines = cv2.HoughLines(edges, 1, np.pi/180, 150)
     linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 50, None, 50, 10)
 
@@ -61,6 +64,15 @@ def analyze_edge():
             pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
             pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
             cv2.line(cEdges, pt1, pt2, (0,0,255), 1, cv2.LINE_AA)
+    
+        # Find largest distance between lines. this could be the distance between the outer edges
+        difference = []
+        for i in range(0, len(lines)):
+            # calculate distance between all lines
+            for j in range(i+1, len(lines)): 
+                difference.append(abs(lines[j] - lines[i])) 
+
+        print(max(difference))
 
     cv2.imwrite("lines.jpg", cEdges)
 
@@ -68,12 +80,13 @@ def analyze_edge():
     if linesP is not None: 
         for i in range(0, len(linesP)):
             l = linesP[i][0]
-            cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 3, cv2.LINE_AA)
+            cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
     cv2.imwrite("plines.jpg", cEdgesP)
 
     for line in linesP: 
-        print(line)
+        if line[0]-line[1] > 10:
+            cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
     # find the two edges on the side and calculate their distance, X AXIS
     # distanceX = coordX2 - coordX1
