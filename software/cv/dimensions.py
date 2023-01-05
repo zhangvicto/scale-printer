@@ -92,7 +92,7 @@ def analyze_edge(img):
     #         cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
     # cv2.imwrite("plines.jpg", cEdgesP)
-    return distanceX, edges
+    return (distanceX, edges)
     
 # Find Dimension of the Printed Part  
 def find_dim(distanceX, edges): 
