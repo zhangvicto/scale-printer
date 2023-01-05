@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import time
+import math
 
 cannyThres1 = 35
 cannyThres2 = 200
@@ -42,7 +43,24 @@ def analyze_edge():
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
     lines = cv2.HoughLines(edges, 1, np.pi/180, 150)
-    cv2.imwrite("lines.jpg", lines)
+    # cv2.imwrite("lines.jpg", lines)
+    # Draw the lines
+    cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+
+    if lines is not None:
+        for i in range(0, len(lines)):
+            rho = lines[i][0][0]
+            theta = lines[i][0][1]
+            a = math.cos(theta)
+            b = math.sin(theta)
+            x0 = a * rho
+            y0 = b * rho
+            pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
+            pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
+            cv2.line(cEdges, pt1, pt2, (0,0,255), 3, cv2.LINE_AA)
+
+    cv2.imwrite("lines.jpg", cEdges)
+
 
     # find the two edges on the side and calculate their distance, X AXIS
     # distanceX = coordX2 - coordX1
