@@ -18,7 +18,7 @@ def image_process():
     img = cv2.imread('test.jpg')
     img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # print(img_rotate.shape[:2]) # output dimensions
-    img_cropped = img_rotate[0:400, 0:480] # crop
+    img_cropped = img_rotate[0:440, 0:480] # crop
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
@@ -88,9 +88,9 @@ def analyze_edge():
 
     cv2.imwrite("plines.jpg", cEdgesP)
 
-    for line in linesP: 
-        if line[0]-line[1] > 10:
-            cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
+    # for line in linesP: 
+    #     if line[0]-line[1] > 10:
+    #         cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
     # find the two edges on the side and calculate their distance, X AXIS
     # distanceX = coordX2 - coordX1
