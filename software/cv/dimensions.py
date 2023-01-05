@@ -41,19 +41,20 @@ def image_process():
 
     return img_blur
 
+def edges(img):
+    return cv2.Canny(img, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
 
-def analyze_edge(img): 
-    # img is blurred
-    edges = cv2.Canny(img, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
-
-    # Using Houghlines
+def analyze_edge(edges): 
+    # Using Houghlines, Find Houghlines using Canny Edges
     lines = cv2.HoughLines(edges, 1, np.pi/180, 150)
 
-    # Draw the lines
+    # Draw the Hough Lines
     cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
     # cEdgesP = np.copy(cEdges)
 
     difference = [] # Array for Distances Between All Hough Lines
+
+    # Draw the lines
     if lines is not None:
         for i in range(0, len(lines)):
             x0 = hough_coord(lines, i)[0]
@@ -92,7 +93,7 @@ def analyze_edge(img):
     #         cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
     # cv2.imwrite("plines.jpg", cEdgesP)
-    return (distanceX, edges)
+    return distanceX
     
 # Find Dimension of the Printed Part  
 def find_dim(distanceX, edges): 
@@ -136,4 +137,5 @@ def hough_coord(lines, i):
     return [x0, y0, a, b]
 
 capture()
-find_dim(analyze_edge(image_process()))
+blurred = image_process()
+find_dim(analyze_edge(blurred), edges(blurred))
