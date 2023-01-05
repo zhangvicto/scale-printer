@@ -43,9 +43,12 @@ def analyze_edge():
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
     lines = cv2.HoughLines(edges, 1, np.pi/180, 150)
+    linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 50, None, 50, 10)
+
     # cv2.imwrite("lines.jpg", lines)
     # Draw the lines
     cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+    cEdgesP = np.copy(cEdges)
 
     if lines is not None:
         for i in range(0, len(lines)):
@@ -57,10 +60,17 @@ def analyze_edge():
             y0 = b * rho
             pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
             pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-            cv2.line(cEdges, pt1, pt2, (0,0,255), 3, cv2.LINE_AA)
+            cv2.line(cEdges, pt1, pt2, (0,0,255), 1, cv2.LINE_AA)
 
     cv2.imwrite("lines.jpg", cEdges)
 
+    # Draw Probablistic Hough Lines
+    if linesP is not None: 
+        for i in range(0, len(linesP)):
+            l = linesP[i][0]
+            cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 3, cv2.LINE_AA)
+
+    cv2.imwrite("plines.jpg", cEdgesP)
 
     # find the two edges on the side and calculate their distance, X AXIS
     # distanceX = coordX2 - coordX1
