@@ -67,11 +67,11 @@ def analyze_edge():
                 else: 
                     return 'Distance too short, check your camera.'
 
-        print(max(difference))
+        print(max(difference)[0])
 
     cv2.imwrite("lines.jpg", cEdges) # Send to file 
 
-    distanceX = max(difference) # this is now the distance to be used for calculating the size of 
+    distanceX = max(difference[0]) # this is now the distance to be used for calculating the size of 
 
     # Draw Probablistic Hough Lines
 
@@ -92,6 +92,9 @@ def analyze_edge():
     
     # Using Contours
     contours, h = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+    cv2.imwrite('contours.jpg', contours)
+    
     for contour in contours: 
         print(cv2.contourArea(contour)) # Calculate contour area
     # Now we find the largest contour and highlight it 
