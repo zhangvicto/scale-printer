@@ -72,6 +72,9 @@ def analyze_edge():
 
     cv2.imwrite("plines.jpg", cEdgesP)
 
+    for line in linesP: 
+        print(line)
+
     # find the two edges on the side and calculate their distance, X AXIS
     # distanceX = coordX2 - coordX1
     # distanceY = coordY2 - coordY1
