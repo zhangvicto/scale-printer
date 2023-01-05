@@ -36,69 +36,68 @@ def image_process():
 def analyze_edge(): 
     img = cv2.imread('blur.jpg')
     edges = cv2.Canny(img, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
-    
-    # Using contours?
-    # contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    # for contour in contours: 
-    #     print(cv2.contourArea(contour))
-    # Now we find the largest contour and highlight it 
-    # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
 
     # Using Houghlines
     lines = cv2.HoughLines(edges, 1, np.pi/180, 150)
-    linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 50, None, 50, 10)
 
-    # cv2.imwrite("lines.jpg", lines)
     # Draw the lines
     cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
-    cEdgesP = np.copy(cEdges)
+    # cEdgesP = np.copy(cEdges)
 
+    difference = [] # Array for Distances Between All Hough Lines
     if lines is not None:
         for i in range(0, len(lines)):
-            rho = lines[i][0][0]
-            theta = lines[i][0][1]
-            a = math.cos(theta)
-            b = math.sin(theta)
-            x0 = a * rho
-            y0 = b * rho
+            x0 = hough_coord(lines, i)[0]
+            y0 = hough_coord(lines, i)[1]
+            a = hough_coord(lines, i)[2]
+            b = hough_coord(lines, i)[3]
             pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
             pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-            cv2.line(cEdges, pt1, pt2, (0,0,255), 1, cv2.LINE_AA)
+            cv2.line(cEdges, pt1, pt2, (0,0,255), 1, cv2.LINE_AA) # Draw Hough Lines
     
-        # Find largest distance between lines. this could be the distance between the outer edges
-        difference = []
+        # Find largest distance between lines. this is likely distance between the outer edges
         for i in range(0, len(lines)):
             # calculate distance between all lines
             for j in range(i+1, len(lines)): 
                 distX = abs(hough_coord(lines, j)[0] - hough_coord(lines, i))[0]
                 distY = abs(hough_coord(lines, j)[1] - hough_coord(lines, i))[1]
 
-                difference.append(max(distX, distY))
+                if distX or distY > 400: 
+                    difference.append([max(distX, distY), i if distX > distY else j])
+                else: 
+                    return 'Distance too short, check your camera.'
 
-        print(difference)
         print(max(difference))
 
-    cv2.imwrite("lines.jpg", cEdges)
+    cv2.imwrite("lines.jpg", cEdges) # Send to file 
+
+    distanceX = max(difference) # this is now the distance to be used for calculating the size of 
 
     # Draw Probablistic Hough Lines
-    if linesP is not None: 
-        for i in range(0, len(linesP)):
-            l = linesP[i][0]
-            cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
-    cv2.imwrite("plines.jpg", cEdgesP)
+    # linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 50, None, 50, 10)
 
-    # for line in linesP: 
-    #     if line[0]-line[1] > 10:
+    # if linesP is not None: 
+    #     for i in range(0, len(linesP)):
+    #         l = linesP[i][0]
     #         cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
-    # find the two edges on the side and calculate their distance, X AXIS
-    # distanceX = coordX2 - coordX1
-    # distanceY = coordY2 - coordY1
+    # cv2.imwrite("plines.jpg", cEdgesP)
+    
 
-    # length = # code here to find pixel size of the printed part
+    # --------------------------------------------------------- # 
+    # Find Dimension of the Printed Part 
+    length = 0 # code here to find pixel size of the printed part
+    width = 0
+    
+    # Using Contours
+    contours, h = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    for contour in contours: 
+        print(cv2.contourArea(contour)) # Calculate contour area
+    # Now we find the largest contour and highlight it 
+    # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
 
-    # return width*distanceX/200, length*distanceY/200
+    return [width*distanceX/250, length*distanceX/250] # in mm
 
 # Compute Hough Line Coordinate
 def hough_coord(lines, i):
@@ -111,7 +110,17 @@ def hough_coord(lines, i):
     pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
     pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
 
-    return [x0, y0]
+    return [x0, y0, a, b]
+
+def maxVal(list): 
+    max = list[0]
+    index = 0
+    for i in range(1,len(list)):
+        if list[i] > max:
+            max = list[i]
+            index = i
+
+    return [index, ]
 
 capture()
 image_process()
