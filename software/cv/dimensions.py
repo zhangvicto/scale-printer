@@ -138,4 +138,5 @@ def hough_coord(lines, i):
 
 capture()
 blurred = image_process()
-find_dim(analyze_edge(blurred), edges(blurred))
+edge = edges(blurred)
+find_dim(analyze_edge(edge), edge)
