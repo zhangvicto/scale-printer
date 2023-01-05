@@ -18,13 +18,12 @@ def capture(numCapture):
         cap.release() # release
     
 
-def blend(list_images): # Blend images equally
-    equal_fraction = 1.0/(len(list_images))
-    output = np.zeros_like(list_images[0])
-    for img in list_images:
-        output = output + img * equal_fraction
-    output = output.astype(np.uint8)
-    return output
+# def blend(list_images): # Blend images equally
+#     equal_fraction = 1.0/(len(list_images))
+#     output = np.zeros_like(list_images[0])
+#     for img in list_images:
+#         output += img * equal_fraction
+#     return output
 
 
 def image_process(): 
@@ -34,12 +33,12 @@ def image_process():
         capture(i)
 
     # Blending Images
-    images = []
-    for i in range(0, numCapture): 
-        images.append(cv2.imread('capture'+str(numCapture)+'.jpg'))
-    cv2.imwrite('capture.jpg', blend(images))
+    # images = []
+    # for i in range(0, numCapture): 
+    #     images.append(cv2.imread('capture'+str(numCapture)+'.jpg'))
+    # cv2.imwrite('capture.jpg', blend(images))
     
-    img = cv2.imread('capture.jpg')
+    img = cv2.imread('capture0.jpg')
     img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # print(img_rotate.shape[:2]) # output dimensions
     img_cropped = img_rotate[0:440, 0:480] # crop
