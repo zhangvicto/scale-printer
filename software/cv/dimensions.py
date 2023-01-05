@@ -6,21 +6,40 @@ import math
 cannyThres1 = 40
 cannyThres2 = 180
 
-def capture(): 
+def capture(numCapture): 
+
     cap = cv2.VideoCapture(0) #setup
     ret, frame = cap.read() # take image and store in variable
-    time.sleep(2) # give time to prevent a green image
+    time.sleep(1) # give time to prevent a green image
     if ret:
+        cv2.imwrite('capture' + numCapture + '.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100]) # write to a file
         cap.release() # release
-        return ret
-        cv2.imwrite('test.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100]) # write to a file
     else: 
         cap.release() # release
-        return 0
     
 
+def blend(list_images): # Blend images equally
+    equal_fraction = 1.0/(len(list_images))
+    output = np.zeros_like(list_images[0])
+    for img in list_images:
+        output = output + img * equal_fraction
+    output = output.astype(np.uint8)
+    return output
+
+
 def image_process(): 
-    img = cv2.imread('test.jpg')
+    # Capture x images
+    numCapture = 5
+    for i in range(0, numCapture): 
+        capture(i)
+
+    # Blending Images
+    images = []
+    for i in range(0, numCapture): 
+        images.append(cv2.imread('capture'+numCapture+'.jpg'))
+    cv2.imwrite('capture.jpg', blend(images))
+    
+    img = cv2.imread('capture.jpg')
     img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # print(img_rotate.shape[:2]) # output dimensions
     img_cropped = img_rotate[0:440, 0:480] # crop
@@ -109,8 +128,7 @@ def find_dim(distanceX, edges):
     
     # Draw Any Significant Contours
     for i in range(0,len(contours)): 
-        print(cv2.contourArea(contours[i])) # Calculate contour area
-
+        # print(cv2.contourArea(contours[i]))
         # Find max hierarchy
     
         # Draw Contours that are big enough, maybe use a percentile calculation instead
