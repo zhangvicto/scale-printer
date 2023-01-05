@@ -12,7 +12,7 @@ def capture(numCapture):
     ret, frame = cap.read() # take image and store in variable
     time.sleep(1) # give time to prevent a green image
     if ret:
-        cv2.imwrite('capture' + numCapture + '.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100]) # write to a file
+        cv2.imwrite('capture' + str(numCapture) + '.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100]) # write to a file
         cap.release() # release
     else: 
         cap.release() # release
@@ -36,7 +36,7 @@ def image_process():
     # Blending Images
     images = []
     for i in range(0, numCapture): 
-        images.append(cv2.imread('capture'+numCapture+'.jpg'))
+        images.append(cv2.imread('capture'+str(numCapture)+'.jpg'))
     cv2.imwrite('capture.jpg', blend(images))
     
     img = cv2.imread('capture.jpg')
