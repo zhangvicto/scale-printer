@@ -71,8 +71,8 @@ def analyze_edge():
             # calculate distance between all lines
             for j in range(i+1, len(lines)): 
                 difference.append(abs(lines[j] - lines[i])) 
-
-        print(max(difference))
+        print(difference)
+        print(max(difference.all()))
 
     cv2.imwrite("lines.jpg", cEdges)
 
