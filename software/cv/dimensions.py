@@ -29,16 +29,18 @@ def image_process():
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
     cv2.imwrite('blur.jpg', img_blur) # write to a file
 
+    # View Edges
     edges = cv2.Canny(image=img_blur, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
     cv2.imwrite('edges.jpg', edges) # write to a file
 
-    # img = cv2.imread('edges.jpg')
-    contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(img_cropped, contours[0], -1, color=(255,255,255), thickness=1)
-    time.sleep(1) # give time to prevent a green image
-    cv2.imwrite("output.jpg", img_cropped)
+    # Draw Contours
+    # contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    # cv2.drawContours(img_cropped, contours[0], -1, color=(255,255,255), thickness=1)
+    # time.sleep(1) # give time to prevent a green image
+    # cv2.imwrite("output.jpg", img_cropped)
 
     return img_blur
+
 
 def analyze_edge(img): 
     # img is blurred
@@ -64,7 +66,7 @@ def analyze_edge(img):
     
         # Find largest distance between lines. this is likely distance between the outer edges
         for i in range(0, len(lines)):
-            # calculate distance between all lines
+            # Calculate distance between all lines
             for j in range(i+1, len(lines)): 
                 distX = abs(hough_coord(lines, j)[0] - hough_coord(lines, i))[0]
                 distY = abs(hough_coord(lines, j)[1] - hough_coord(lines, i))[1]
@@ -90,21 +92,31 @@ def analyze_edge(img):
     #         cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
     # cv2.imwrite("plines.jpg", cEdgesP)
+    return distanceX, edges
     
+# Find Dimension of the Printed Part  
+def find_dim(distanceX, edges): 
 
-    # --------------------------------------------------------- # 
-    # Find Dimension of the Printed Part 
     length = 0 # code here to find pixel size of the printed part
     width = 0
     
     # Using Contours
-    contours, h = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-    cv2.drawContours(edges, contours, -1, (0,0,255), 1)
+    # Draw ALL 
+    # cv2.drawContours(edges, contours, -1, (0,0,255), 1)
+    
+    # Draw Any Significant Contours
+    for i in range(0,len(contours)): 
+        print(cv2.contourArea(contours[i])) # Calculate contour area
+
+        # Find max hierarchy
+    
+        # Draw Contours that are big enough, maybe use a percentile calculation instead
+        if cv2.contourArea(contours[i]) > 6: 
+            cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
+
     cv2.imwrite("contours.jpg", edges)
-
-    for contour in contours: 
-        print(cv2.contourArea(contour)) # Calculate contour area
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
 
@@ -124,4 +136,4 @@ def hough_coord(lines, i):
     return [x0, y0, a, b]
 
 capture()
-analyze_edge(image_process())
+find_dim(analyze_edge(image_process()))
