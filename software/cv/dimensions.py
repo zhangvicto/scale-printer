@@ -41,7 +41,7 @@ def analyze_edge():
     #     print(cv2.contourArea(contour))
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
-    lines = cv2.HoughLines(contours, 1, np.pi/180, 150)
+    lines = cv2.HoughLines(edges, 1, np.pi/180, 150)
     cv2.imwrite("lines.jpg", lines)
 
     # find the two edges on the side and calculate their distance, X AXIS
