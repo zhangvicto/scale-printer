@@ -3,8 +3,8 @@ import numpy as np
 import time
 import math
 
-cannyThres1 = 35
-cannyThres2 = 200
+cannyThres1 = 40
+cannyThres2 = 180
 
 def capture(): 
     cap = cv2.VideoCapture(0) #setup
