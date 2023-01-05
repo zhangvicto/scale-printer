@@ -10,7 +10,7 @@ def capture(numCapture):
 
     cap = cv2.VideoCapture(0) #setup
     ret, frame = cap.read() # take image and store in variable
-    time.sleep(1) # give time to prevent a green image
+    time.sleep(1.5) # give time to prevent a green image
     if ret:
         cv2.imwrite('capture' + str(numCapture) + '.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100]) # write to a file
         cap.release() # release
