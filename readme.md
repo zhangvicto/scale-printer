@@ -1,15 +1,14 @@
 # Particle Swarm Optimization of 3D Printing Parameters on Open-Source Commercial 3D Printer
 
 <img src="/image/printer.jpg" alt="printer" />
-(still WIP)
 
 # Current Progress
 - [x] Mechanical Design
-- [ ] Test Load Cells {60%}
+- [ ] Test Load Cells {80%}
 - [x] Test Camera
-- [ ] Test Dimensional Measurement {20%}
-- [ ] PSO Implementation {60%}
-- [ ] Documentation {30%}
+- [ ] Test Dimensional Measurement {50%}
+- [ ] PSO Implementation {80%}
+- [ ] Documentation {50%}
 - [ ] Refinement 
 
 # Hardware
@@ -33,7 +32,7 @@ Flowchart:
 The PSO algorithm runs each calibration sequence by taking an initial guess to generate the first iteration, then using the results of the first iteration to generate the next iteration. The process repeats until the results are desirable or if the max number of iteration is reached. This implementation is adapted from a previous experiment: https://doi.org/10.1089/3dp.2022.0012. 
 
 ## Computer Vision
-A camera is used to measure the length of each print, as the pixel size can be roughly estimated using the grid pattern on the print bed.
+A camera is used to measure the length of each print, as the pixel size can be roughly estimated using the dimension of the bed.
 <img src="/image/camera-view.png" alt="camera" />
 
 ## Load Cell

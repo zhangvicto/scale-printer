@@ -32,17 +32,25 @@ def image_process():
     time.sleep(1) # give time to prevent a green image
     cv2.imwrite("output.jpg", img_cropped)
 
-    
-
 def analyze_edge(): 
     img = cv2.imread('blur.jpg')
     edges = cv2.Canny(img, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
     contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    for contour in contours: 
-        print(cv2.contourArea(contour))
+    print(contours)
+    # for contour in contours: 
+    #     print(cv2.contourArea(contour))
     # Now we find the largest contour and highlight it 
-    cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
-    cv2.imwrite("highlight.jpg", img)
+    # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
+    lines = cv2.HoughLines(contours, 1, np.pi/180, 150)
+    cv2.imwrite("lines.jpg", lines)
+
+    # find the two edges on the side and calculate their distance, X AXIS
+    # distanceX = coordX2 - coordX1
+    # distanceY = coordY2 - coordY1
+
+    # length = # code here to find pixel size of the printed part
+
+    # return width*distanceX/200, length*distanceY/200
 
 capture()
 image_process()
