@@ -8,7 +8,7 @@ cannyThres2 = 180
 
 def capture(): 
     cap = cv2.VideoCapture(0) #setup
-    ret, frame = cap.read() # take image and store in variable
+    ret = cap.read() # take image and store in variable
     time.sleep(2) # give time to prevent a green image
     if ret:
         cap.release() # release
