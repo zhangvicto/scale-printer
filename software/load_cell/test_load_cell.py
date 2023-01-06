@@ -9,7 +9,7 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
 readings_to_average = 10
 sck_pin = 6
-dout_pins = [3, 4]
+dout_pins = [3, 17]
 weight_multiples = [-5176, -5176]
 
 # create hx711 instance
