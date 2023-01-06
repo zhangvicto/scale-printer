@@ -63,7 +63,7 @@ def measure_mass():
     except Exception as e:
         print(e)
 
-    print(sum(values)/len(values))
-    
-    return sum(values)/len(values) # avg
+    print(sum(values)) # weight
+
+    return sum(values)
 
