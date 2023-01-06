@@ -131,7 +131,7 @@ def find_dim(distanceX, edges):
         # Find max hierarchy
     
         # Draw Contours that are big enough, maybe use a percentile calculation instead
-        if cv2.contourArea(contours[i]) > 6: 
+        if cv2.contourArea(contours[i]) > 10: 
             cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
 
     cv2.imwrite("contours.jpg", edges)
