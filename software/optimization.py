@@ -1,7 +1,7 @@
 from pso.optimize_helpers import Particle, accuracy, consist
 import numpy as np
-from load_cell.mass import load_cell_setup, measure_mass
-from cv.camera import measure_dim
+from load_cell.mass import measure_mass
+from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
 # Settings
 numParticles = 10 # not sure
@@ -15,22 +15,12 @@ particles = []
 # Execute iteration
 def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be the fitness of last iteration
     
-    fitness = func(mass, widths, lengths, 0.33, 0.5, 200)
-
     # global optimum
     x_best_g = []
 
     for i in range(numParticles):
         # Add new particle to particle array
         particles.append(Particle(xmax[i], xmin[i], xguess[i], numDimensions))
-
-        # Once print finishes, check weight, 
-        mass = measure_mass()
-
-        # check dimensions
-        widths = measure_dim()[0]
-        lengths = measure_dim()[1]
-
 
     # For each iteration, iterate through all particles and collect data
     for j in range(numParticles):
@@ -41,6 +31,19 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be t
 
         # compare global op to local op
     
+    
+    # Once print finishes, check weight, 
+    mass = measure_mass()
+
+    # check dimensions
+    blurred = image_process()
+    edge = edges(blurred)
+    find_dim(analyze_edge(edge), edge)
+    widths = find_dim(iter)[0]
+    lengths = find_dim(iter)[1]
+
+    fitness = func(mass, widths, lengths, 0.33, 0.5, 200)
+
     return 
 
 

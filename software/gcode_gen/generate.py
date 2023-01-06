@@ -173,10 +173,11 @@ def genStart(nozzleD, Te, Tb, Vp):
 
 def genEnd(): 
     # Park and Reset Flow
-    # Park Location
-    x = 200
+    # Park Location, in mm
+    x = 100
     y = 200
 
+    # Move up and to the middle of the bed
     gcode = "G1 Z9 F720 ; Move print head up \nG1 X{} Y{} F3600 ; park \nG1 Z57 F720 ; Move print head further up \nG4 ; wait \nM221 S100 ; reset flow\n\n".format(x,y)
 
     # Turn Everything Off
@@ -187,10 +188,10 @@ def genEnd():
     return gcode
 
 def genLine(iter, settings): 
-    TO_X = iter*10
-    TO_Y = settings['lineSpacing']
+    TO_X = iter*15
+    TO_Y = settings['lineSpacing'] + 10
     TO_Z = HEIGHT_FIRSTLAYER
-    line_length = 150
+    line_length = 100
 
     gcode = ''
 
@@ -201,7 +202,6 @@ def genLine(iter, settings):
     # Initial xy pos
     gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': ' ; Moving to line position\n'})
     
-
     # Set Acceleration
     gcode += "M204 S800\n"
 
@@ -218,13 +218,14 @@ def genLine(iter, settings):
 
 def genPlane(): 
     gcode = ''
+
     return ''
 
 def genCube(): 
     gcode = ''
     return ''
 
-
+# ------------------------------------------------------------------------------------------- # 
 def moveToZ(to_z, settings): 
 
     global CUR_Z

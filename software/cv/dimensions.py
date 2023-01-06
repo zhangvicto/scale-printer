@@ -48,8 +48,8 @@ def image_process():
     cv2.imwrite('blur.jpg', img_blur) # write to a file
 
     # View Edges
-    edges = cv2.Canny(image=img_blur, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
-    cv2.imwrite('edges.jpg', edges) # write to a file
+    # edges = cv2.Canny(image=img_blur, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
+    # cv2.imwrite('edges.jpg', edges) # write to a file
 
     # Draw Contours
     # contours = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
@@ -121,19 +121,21 @@ def find_dim(distanceX, edges):
     
     # Using Contours
     contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    # Find Highest Hierarchy
+    maxH = list_max(h)
 
     # Draw ALL 
     # cv2.drawContours(edges, contours, -1, (0,0,255), 1)
     
     contourArea = []
     # Draw Any Significant Contours
-    for i in range(0,len(contours)): 
+    for i in range(0, len(contours)): 
         # print(cv2.contourArea(contours[i]))
-        # Find max hierarchy
-
-        
+        # Using RETER_TREE 
+        # Remove any contour that are 
+       
         # Draw Contours that are big enough, maybe use a percentile calculation instead
-        if cv2.contourArea(contours[i]) > 100: 
+        if cv2.contourArea(contours[i]) > 100 and h[i][3] == maxH: 
             cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
             contourArea.append(cv2.contourArea(contours[i]))
 
@@ -144,6 +146,10 @@ def find_dim(distanceX, edges):
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
 
     return [width*distanceX/250, length*distanceX/250] # in mm
+
+
+# Helper Functions
+# ----------------------------------------------------------------------- # 
 
 # Compute Hough Line Coordinate
 def hough_coord(lines, i):
@@ -158,6 +164,16 @@ def hough_coord(lines, i):
 
     return [x0, y0, a, b]
 
+# Recursively Find Max in a List 
+def list_max(list):
+    if len(list) == 1:
+        return list[0]
+    else:
+        m = max(list[1:])
+        return m if m > list[0] else list[0]
+
+# Execute Script
+# ----------------------------------------------------------------------- # 
 blurred = image_process()
 edge = edges(blurred)
 find_dim(analyze_edge(edge), edge)
