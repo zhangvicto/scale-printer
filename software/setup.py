@@ -40,8 +40,10 @@ if mode == "L":
 elif mode == "P" or mode == "C": 
     numIterations = 10
 
+# Run Interations
 for i in range(numIterations): 
     # Start print once the inputs are confirmed
+
     # Run through first PSO iteration
     gcode = gcode_gen(optimize(fitness, xmax, xmin, xguess, numDimensions, i), i, )
 
