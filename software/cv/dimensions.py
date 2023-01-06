@@ -133,12 +133,12 @@ def find_dim(distanceX, edges):
 
         
         # Draw Contours that are big enough, maybe use a percentile calculation instead
-        if cv2.contourArea(contours[i]) > 10: 
+        if cv2.contourArea(contours[i]) > 100: 
             cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
             contourArea.append(cv2.contourArea(contours[i]))
 
     print(contourArea)
-    
+
     cv2.imwrite("contours.jpg", edges)
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
