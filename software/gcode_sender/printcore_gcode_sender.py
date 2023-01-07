@@ -28,7 +28,8 @@ def send_gcode(gcode_file):
   except:
       p.disconnect()
   
-print(serial.tools.list_ports.comports())
+for device in serial.tools.list_ports.comports(): 
+  print(device.description)
 
 #If you need to interact with the printer:
 # p.send_now("M105") # this will send M105 immediately, ahead of the rest of the print
