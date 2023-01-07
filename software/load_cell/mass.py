@@ -69,8 +69,8 @@ def measure_mass():
         print(e)
 
     print(values) # weight
-    print(sum(values)/len(values))
+    # print(sum(values)/len(values))
 
-    return sum(values)/len(values)
+    # return sum(values)/len(values)
 
 measure_mass()
