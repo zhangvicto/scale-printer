@@ -121,8 +121,9 @@ def find_dim(distanceX, edges):
     
     # Using Contours
     contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    
     # Find Highest Hierarchy
-    maxH = find_maxH(h)
+    # maxH = find_maxH(h)
 
     # Draw ALL 
     # cv2.drawContours(edges, contours, -1, (0,0,255), 1)
@@ -136,7 +137,7 @@ def find_dim(distanceX, edges):
         print(maxH)
         print(h[0][0])
         # Draw Contours that are big enough, maybe use a percentile calculation instead
-        if cv2.contourArea(contours[i]) > 100 and h[0][i][3] == maxH: 
+        if cv2.contourArea(contours[i]) > 100:  #and h[0][i][3] == maxH
             cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
             contourArea.append(cv2.contourArea(contours[i]))
 
@@ -166,16 +167,16 @@ def hough_coord(lines, i):
     return [x0, y0, a, b]
 
 # Recursively Find Max in a List 
-def find_maxH(h):
-    array = h[0]
-    m = []
-    if len(array) == 1:
-        return array[3]
-    else:
-        for i in range(0, len(array)): 
-            m.append(array[3]) 
-        print(m)
-        return max(m)
+# def find_maxH(h):
+#     array = h[0]
+#     m = []
+#     if len(array) == 1:
+#         return array[3][3]
+#     else:
+#         for i in range(0, len(array)): 
+#             m.append(array[3]) 
+#         print(m)
+#         return max(m)
 
 
 # Execute Script
