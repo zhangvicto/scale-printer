@@ -24,6 +24,8 @@ def calibrate_all(known_weights):
     i = 0 
     for weight in known_weights: 
         raw = hx711.read_raw(readings_to_average=readings_to_average) # Read the Raw Values
+        print(raw)
+
         raw_sum = sum(raw) # Sum up all raw readings
         avg_multiples += weight/raw_sum # Find the multiple
 
