@@ -37,6 +37,7 @@ def measure_mass():
     hx711.set_weight_multiples(weight_multiples=weight_multiples)
 
     values = []
+    mass = []
 
     try:
         start = perf_counter()
@@ -69,9 +70,11 @@ def measure_mass():
     except Exception as e:
         print(e)
 
-    print(values) # weight
-    # print(sum(values)/len(values))
+    # print(values) # weight
+    if values: 
+        for value in values: 
+            mass.append(sum(value))
 
-    # return sum(values)/len(values)
+    return sum(mass)/len(mass)
 
-measure_mass()
+print(measure_mass())
