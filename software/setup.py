@@ -48,9 +48,9 @@ for i in range(numIterations):
     input("put weight pls") # wait for weight to be placed
     mass = measure_mass()
     print(mass)
-    if round(mass) > 0: 
+    while abs(mass) > 0.3: 
         tare()
-    print(measure_mass)
+    # tare until we get a value that is less than 0.3g
     
     # Start print once the inputs are confirmed
 
