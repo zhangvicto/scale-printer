@@ -43,5 +43,5 @@ def send_gcode(gcode_file):
 # p.disconnect() # this is how you disconnect from the printer once you are done. This will also stop running prints.
 for device in serial.tools.list_ports.comports(): 
   if 'Prusa' in device.description: 
-    port = device.location
+    port = device.device
 print(port)
