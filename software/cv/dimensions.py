@@ -133,9 +133,9 @@ def find_dim(distanceX, edges):
         # print(cv2.contourArea(contours[i]))
         # Using RETER_TREE 
         # Remove any contour that are 
-       
+        print(h)
         # Draw Contours that are big enough, maybe use a percentile calculation instead
-        if cv2.contourArea(contours[i]) > 100 and h[i][3] == maxH: 
+        if cv2.contourArea(contours[i]) > 100 : #and h[0][3] == maxH
             cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
             contourArea.append(cv2.contourArea(contours[i]))
 
