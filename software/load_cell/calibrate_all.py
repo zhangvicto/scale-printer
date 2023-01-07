@@ -37,7 +37,7 @@ def calibrate_all(known_weights):
             print(e)
             
         # Input Prompt
-        input("Please put {}g weight on the bed. \n".format(weight))
+        input("Please put {}g weight on the bed.".format(weight))
         time.sleep(1) # sleep to prevent none values
 
         raw = hx711.read_raw(readings_to_average) # Read the Raw Values of Each Load Cell
@@ -58,7 +58,7 @@ def calibrate_all(known_weights):
 
         i += 1 # Next calibration weight
 
-        input("Please take the weight off.")
+        input("Please take the weight off.\n")
 
     # Standard Dev of Values in Multiples
     print(statistics.stdev(avg_multiples)) # Avg Value of the multiple across four cells
@@ -70,5 +70,5 @@ def calibrate_all(known_weights):
         i += 1
 
 # Run Script to find best, for future auto run calibration at start
-weights = [5, 10, 20, 100]
+weights = [1, 2, 5, 10, 20, 100]
 calibrate_all(weights)
