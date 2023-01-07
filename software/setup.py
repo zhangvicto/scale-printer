@@ -48,9 +48,9 @@ for i in range(numIterations):
     input("put weight pls") # wait for weight to be placed
     mass = measure_mass
     print(mass)
-    if round(mass) > 0: 
-        tare()
-    print(measure_mass)
+    # if round(mass) > 0: 
+    #     tare()
+    # print(measure_mass)
     
     # Start print once the inputs are confirmed
 
