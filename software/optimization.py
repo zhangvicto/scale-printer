@@ -20,18 +20,20 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be t
     global x_best_g, particles
 
     # Create Particle Array
-    for i in range(numParticles):
+    for i in range(0, numParticles):
         # Add new particle to particle array
         particles.append(Particle(xmax[i], xmin[i], xguess[i], numDimensions))
 
     # For each iteration, iterate through all particles and collect data
-    for j in range(numParticles):
+    for particle in particles:
             
         # Generate new values for the next iteration based on previous iteration
         particles[j].updateVelocity(x_best_g)
         particles[j].updatePosition()
 
         # compare global op to local op
+        if particles[j].f_best_p > x_best_g: # evaluate 
+            
     
     
     # Once print finishes, check weight, 
