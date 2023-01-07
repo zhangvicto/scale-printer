@@ -65,10 +65,11 @@ def calibrate_all(known_weights):
 
     # Avg the individual Weights and Print
     individual = np.transpose(individual_multiples)
+
     for multiple in individual: 
-        print("Load Cell-{}: {}. Stddev: {}".format(i, sum(multiple)/len(multiple), statistics.stdev(multiple)))
+        print("Load Cell-{}: {}. Stddev: {}".format(individual_multiples.index(multiple), sum(multiple)/len(multiple), statistics.stdev(multiple)))
         
 
 # Run Script to find best, for future auto run calibration at start
-weights = [1, 2, 5, 10, 20, 100]
+weights = [5, 10, 20, 100]
 calibrate_all(weights)
