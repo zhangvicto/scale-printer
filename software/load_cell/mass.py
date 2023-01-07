@@ -4,21 +4,26 @@ from hx711_multi import HX711
 from time import perf_counter
 
 def measure_mass():
+
+
     readings_to_average = 10
-    sck_pin = 2
-    dout_pins = [3, 4]
-    weight_multiples = [-5176, -5500]
+    sck_pin = 6
+    dout_pins = [22, 4, 17, 27] # 1, 2, 3, 4
+    # weight_multiples = [465.08, 459.72, 459.72, 459.72] # 128 gain
+    weight_multiples = [ 242.77546428571455, 239.82688492063602, 239.82688492063602, 227.31083333333316, 237.6260119047622] # 64 gain
+
 
     # create hx711 instance
     hx711 = HX711(dout_pins=dout_pins,
                 sck_pin=sck_pin,
-                channel_A_gain=128,
+                channel_A_gain=64,
                 channel_select='A',
                 all_or_nothing=False,
                 log_level='CRITICAL')
-
+    
     # reset ADC, zero it
     hx711.reset()
+
     try:
         hx711.zero(readings_to_average=readings_to_average*3)
     except Exception as e:
@@ -45,7 +50,6 @@ def measure_mass():
             weights = hx711.get_weight()
             values.append(weights)
 
-
             read_duration = perf_counter() - start
             # sample_rate = readings_to_average/read_duration
             # print('\nread duration: {:.3f} seconds, rate: {:.1f} Hz'.format(read_duration, sample_rate))
@@ -63,7 +67,8 @@ def measure_mass():
     except Exception as e:
         print(e)
 
-    print(sum(values)) # weight
+    print(values) # weight
+    print(sum(values)/len(values))
 
-    return sum(values)
+    return sum(values)/len(values)
 
