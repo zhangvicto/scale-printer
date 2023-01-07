@@ -50,6 +50,7 @@ def measure_mass():
             # This function call will not perform a new measurement, it will just use what was acquired during read_raw()
             weights = hx711.get_weight()
             values.append(weights)
+            print(values)
 
             read_duration = perf_counter() - start
             # sample_rate = readings_to_average/read_duration
