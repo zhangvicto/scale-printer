@@ -10,7 +10,7 @@ def measure_mass():
     sck_pin = 6
     dout_pins = [22, 4, 17, 27] # 1, 2, 3, 4
     # weight_multiples = [465.08, 459.72, 459.72, 459.72] # 128 gain
-    weight_multiples = [ 242.77546428571455, 239.82688492063602, 239.82688492063602, 227.31083333333316, 237.6260119047622] # 64 gain
+    weight_multiples = [242.78, 239.83, 239.83, 227.31, 237.63] # 64 gain
 
 
     # create hx711 instance
