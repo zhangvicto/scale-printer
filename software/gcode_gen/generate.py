@@ -51,7 +51,7 @@ ANCHOR_LAYER_LINE_RATIO = ANCHOR_LAYER_LINE_WIDTH * HEIGHT_FIRSTLAYER /  (pow(FI
 # LINE_WIDTH = NOZZLE_DIAMETER * (LINE_RATIO / 100)
 # ANCHOR_PERIMETERS = 
 
-
+# Gcode Settings
 settings = {
     'firstLayerSpeed': SPEED_FIRSTLAYER,
     'moveSpeed': SPEED_TRAVEL,
@@ -107,7 +107,7 @@ settings = {
 #    [ ]   [ ]
 # [ ]         [ ]
 
-def gcode_gen(type, iter, settings): #x, y, indicate the position of the print
+def gcode_gen(type, iter): #x, y, indicate the position of the print
 
     gcode = ''
 

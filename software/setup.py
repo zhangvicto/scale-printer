@@ -45,21 +45,24 @@ elif mode == "P" or mode == "C":
 for i in range(numIterations): 
     # Tare Load Cells
     tare()
-    input("put weight pls") # wait for weight to be placed
     mass = measure_mass()
-    print(mass)
-    while abs(mass) > 0.3: 
-        tare()
-    # tare until we get a value that is less than 0.3g
+    print(mass) # Should be 0 
+
+    # Tare until we get a value that is less than 0.3g
+    # while abs(mass) > 0.3: 
+    #     tare()
+    
     
     # Start print once the inputs are confirmed
 
-    # Run through first PSO iteration
-    # gcode = gcode_gen(optimize(fitness, xmax, xmin, xguess, numDimensions, i), i, )
+    # Run through first PSO iteration and generate parameter
+    gcode_gen(optimize(fitness, xmax, xmin, xguess, numDimensions, i), i, )
 
+    # Send to Printer
+    send_gcode(gcode_file=gcode)
 
-# Check for 
+    # Check for 
 
-# Generate gcode for next iteration
+    # Generate gcode for next iteration
 
 GPIO.cleanup()
