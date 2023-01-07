@@ -3,9 +3,15 @@
 from printrun.printcore import printcore
 from printrun import gcoder
 import time
+from serial import tools
 
 def send_gcode(gcode_file): 
-  p=printcore('/dev/ttyACM1', 115200) # or p.printcore('COM3',115200) on Windows
+
+  port = '/dev/ttyACM0'
+
+  # for devices in tools.
+  # port = tools.
+  p=printcore(port , 115200) # or p.printcore('COM3',115200) on Windows
   gcode=[i.strip() for i in open(gcode_file)] # or pass in your own array of gcode lines instead of reading from a file
   gcode = gcoder.LightGCode(gcode)
 
@@ -22,6 +28,9 @@ def send_gcode(gcode_file):
   except:
       p.disconnect()
   
+for device in tools.list_ports.ListPortInfo: 
+  print(device.description)
+
 #If you need to interact with the printer:
 # p.send_now("M105") # this will send M105 immediately, ahead of the rest of the print
 # p.pause() # use these to pause/resume the current print
