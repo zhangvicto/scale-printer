@@ -174,6 +174,7 @@ def find_maxH(h):
     else:
         for i in range(0, len(array)): 
             m.append(array[3]) 
+        print(m)
         return max(m)
 
 
