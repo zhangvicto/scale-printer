@@ -122,7 +122,7 @@ def find_dim(distanceX, edges):
     # Using Contours
     contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     # Find Highest Hierarchy
-    maxH = list_max(h)
+    maxH = list_max(h[0])
 
     # Draw ALL 
     # cv2.drawContours(edges, contours, -1, (0,0,255), 1)
