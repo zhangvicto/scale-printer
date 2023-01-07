@@ -64,5 +64,5 @@ def calibrate_all(known_weights):
         i += 1
 
 # Run Script to find best, for future auto run calibration at start
-weights = [1, 2, 5, 10, 20, 100]
+weights = [5, 10, 20, 100]
 calibrate_all(weights)
