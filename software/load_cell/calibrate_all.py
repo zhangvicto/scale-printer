@@ -18,11 +18,26 @@ hx711 = HX711(dout_pins=dout_pins,
 # reset ADC, zero it
 hx711.reset()
 
+try:
+    hx711.zero(readings_to_average)
+except Exception as e:
+    print(e)
+
+# Function to Calibrate all Load Cells Together
 def calibrate_all(known_weights): 
     avg_multiples = []
     individual_multiples = []
     i = 0 
     for weight in known_weights: 
+        # Tare
+        try:
+            hx711.zero(readings_to_average)
+        except Exception as e:
+            print(e)
+            
+        # Input Prompt
+        input("Please put {}g weight on the bed. \n".format(weight))
+
         raw = hx711.read_raw(readings_to_average) # Read the Raw Values of Each Load Cell
         raw_sum = sum(raw) # Sum up all raw readings
         avg_multiples.append((weight/raw_sum)/4) # Find the multiple
@@ -33,10 +48,11 @@ def calibrate_all(known_weights):
             individual_cell_multiple.append(avg_multiples[i]*(1 + multiple_diff))  # Adjustment to the individual multiple
 
         individual_multiples.append(individual_cell_multiple) # Add all four multiples with adjustment
+
         i += 1 # Next calibration weight
 
-        input("Please put {}g weight on the bed.".format(weight))
-    
+        input("Please take the weight off. \n")
+
 
     # Standard Dev of Values in Multiples
     print(statistics.stdev(avg_multiples)) # Avg Value of the multiple across four cells
