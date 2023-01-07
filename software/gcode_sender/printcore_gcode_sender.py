@@ -7,17 +7,15 @@ import serial.tools.list_ports
 
 def send_gcode(gcode_file): 
 
-  port = '/dev/ttyACM0'
-  # for device in serial.tools.list_ports.comports(): 
-  #   if 'Prusa' in device.description: 
-  #     port = device.location
-  # print(port)
+  port = '/dev/ttyACM0' # default port
 
-  # for devices in tools.
-  # port = tools.
-  p=printcore(port , 115200) # or p.printcore('COM3',115200) on Windows
-  gcode=[i.strip() for i in open(gcode_file)] # or pass in your own array of gcode lines instead of reading from a file
-  gcode = gcoder.LightGCode(gcode)
+  for device in serial.tools.list_ports.comports(): 
+    if 'Prusa' in device.description: 
+      port = device.device
+
+  p = printcore(port , 115200) #  Instance of Printcore
+  gcode = [i.strip() for i in open(gcode_file)] # Process Gcode read from file
+  gcode = gcoder.LightGCode(gcode) # Process Gcode
 
   # startprint silently exits if not connected yet
   while not p.online:
@@ -41,7 +39,3 @@ def send_gcode(gcode_file):
 # p.pause() # use these to pause/resume the current print
 # p.resume()
 # p.disconnect() # this is how you disconnect from the printer once you are done. This will also stop running prints.
-for device in serial.tools.list_ports.comports(): 
-  if 'Prusa' in device.description: 
-    port = device.device
-print(port)
