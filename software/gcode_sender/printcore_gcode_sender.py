@@ -8,6 +8,10 @@ import serial.tools.list_ports
 def send_gcode(gcode_file): 
 
   port = '/dev/ttyACM0'
+  # for device in serial.tools.list_ports.comports(): 
+  #   if 'Prusa' in device.description: 
+  #     port = device.location
+  # print(port)
 
   # for devices in tools.
   # port = tools.
@@ -28,11 +32,16 @@ def send_gcode(gcode_file):
   except:
       p.disconnect()
   
-for device in serial.tools.list_ports.comports(): 
-  print(device.description)
+# List all com connected devices
+# for device in serial.tools.list_ports.comports(): 
+#   print(device.description)
 
 #If you need to interact with the printer:
 # p.send_now("M105") # this will send M105 immediately, ahead of the rest of the print
 # p.pause() # use these to pause/resume the current print
 # p.resume()
 # p.disconnect() # this is how you disconnect from the printer once you are done. This will also stop running prints.
+for device in serial.tools.list_ports.comports(): 
+  if 'Prusa' in device.description: 
+    port = device.location
+print(port)
