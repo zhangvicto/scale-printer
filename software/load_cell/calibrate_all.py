@@ -23,8 +23,7 @@ def calibrate_all(known_weights):
     individual_multiples = []
     i = 0 
     for weight in known_weights: 
-        raw = hx711.read_raw(readings_to_average=readings_to_average) # Read the Raw Values of Each Load Cell
-        print(sum(raw))
+        raw = hx711.read_raw(readings_to_average) # Read the Raw Values of Each Load Cell
         raw_sum = sum(raw) # Sum up all raw readings
         avg_multiples += weight/raw_sum # Find the multiple
 
@@ -48,4 +47,5 @@ def calibrate_all(known_weights):
         print("Load Cell{}: {}. Stddev: {}".format(i, sum(multiple)/len(multiple), statistics.stdev(multiple)))
 
 # Run Script to find best, for future auto run calibration at start
-calibrate_all(known_weights=[1, 2, 5, 10, 20, 100])
+weights = [1, 2, 5, 10, 20, 100]
+calibrate_all(weights)
