@@ -41,7 +41,7 @@ def measure_mass():
     try:
         start = perf_counter()
 
-        while perf_counter() < 4: # 4 sec timer
+        while perf_counter() - start <  4: # 4 sec timer
             # perform read operation, returns signed integer values as delta from zero()
             # readings aare filtered for bad data and then averaged
             raw_vals = hx711.read_raw(readings_to_average=readings_to_average)
