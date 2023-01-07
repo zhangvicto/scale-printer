@@ -41,6 +41,7 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be t
     blurred = image_process()
     edge = edges(blurred)
     find_dim(analyze_edge(edge), edge)
+
     widths = find_dim(iter)[0]
     lengths = find_dim(iter)[1]
 
