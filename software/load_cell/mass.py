@@ -4,8 +4,6 @@ from hx711_multi import HX711
 from time import perf_counter
 
 def measure_mass():
-
-
     readings_to_average = 10
     sck_pin = 6
     dout_pins = [22, 4, 17, 27] # 1, 2, 3, 4
@@ -72,3 +70,4 @@ def measure_mass():
 
     return sum(values)/len(values)
 
+measure_mass()
