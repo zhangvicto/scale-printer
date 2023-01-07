@@ -9,6 +9,7 @@ numParticles = 10 # not sure
 # Array of particle objects
 particles = []
 
+x_best_g = []
 # Inertia weights?
 
 
@@ -16,8 +17,9 @@ particles = []
 def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be the fitness of last iteration
     
     # global optimum
-    x_best_g = []
+    global x_best_g, particles
 
+    # Create Particle Array
     for i in range(numParticles):
         # Add new particle to particle array
         particles.append(Particle(xmax[i], xmin[i], xguess[i], numDimensions))
@@ -44,7 +46,7 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter): #inputs should be t
 
     fitness = func(mass, widths, lengths, 0.33, 0.5, 200)
 
-    return 
+    return particles
 
 
 # Fitness Functions
