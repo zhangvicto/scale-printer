@@ -2,6 +2,7 @@ from hx711_multi import HX711
 import statistics
 import time
 import RPi.GPIO as GPIO  # import GPIO
+import numpy as np
 
 GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
@@ -41,13 +42,12 @@ def calibrate_all(known_weights):
         time.sleep(1) # sleep to prevent none values
 
         raw = hx711.read_raw(readings_to_average) # Read the Raw Values of Each Load Cell
-
         # prevent none values
         while None in raw: 
             raw = hx711.read_raw(readings_to_average)
 
         raw_sum = sum(raw) # Sum up all raw readings
-        avg_multiples.append((raw_sum/weight)/4) # Find the multiple
+        avg_multiples.append((raw_sum/(weight*4))) # Calculate the multiple
 
         individual_cell_multiple = []
         for value in raw: 
@@ -63,11 +63,11 @@ def calibrate_all(known_weights):
     # Standard Dev of Values in Multiples
     print(statistics.stdev(avg_multiples)) # Avg Value of the multiple across four cells
 
-    # Avg the individual Weights
-    i = 1
-    for multiple in individual_multiples: 
+    # Avg the individual Weights and Print
+    individual = np.transpose(individual_multiples)
+    for multiple in individual: 
         print("Load Cell-{}: {}. Stddev: {}".format(i, sum(multiple)/len(multiple), statistics.stdev(multiple)))
-        i += 1
+        
 
 # Run Script to find best, for future auto run calibration at start
 weights = [1, 2, 5, 10, 20, 100]
