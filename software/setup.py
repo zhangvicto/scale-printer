@@ -34,7 +34,7 @@ xguess = [230, 60, 40]
 numDimensions = len(xmax)
 
 # Choose Calibration Type GCODE (Line or Plane)
-mode = input('Choose a calibration mode, L, P, or C')
+mode = input('Choose a calibration mode, L, P, or C: \n')
 
 if mode == "L": 
     numIterations = 15
