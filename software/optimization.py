@@ -1,7 +1,7 @@
 from pso.optimize_helpers import Particle, accuracy, consist
 import numpy as np
 from load_cell.mass import measure_mass
-from gcode_gen.generate import gcode_gen
+from gcode_gen.generate import gcode_gen, settings
 from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
@@ -16,39 +16,6 @@ x_best_g = []
 
 desired_mass = 
 
-
-# Default Print Settings
-settings = {
-    'firstLayerSpeed': SPEED_FIRSTLAYER,
-    'moveSpeed': SPEED_TRAVEL,
-    'zSpeed': Z_SPEED, 
-    # 'numPatterns': NUM_PATTERNS,
-    'perimSpeed': SPEED_PERIMETER,
-    'centerX': CENTER_X,
-    'centerY': CENTER_Y,
-    'printDir': PRINT_DIR,
-    'layerHeight': HEIGHT_LAYER,
-    'firstLayerHeight': HEIGHT_FIRSTLAYER,
-    'lineWidth': LINE_WIDTH,
-    'lineSpacing': LINE_SPACING,
-    'extRatio': EXTRUSION_RATIO,
-    'extMult': EXT_MULT,
-    # 'anchorExtRatio': ANCHOR_LAYER_EXTRUSION_RATIO,
-    'anchorLineWidth': ANCHOR_LAYER_LINE_WIDTH,
-    'anchorLineSpacing': ANCHOR_LAYER_LINE_SPACING,
-    # 'anchorPerimeters': ANCHOR_PERIMETERS,
-    'retractDist': 0.8,
-    'retractSpeed': SPEED_RETRACT,
-    'unretractSpeed': SPEED_UNRETRACT,
-    'extruderName': EXTRUDER_NAME,
-    'xyRound': XY_ROUND,
-    'zRound': Z_ROUND,
-    'zhopEnable': ZHOP_ENABLE,
-    'zhopHeight': ZHOP_HEIGHT,
-    # 'paStart': PA_START,
-    # 'paEnd': PA_END,
-    # 'paStep': PA_STEP
-}
 
 # Execute iteration
 def optimize(func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs should be the fitness of last iteration

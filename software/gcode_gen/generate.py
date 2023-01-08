@@ -350,12 +350,12 @@ def createLine(to_x, to_y, settings, optional):
 
     return gcode
 
-with open("./gcode_gen/test.gcode", "w") as f:
-    configEnd = open("./gcode_gen/end.txt", "r").read()
+# with open("./gcode_gen/test.gcode", "w") as f:
+#     configEnd = open("./gcode_gen/end.txt", "r").read()
 
-    f.write(genStart(0.4, 230, 0, settings['moveSpeed']))
-    f.write(gcode_gen('L', 1, settings))
-    f.write(genEnd())
-    f.write(configEnd)
+#     f.write(genStart(0.4, 230, 0, settings['moveSpeed']))
+#     f.write(gcode_gen('L', 1, settings))
+#     f.write(genEnd())
+#     f.write(configEnd)
 
-    f.close()
+#     f.close()

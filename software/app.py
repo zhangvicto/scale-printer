@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory, request, jsonify
 
 app = Flask(__name__)
-static_path = '/web_server/static'
+static_path = './web_server/static'
 
 @app.route("/")
 def index():
