@@ -5,9 +5,13 @@ from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
 iter = 1
 
-gcode = genStart(nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
-gcode += gcode_gen('L', iter, settings)
-gcode += genEnd(iter) # need to add iter as a parameter
-gcode += open("./gcode_gen/end.txt", "r").read()
+with open("./gcode_gen/test.gcode", "w") as f:
+    
+    gcode = genStart(nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+    gcode += gcode_gen('L', iter, settings)
+    gcode += genEnd(iter) # need to add iter as a parameter
+    gcode += open("./gcode_gen/end.txt", "r").read()
 
-send_gcode(gcode)
+    f.write(gcode)
+
+send_gcode('./gcode_gen/test.gcode')
