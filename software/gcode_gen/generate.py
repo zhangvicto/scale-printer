@@ -211,7 +211,7 @@ def genLine(iter, settings):
     gcode += "; stop printing line id:0 copy 0\n"
 
     # Force retract
-    gcode += retract(settings)
+    gcode += retract()
     # Set Progresss
     # gcode += "M73 P100 R0\nM73 Q100 S0\n"
 
