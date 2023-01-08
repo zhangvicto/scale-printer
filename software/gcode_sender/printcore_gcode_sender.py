@@ -27,12 +27,6 @@ def send_gcode(gcode_file):
   start = time.perf_counter()
   last_val = 0
   while p.printing:
-    if last_val > 50 and time.perf_counter()- start > 10 and float(p.queueindex) / len(p.mainqueue) == last_val:
-      print('Print is likely done. Disconnecting...')
-      p.cancelprint()
-      p.disconnect()
-      break
-    last_val = float(p.queueindex) / len(p.mainqueue)
     print('progress: {}'.format(100 * float(p.queueindex) / len(p.mainqueue)))
   else:
     print('Print Complete')
