@@ -154,7 +154,8 @@ def genStart(nozzleD, Te, Tb, Vp):
     gcode += "G80 ; mesh bed leveling\n\n"
 
     # Intro line
-    gcode += "G1 Z{} F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'])
+    if iter == 1: # only on first print
+        gcode += "G1 Z{} F720 \nG1 Y-3 F1000 ; go outside print area \nG92 E0 \nG1 X60 E9 F1000 ; intro line \nG1 X100 E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'])
 
     # Level again, set flow, set other
     gcode += "G92 E0 \nM221 S95\n\n; Don't change E values below. Excessive value can damage the printer.\n\n"
