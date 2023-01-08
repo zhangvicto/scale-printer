@@ -235,7 +235,7 @@ def hough_coord(lines, i):
 
 # Execute Script, comment on final
 # ----------------------------------------------------------------------- # 
-blurred = image_process()
-edge = edges(blurred)
-distX = analyze_edge(edge)
-find_dim([0, 1*15/250*distX], [0, 180], distX, edge)
+# blurred = image_process()
+# edge = edges(blurred)
+# distX = analyze_edge(edge)
+# find_dim([0, 1*15/250*distX], [0, 180], distX, edge)
