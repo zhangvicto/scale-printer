@@ -158,12 +158,12 @@ def genStart(iter, nozzleD, Te, Tb, Vp):
     introX1 = 40
     introY = 180 + iter*3 # intro line starting at 180 and increasing by 3mm for each iteration
     if introY > 200:
-        introX = 100 + 40
+        introX1 = 100 + 40
     introX2 = introX1 + intro_length
 
     # maybe try stacking it using Z
     # if iter == 1: # only on first print -- OLD
-    gcode += "G1 Z{} F720 \nG1 Y{} F1000 ; go outside print area \nG92 E0 \nG1 X{} E9 F1000 ; intro line \nG1 X{} E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'], introY, introX, introX2)
+    gcode += "G1 Z{} F720 \nG1 Y{} F1000 ; go outside print area \nG92 E0 \nG1 X{} E9 F1000 ; intro line \nG1 X{} E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'], introY, introX1, introX2)
 
     # Level again, set flow, set other
     gcode += "G92 E0 \nM221 S95\n\n; Don't change E values below. Excessive value can damage the printer.\n\n"
