@@ -5,7 +5,7 @@ kv = 0.5
 kp = 1
 kg = 2
 
-# Particle object
+# Particle Class
 class Particle: 
     def __init__(self, xmax, xmin, xguess, numDimensions): 
         self.x_i = [] # position

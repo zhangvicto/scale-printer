@@ -1,0 +1,14 @@
+# https://gist.github.com/emxsys/a507f3cad928e66f6410e7ac28e2990f
+DELETE AFTER
+
+[Unit]
+Description=Flask Web Server for PSO
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/scale-printer/setup.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

@@ -16,15 +16,6 @@ def capture(numCapture):
         cap.release() # release
     else: 
         cap.release() # release
-    
-
-# def blend(list_images): # Blend images equally
-#     equal_fraction = 1.0/(len(list_images))
-#     output = np.zeros_like(list_images[0])
-#     for img in list_images:
-#         output += img * equal_fraction
-#     return output
-
 
 def image_process(): 
     # Capture x images
@@ -66,8 +57,8 @@ def analyze_edge(edges):
     # Using Houghlines, Find Houghlines using Canny Edges
     lines = cv2.HoughLines(edges, 1, np.pi/180, 150)
 
-    # Draw the Hough Lines
-    cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+    # Draw the Hough Lines, find the max distance between any lines -- likely the dimenstion of the bed
+    cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR) # covert color
     # cEdgesP = np.copy(cEdges)
 
     difference = [] # Array for Distances Between All Hough Lines
@@ -93,7 +84,7 @@ def analyze_edge(edges):
                 if distX or distY > 400: 
                     difference.append([max(distX, distY), i if distX > distY else j])
                 else: 
-                    return 'Distance too short, check your camera.'
+                    return 'Distance too short, check the camera.'
 
         print(max(difference)[0])
 
@@ -102,7 +93,6 @@ def analyze_edge(edges):
     distanceX = max(difference[0]) # this is now the distance to be used for calculating the size of 
 
     # Draw Probablistic Hough Lines
-
     # linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 50, None, 50, 10)
 
     # if linesP is not None: 
@@ -111,39 +101,88 @@ def analyze_edge(edges):
     #         cv2.line(cEdgesP, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
 
     # cv2.imwrite("plines.jpg", cEdgesP)
+    
     return distanceX
     
 # Find Dimension of the Printed Part  
-def find_dim(distanceX, edges): 
+def find_dim(x, y, distanceX, edges): 
 
     length = 0 # code here to find pixel size of the printed part
     width = 0
     
-    # Using Contours
-    contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    # Crop the image so we only see the printed piece 
+    print = edges[x[0]:x[1],y[0]:y[1]] 
+    # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
+
+    # Find Hough Lines of the printed shape
+    lines = cv2.HoughLines(print, 1, np.pi/180, 150)
+
+    # Draw Hough Lines
+    cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+
+    if lines is not None:
+        draw_hough(lines, print)
+
+        # Classify the lines (hori or verti) 
+        linesH = []
+        linesV = []
+        for i in range(0, len(lines)):
+
+            # rho = lines[i][0][0]
+            theta = lines[i][0][1]
+
+            if theta < 0 and theta < 30: 
+                linesH.append(lines[i])
+            elif theta > 60 and theta < 90:
+                linesV.append(lines[i])
+        
+        # Find largest distance between lines. This is likely the outer edges
+        differenceH = []
+        differenceV = []
+
+        for i in range(0, len(linesH)): 
+            # Calculate distance between all lines
+            for j in range(i+1, len(linesH)): 
+                distXH = abs(hough_coord(linesH, j)[0] - hough_coord(linesH, i))[0]
+                distYH = abs(hough_coord(linesH, j)[1] - hough_coord(linesH, i))[1]
+
+                if distXH or distYH > 100: 
+                    differenceH.append([max(distXH, distYH), i if distXH > distYH else j])
+                else: 
+                    return 'Distance too short, check the camera.'
+
+        for i in range(0, len(linesV)): 
+            # Calculate distance between all lines
+            for j in range(i+1, len(linesV)): 
+                distXV = abs(hough_coord(linesV, j)[0] - hough_coord(linesV, i))[0]
+                distYV = abs(hough_coord(linesV, j)[1] - hough_coord(linesV, i))[1]
+                
+                if distXV or distYV > 100: 
+                    differenceV.append([max(distXV, distYV), i if distXV > distYV else j])
+                else: 
+                    return 'Distance too short, check the camera.'
+       
+        width = max(differenceV)
+        length = max(differenceH)
     
-    # Find Highest Hierarchy
-    # maxH = find_maxH(h)
+    # Using Contours - IGNORE
+    # contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     # Draw ALL 
     # cv2.drawContours(edges, contours, -1, (0,0,255), 1)
     
-    contourArea = []
+    # contourArea = []
     # Draw Any Significant Contours
-    for i in range(0, len(contours)): 
+    # for i in range(0, len(contours)): 
         # print(cv2.contourArea(contours[i]))
-        # Using RETER_TREE 
-        # Remove any contour that are 
-        # print(maxH)
-        # print(h[0][0])
         # Draw Contours that are big enough, maybe use a percentile calculation instead
-        if cv2.contourArea(contours[i]) > 100:  #and h[0][i][3] == maxH
-            cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
-            contourArea.append(cv2.contourArea(contours[i]))
+        # if cv2.contourArea(contours[i]) > 100:  #and h[0][i][3] == maxH
+        #     cv2.drawContours(edges, contours[i], -1, (255,255,255), 1)
+        #     contourArea.append(cv2.contourArea(contours[i]))
 
-    print(contourArea)
+    # print(contourArea)
 
-    cv2.imwrite("contours.jpg", edges)
+    # cv2.imwrite("contours.jpg", edges)
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
 
@@ -153,6 +192,19 @@ def find_dim(distanceX, edges):
 # Helper Functions
 # ----------------------------------------------------------------------- # 
 
+def draw_hough(lines, edges): 
+    cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+
+    if lines is not None:
+        for i in range(0, len(lines)):
+            x0 = hough_coord(lines, i)[0]
+            y0 = hough_coord(lines, i)[1]
+            a = hough_coord(lines, i)[2]
+            b = hough_coord(lines, i)[3]
+            pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
+            pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
+            cv2.line(cEdges, pt1, pt2, (0,0,255), 1, cv2.LINE_AA) # Draw Hough Lines
+        
 # Compute Hough Line Coordinate
 def hough_coord(lines, i):
     rho = lines[i][0][0]
@@ -166,21 +218,17 @@ def hough_coord(lines, i):
 
     return [x0, y0, a, b]
 
-# Recursively Find Max in a List 
-# def find_maxH(h):
-#     array = h[0]
-#     m = []
-#     if len(array) == 1:
-#         return array[3][3]
-#     else:
-#         for i in range(0, len(array)): 
-#             m.append(array[3]) 
-#         print(m)
-#         return max(m)
+# Blend images equally
+# def blend(list_images): 
+#     equal_fraction = 1.0/(len(list_images))
+#     output = np.zeros_like(list_images[0])
+#     for img in list_images:
+#         output += img * equal_fraction
+#     return output
 
 
-# Execute Script
+# Execute Script, comment on final
 # ----------------------------------------------------------------------- # 
 blurred = image_process()
 edge = edges(blurred)
-find_dim(analyze_edge(edge), edge)
+find_dim(, iter, analyze_edge(edge), edge)
