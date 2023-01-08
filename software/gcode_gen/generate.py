@@ -171,7 +171,7 @@ def genStart(nozzleD, Te, Tb, Vp):
 
     return gcode
 
-def genEnd(): 
+def genEnd(iter): 
     # Park and Reset Flow
     # Park Location, in mm
     x = 100
