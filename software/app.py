@@ -5,7 +5,7 @@ static_path = './web_server/static'
 
 @app.route("/")
 def index():
-    return send_from_directory('reports', static_path)
+    return send_from_directory('index.html', static_path)
 
 # Use this 
 # flask run --host=0.0.0.0
