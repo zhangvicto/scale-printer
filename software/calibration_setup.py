@@ -1,7 +1,5 @@
 import RPi.GPIO as GPIO
 from optimization import optimize, fitness
-from gcode_gen.generate import gcode_gen
-from gcode_sender.printcore_gcode_sender import send_gcode
 from load_cell.mass import tare, measure_mass
 
 # init GPIO (should be done outside HX711 module in case you are using other GPIO functionality)
@@ -42,8 +40,7 @@ if mode == "L":
 elif mode == "P" or mode == "C": 
     numIterations = 10
 
-desired_mass = input('Theoretical Mass of the Pattern: \n')
-
+desired_mass = input('Enter the Theoretical Mass of the Pattern: \n')
 
 
 # Run Iterations
@@ -57,18 +54,7 @@ for i in range(numIterations):
     # while abs(mass) > 0.3: 
     #     tare()
     
-    
-    # Start print once the inputs are confirmed
-
     # Run through first PSO iteration and generate parameter
-
-    gcode = gcode_gen(optimize(fitness, xmax, xmin, xguess, numDimensions, i, mode), i, )
-
-    # Send to Printer
-    send_gcode(gcode_file=gcode)
-
-    # Check for 
-
-    # Generate gcode for next iteration
+    optimize(func=fitness, xmax=xmax, xmin=xmin, xguess=xguess, numDimensions=numDimensions, iter=i, mode=mode)
 
 GPIO.cleanup()

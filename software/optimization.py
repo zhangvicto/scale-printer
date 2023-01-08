@@ -1,6 +1,8 @@
 from pso.optimize_helpers import Particle, accuracy, consist
 import numpy as np
 from load_cell.mass import measure_mass
+from gcode_gen.generate import gcode_gen
+from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
 # Settings
@@ -15,8 +17,41 @@ x_best_g = []
 desired_mass = 
 
 
+# Default Print Settings
+settings = {
+    'firstLayerSpeed': SPEED_FIRSTLAYER,
+    'moveSpeed': SPEED_TRAVEL,
+    'zSpeed': Z_SPEED, 
+    # 'numPatterns': NUM_PATTERNS,
+    'perimSpeed': SPEED_PERIMETER,
+    'centerX': CENTER_X,
+    'centerY': CENTER_Y,
+    'printDir': PRINT_DIR,
+    'layerHeight': HEIGHT_LAYER,
+    'firstLayerHeight': HEIGHT_FIRSTLAYER,
+    'lineWidth': LINE_WIDTH,
+    'lineSpacing': LINE_SPACING,
+    'extRatio': EXTRUSION_RATIO,
+    'extMult': EXT_MULT,
+    # 'anchorExtRatio': ANCHOR_LAYER_EXTRUSION_RATIO,
+    'anchorLineWidth': ANCHOR_LAYER_LINE_WIDTH,
+    'anchorLineSpacing': ANCHOR_LAYER_LINE_SPACING,
+    # 'anchorPerimeters': ANCHOR_PERIMETERS,
+    'retractDist': 0.8,
+    'retractSpeed': SPEED_RETRACT,
+    'unretractSpeed': SPEED_UNRETRACT,
+    'extruderName': EXTRUDER_NAME,
+    'xyRound': XY_ROUND,
+    'zRound': Z_ROUND,
+    'zhopEnable': ZHOP_ENABLE,
+    'zhopHeight': ZHOP_HEIGHT,
+    # 'paStart': PA_START,
+    # 'paEnd': PA_END,
+    # 'paStep': PA_STEP
+}
+
 # Execute iteration
-def optimize( func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs should be the fitness of last iteration
+def optimize(func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs should be the fitness of last iteration
     
     # global optimum
     global x_best_g, particles
@@ -24,40 +59,47 @@ def optimize( func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs shou
     # Create Particle Array
     for i in range(0, numParticles):
         # Add new particle to particle array
-        particles.append(Particle(xmax[i], xmin[i], xguess[i], numDimensions))
+        particle = Particle(xmax[i], xmin[i], xguess[i], numDimensions)
+        particles.append(particle)
 
     # STARTING THE ITERATION
     # For each particle, print and collect data
     particle_i = 0 
     for particle in particles:
+
+        # Generate Gcode 
+        gcode = gcode_gen(mode, iter, settings)
+
+        # Send to Printer
+        send_gcode(gcode_file=gcode)
             
-        # Once print finishes, check weight, 
+        # Once print finishes, check weight
         mass = measure_mass()
 
-        # check dimensions
-        blurred = image_process()
-        edge = edges(blurred)
+        # Find Dimension of the Print
+        blurred = image_process() # Process Image
+        edge = edges(blurred) # Canny Edge Detection
 
-        # Print Location
+        distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
+        
+        # Calculate Print Location
         if mode == 'L': 
-            x = [(iter-1)*15, iter*15]
+            x = [(iter-1)*15/250*distX, iter*15/250*distX]
             y = [0, 180]
         # TBD
         if mode == 'P' or mode == 'C': 
             x = [0, 0]
             y = [0, 0]
 
-
-        # Get dimension
-        dimensions = find_dim(x, y, analyze_edge(edge), edge)
+        dimensions = find_dim(x, y, distX, edge) # Find dim
         widths = dimensions[0]
         lengths = dimensions[1]
 
         # Evaluate and Compare global optimum to local optimum
         particle.evaluate(func(mass, widths, lengths, 0.33, 0.5, 200))
 
-        if particle.f_best_p > x_best_g: # evaluate 
-            x_best_g = particle.f_best_p[:]
+        if particle.f_best_p > x_best_g: # Compare fitness
+            x_best_g = particle.f_best_p[:] # Splice array and set global op to current particle
 
         # Generate new values for the next iteration based on previous iteration
         particle.updateVelocity(x_best_g)

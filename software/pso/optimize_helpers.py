@@ -22,7 +22,6 @@ class Particle:
             self.x_i.append(vel)
 
         # Functions
-
         # Evaluate Fitness
         def evaluate(self, func): 
             self.f_best_p = func()

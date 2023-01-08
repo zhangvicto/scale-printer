@@ -111,17 +111,17 @@ def find_dim(x, y, distanceX, edges):
     width = 0
     
     # Crop the image so we only see the printed piece 
-    print = edges[x[0]:x[1],y[0]:y[1]] 
+    printed = edges[x[0]:x[1],y[0]:y[1]] 
     # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
 
     # Find Hough Lines of the printed shape
-    lines = cv2.HoughLines(print, 1, np.pi/180, 150)
+    lines = cv2.HoughLines(printed, 1, np.pi/180, 150)
 
     # Draw Hough Lines
     cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
 
     if lines is not None:
-        draw_hough(lines, print)
+        draw_hough(lines, printed)
 
         # Classify the lines (hori or verti) 
         linesH = []
@@ -164,6 +164,8 @@ def find_dim(x, y, distanceX, edges):
        
         width = max(differenceV)
         length = max(differenceH)
+
+    print(width, length)
     
     # Using Contours - IGNORE
     # contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -231,4 +233,5 @@ def hough_coord(lines, i):
 # ----------------------------------------------------------------------- # 
 blurred = image_process()
 edge = edges(blurred)
-find_dim(, iter, analyze_edge(edge), edge)
+distX = analyze_edge(edge)
+find_dim([0, 1*15/250*distX], [0, 180], distX, edge)

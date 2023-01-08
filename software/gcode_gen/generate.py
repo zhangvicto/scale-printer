@@ -107,16 +107,17 @@ settings = {
 #    [ ]   [ ]
 # [ ]         [ ]
 
-def gcode_gen(type, iter): #x, y, indicate the position of the print
+def gcode_gen(mode, iter, modified_settings): #x, y, indicate the position of the print
 
     gcode = ''
+    settings.update(modified_settings)
 
     # generate line or plane
-    if type == 'L': 
-        gcode += genLine(iter,settings)
-    elif type == 'P':
+    if mode == 'L': 
+        gcode += genLine(iter, settings)
+    elif mode == 'P':
         gcode += genPlane()
-    elif type == 'C':
+    elif mode == 'C':
         gcode += genCube()
     else:
         print('Enter L for Line, P for Plane, C for Cube')
