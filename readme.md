@@ -4,17 +4,20 @@
 
 # Current Progress
 - [x] Mechanical Design
-- [ ] Test Load Cells {80%}
+- [x] Test Load Cells
 - [x] Test Camera
-- [ ] Test Dimensional Measurement {50%}
-- [ ] PSO Implementation {80%}
+- [ ] Test Dimensional Measurement {80%}
+- [ ] PSO Implementation {90%}
 - [ ] Documentation {50%}
-- [ ] Refinement 
+
+## Additional Features 
+- [ ] Web Server {5%}
+- [ ] Refinement {5%}
 
 # Hardware
 ## Mechanical Design
 <img src="/image/v1.png" alt="v1" />
-The mechanical is designed around the Prusa MK3s, as it is a versatile printer that can be easily modified. Load cells and camera were mounted on the printer using 3D printed parts. 
+The mechanical is designed around the Prusa MK3s, as it is a versatile printer that can be easily modified. Load cells and a camera were mounted on the printer using 3D printed parts. 
 
 Load Cell Configuration: 
 <img src="/image/load-cell.jpg" alt="image" />
@@ -22,7 +25,7 @@ Load Cell Configuration:
 
 ## Bill of Materials
 Found in repo. 
-Total cost excluding printer is CAD $100.00.
+Total cost excluding printer is CAD $150.00 (to be updated).
 
 # Software
 Flowchart: 

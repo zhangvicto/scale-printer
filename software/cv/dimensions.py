@@ -86,7 +86,7 @@ def analyze_edge(edges):
                 else: 
                     return 'Distance too short, check the camera.'
 
-        print(max(difference)[0])
+        print("Bed Pixel Size: " + str(max(difference)[0]))
 
     cv2.imwrite("lines.jpg", cEdges) # Send to file 
 
@@ -107,7 +107,7 @@ def analyze_edge(edges):
 # Find Dimension of the Printed Part  
 def find_dim(x, y, distanceX, edges): 
 
-    length = 0 # code here to find pixel size of the printed part
+    length = 0
     width = 0
     
     # Crop the image so we only see the printed piece 
@@ -118,10 +118,9 @@ def find_dim(x, y, distanceX, edges):
     lines = cv2.HoughLines(printed, 1, np.pi/180, 150)
 
     # Draw Hough Lines
-    cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
 
     if lines is not None:
-        draw_hough(lines, printed)
+        draw_hough(lines, printed, 'printed-lines.jpg')
 
         # Classify the lines (hori or verti) 
         linesH = []
@@ -136,6 +135,9 @@ def find_dim(x, y, distanceX, edges):
             elif theta > 60 and theta < 90:
                 linesV.append(lines[i])
         
+        draw_hough(linesH, printed, 'h-lines.jpg')
+        draw_hough(linesV, printed, 'v-lines.jpg')
+
         # Find largest distance between lines. This is likely the outer edges
         differenceH = []
         differenceV = []
@@ -194,7 +196,7 @@ def find_dim(x, y, distanceX, edges):
 # Helper Functions
 # ----------------------------------------------------------------------- # 
 
-def draw_hough(lines, edges): 
+def draw_hough(lines, edges, filename): 
     cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
 
     if lines is not None:
@@ -206,6 +208,8 @@ def draw_hough(lines, edges):
             pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
             pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
             cv2.line(cEdges, pt1, pt2, (0,0,255), 1, cv2.LINE_AA) # Draw Hough Lines
+
+    cv2.imwrite(filename, cEdges)
         
 # Compute Hough Line Coordinate
 def hough_coord(lines, i):

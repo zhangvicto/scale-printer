@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Flask, send_from_directory, request, jsonify
 
 app = Flask(__name__)
+static_path = '/web_server/static'
 
 @app.route("/")
 def index():
-    return "nothing here yet"
+    return send_from_directory('reports', static_path)
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port= 8090)
+# Use this 
+# flask run --host=0.0.0.0
