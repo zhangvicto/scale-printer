@@ -160,6 +160,8 @@ def genStart(iter, nozzleD, Te, Tb, Vp):
     if introY > 200:
         introX = 100 + 40
     introX2 = introX1 + intro_length
+
+    # maybe try stacking it using Z
     # if iter == 1: # only on first print -- OLD
     gcode += "G1 Z{} F720 \nG1 Y{} F1000 ; go outside print area \nG92 E0 \nG1 X{} E9 F1000 ; intro line \nG1 X{} E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'], introY, introX, introX2)
 
