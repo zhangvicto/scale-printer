@@ -29,6 +29,7 @@ def send_gcode(gcode_file):
       print('progress: {}'.format(100 * float(p.queueindex) / len(p.mainqueue)))
   except:
       p.disconnect()
+      print('Print Complete')
   
 # List all com connected devices
 # for device in serial.tools.list_ports.comports(): 
