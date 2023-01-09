@@ -25,7 +25,7 @@ HEIGHT_LAYER = 0.3
 HEIGHT_FIRSTLAYER = 0.2
 
 EXTRUSION_RATIO = LINE_WIDTH * HEIGHT_LAYER / (pow(FILAMENT_DIAMETER/2, 2) * math.pi)
-RETRACT_DIST = 0.8
+RETRACT_DIST = 3
 EXTRUDER_NAME = "PSO Printer"
 ZHOP_ENABLE = True
 ZHOP_HEIGHT = 0.2
@@ -151,7 +151,8 @@ def genStart(iter, nozzleD, Te, Tb, Vp):
     # gcode += "M190 S{} ; wait for bed temp\n".format(Tb)
     gcode += "M109 S{} ; wait for extruder temp\n".format(Te)
     gcode += "G28 W ; home all without mesh bed level\n"
-    gcode += "G80 ; mesh bed leveling\n\n"
+    if iter > 1: 
+        gcode += "G80 ; mesh bed leveling\n\n"
 
     # Intro line
     intro_length = 20
@@ -220,8 +221,8 @@ def genLine(iter, settings):
     gcode += "; stop printing line id:0 copy 0\n"
 
     # Force retract
-    # gcode += retract()
-    
+    gcode += retract()
+
     # Set Progresss
     # gcode += "M73 P100 R0\nM73 Q100 S0\n"
 
@@ -327,15 +328,16 @@ def doEfeed(dir, settings):
         gcode += 'G1 E-' + str(round(settings['retractDist'], 5)) + ' F' + str(settings['retractSpeed']) + ' ; Retract\n' + 'G1 Z' + str(round((CUR_Z + settings['zhopHeight']), settings['zRound'])) + ' F' + str(settings['zSpeed']) + ' ; Z hop\n'
         RETRACTED = True
         return gcode
+    return gcode
 
-# def retract(): 
-#     global RETRACTED
+def retract(): 
+    global RETRACTED
 
-#     if not RETRACTED: 
-#         RETRACTED = True
-#         return 'G1 E-' + str(round(settings['retractDist'], 5)) + ' F' + str(settings['retractSpeed']) + ' ; Retract\n'
-#     else: 
-#         return ''
+    if not RETRACTED: 
+        RETRACTED = True
+        return 'G1 E-' + str(round(settings['retractDist'], 5)) + ' F' + str(settings['retractSpeed']) + ' ; Retract\n'
+    else: 
+        return ''
 
 def createLine(to_x, to_y, settings, optional): 
 
