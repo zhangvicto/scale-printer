@@ -20,10 +20,10 @@ mode = 'L'
 blurred = image_process() # Process Image
 edge = edges(blurred) # Canny Edge Detection
 
-distX = round(analyze_edge(edge)) # Get the bed x-axis length in terms of pixels
+distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
 
 # Calculate Print Location
-ratio = distX/250 # Pixels per mm
+ratio = round(distX/250) # Pixels per mm
 # Pixel = mm * ratio
 
 if mode == 'L': 
