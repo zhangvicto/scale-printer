@@ -84,7 +84,7 @@ def analyze_edge(edges):
                 if distX or distY > 400: 
                     difference.append([max(distX, distY), i if distX > distY else j])
                 else: 
-                    return 'Distance too short, check the camera.'
+                    return None # Distance is too small, likely not the bed
 
         print("Bed Pixel Size: " + str(max(difference)[0]))
 
@@ -151,7 +151,7 @@ def find_dim(x, y, distanceX, edges):
                 if distXH or distYH > 100: 
                     differenceH.append([max(distXH, distYH), i if distXH > distYH else j])
                 else: 
-                    return 'Distance too short, check the camera.'
+                    return [None, None] # Distance too short, check the camera.
 
         for i in range(0, len(linesV)): 
             # Calculate distance between all lines
@@ -162,7 +162,7 @@ def find_dim(x, y, distanceX, edges):
                 if distXV or distYV > 100: 
                     differenceV.append([max(distXV, distYV), i if distXV > distYV else j])
                 else: 
-                    return 'Distance too short, check the camera.'
+                    return [None, None] # Distance too short, check the camera.
        
         width = max(differenceV)
         length = max(differenceH)
