@@ -24,15 +24,12 @@ def send_gcode(gcode_file):
   p.startprint(gcode) # this will start a print
 
   # Print Progress if printing, otherwise disconnect
-  start = time.perf_counter()
-  last_val = 0
   while p.printing:
     print('progress: {}'.format(100 * float(p.queueindex) / len(p.mainqueue)))
   else:
     print('Print Complete')
     p.disconnect()
       
-  
 # List all com connected devices
 # for device in serial.tools.list_ports.comports(): 
 #   print(device.description)
