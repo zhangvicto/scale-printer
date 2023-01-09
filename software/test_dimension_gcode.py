@@ -23,11 +23,14 @@ edge = edges(blurred) # Canny Edge Detection
 distX = round(analyze_edge(edge)) # Get the bed x-axis length in terms of pixels
 
 # Calculate Print Location
+ratio = distX/250 # Pixels per mm
+# Pixel = mm * ratio
+
 if mode == 'L': 
     if distX > 0: 
-        x = [round((iter-1)*15/250*distX), round(iter*15/250*distX)]
+        x = [round((iter-1)*15*ratio), round((iter+1)*20*ratio)]
         print(x)
-        y = [0, 180]
+        y = [0, 180*ratio]
     else: 
         x = [0, 0]
         y = [0, 0]
