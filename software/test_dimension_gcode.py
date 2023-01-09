@@ -24,8 +24,9 @@ distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
 
 # Calculate Print Location
 if mode == 'L': 
-    if distX: 
-        x = [(iter-1)*15/250*distX, int(iter*15/250*distX)]
+    if distX > 0: 
+        x = [(iter-1)*15/250*distX, iter*15/250*distX]
+        print(x)
         y = [0, 180]
     else: 
         x = [0, 0]
