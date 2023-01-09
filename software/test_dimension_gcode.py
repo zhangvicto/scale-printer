@@ -20,12 +20,12 @@ mode = 'L'
 blurred = image_process() # Process Image
 edge = edges(blurred) # Canny Edge Detection
 
-distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
+distX = round(analyze_edge(edge)) # Get the bed x-axis length in terms of pixels
 
 # Calculate Print Location
 if mode == 'L': 
     if distX > 0: 
-        x = [(iter-1)*15/250*distX, iter*15/250*distX]
+        x = [round((iter-1)*15/250*distX), round(iter*15/250*distX)]
         print(x)
         y = [0, 180]
     else: 
