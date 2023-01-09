@@ -121,6 +121,7 @@ def find_dim(x, y, distanceX, edges):
 
     if lines is not None:
         draw_hough(lines, printed, 'printed-lines.jpg')
+        print('Drawing Hough Lines...')
 
         # Classify the lines (hori or verti) 
         linesH = []
