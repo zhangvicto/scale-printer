@@ -32,6 +32,7 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs shoul
     # STARTING THE ITERATION
     # For each particle, print and collect data
     particle_i = 0 
+    
     for particle in particles:
 
         # Generate Gcode 

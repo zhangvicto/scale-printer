@@ -220,7 +220,8 @@ def genLine(iter, settings):
     gcode += "; stop printing line id:0 copy 0\n"
 
     # Force retract
-    gcode += retract()
+    # gcode += retract()
+    
     # Set Progresss
     # gcode += "M73 P100 R0\nM73 Q100 S0\n"
 
@@ -327,14 +328,14 @@ def doEfeed(dir, settings):
         RETRACTED = True
         return gcode
 
-def retract(): 
-    global RETRACTED
+# def retract(): 
+#     global RETRACTED
 
-    if not RETRACTED: 
-        RETRACTED = True
-        return 'G1 E-' + str(round(settings['retractDist'], 5)) + ' F' + str(settings['retractSpeed']) + ' ; Retract\n'
-    else: 
-        return ''
+#     if not RETRACTED: 
+#         RETRACTED = True
+#         return 'G1 E-' + str(round(settings['retractDist'], 5)) + ' F' + str(settings['retractSpeed']) + ' ; Retract\n'
+#     else: 
+#         return ''
 
 def createLine(to_x, to_y, settings, optional): 
 

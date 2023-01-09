@@ -3,7 +3,7 @@ from gcode_gen.generate import gcode_gen, genStart, genEnd, settings
 from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
-for i in range(1, 9):
+for i in range(1, 11):
 
     iter = i
     mode = 'L'
