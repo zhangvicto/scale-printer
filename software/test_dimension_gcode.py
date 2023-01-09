@@ -28,7 +28,7 @@ ratio = round(distX/250) # Pixels per mm
 
 if mode == 'L': 
     if distX > 0: 
-        x = [round((iter-1)*15*ratio), round((iter+1)*20*ratio)]
+        x = [round((iter-1)*15*ratio), round(((iter+1)*15+10)*ratio)]
         print(x)
         y = [0, 180*ratio]
     else: 
