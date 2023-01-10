@@ -27,6 +27,7 @@ for i in range(1,2):
 
     # Calculate Print Location
     ratio = distX/250 # Pixels per mm
+    print(ratio)
     # Pixel = mm * ratio
 
     if mode == 'L': 
@@ -35,10 +36,12 @@ for i in range(1,2):
             x2 = round(x1 + 10*ratio)
             x = [x1, x2]
             print(x)
-            y = [0, 180*ratio]
+            print(x)
+            y2 = round(180*ratio)
+            y = [0, y2]
         else: 
-            x = [0, 0]
-            y = [0, 0]
+            x = [None, None]
+            y = [None, None]
 
     if mode == 'P': 
         if distX > 0: 
@@ -46,13 +49,15 @@ for i in range(1,2):
             x2 = round(x1 + 20*ratio)
             x = [x1, x2]
             print(x)
-            y = [0, 20*ratio]
+            y2 = round(20*ratio)
+            y = [0, y2]
+            print(y)
         else: 
-            x = [0, 0]
-            y = [0, 0]
+            x = [None, None]
+            y = [None, None]
     if mode == 'C': 
-        x = [0, 0]
-        y = [0, 0]
+        x = [None, None]
+            y = [None, None]
 
     dimensions = find_dim(x, y, distX, edge) # Find dim
     widths = dimensions[0]
