@@ -89,11 +89,13 @@ settings = {
 # LINE
 # |||||||||||||||
 # |||||||||||||||
+line_length = 100
 
 # PLANE
 # [ ] [ ] [ ] [ ]
 # [ ] [ ] [ ] [ ]
 # [ ] [ ] [ ] [ ]
+square_size = 30
 
 # Cube
 #       [3] 
@@ -225,9 +227,8 @@ def genLine(iter, settings):
 
     return gcode
 
-def genPlane(iter, settings): 
+def genPlane(iter, settings, size): 
     gcode = ''
-    size = 30 #mm
     gap = 5 #mm
     TO_X = settings['lineSpacing'] + (iter - 1)*(size + gap) # start from line spacing and move 25mm 
     TO_Y = 0 # start from 0

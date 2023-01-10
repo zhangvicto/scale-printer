@@ -1,7 +1,8 @@
 from load_cell.mass import measure_mass
-from gcode_gen.generate import gcode_gen, genStart, genEnd, settings
+from gcode_gen.generate import gcode_gen, genStart, genEnd, settings, square_size
 from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
+
 
 mode = 'P'
 
@@ -32,26 +33,29 @@ for i in range(1,2):
 
     if mode == 'L': 
         if distX > 0: 
-            xOffset = 10
-            x1 = 10 + round((iter-1)*15*ratio)
+            xOffset = 20
+            x1 = xOffset + round((iter-1)*15*ratio)
             x2 = round(x1 + 10*ratio)
             x = [x1, x2]
             print(x)
             print(x)
+            y1 = round(180*ratio) - 20
             y2 = round(180*ratio)
-            y = [0, y2]
+            y = [y1, y2]
         else: 
             x = [None, None]
             y = [None, None]
 
     if mode == 'P': 
         if distX: 
-            x1 = round((iter-1)*20*ratio)
-            x2 = round(x1 + 20*ratio)
+            xOffset = 20
+            x1 = xOffset+ round((iter-1)*square_size*ratio)
+            x2 = round(x1 + square_size*ratio)
             x = [x1, x2]
             print(x)
-            y2 = round(20*ratio + distX/250*200)
-            y = [0, y2]
+            y1 = round(180*ratio) - (square_size + 5)
+            y2 = round(square_size*ratio + distX/250*200)
+            y = [y1, y2]
             print(y)
         else: 
             x = [None, None]
