@@ -26,7 +26,7 @@ for i in range(1,2):
     distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
 
     # Calculate Print Location
-    ratio = round(distX/250) # Pixels per mm
+    ratio = distX/250 # Pixels per mm
     # Pixel = mm * ratio
 
     if mode == 'L': 
@@ -46,7 +46,7 @@ for i in range(1,2):
             x2 = round(x1 + 20*ratio)
             x = [x1, x2]
             print(x)
-            y = [0, 180*ratio]
+            y = [0, 20*ratio]
         else: 
             x = [0, 0]
             y = [0, 0]
