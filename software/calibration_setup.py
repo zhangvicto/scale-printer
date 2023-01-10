@@ -31,30 +31,32 @@ xguess = [230, 60, 40]
 
 numDimensions = len(xmax)
 
-# Input Sequence
-# Choose Calibration Type GCODE (Line or Plane)
-mode = input('Choose a calibration mode, L, P, or C: \n')
-
-if mode == "L": 
-    numIterations = 15
-elif mode == "P" or mode == "C": 
-    numIterations = 10
-
-desired_mass = input('Enter the Theoretical Mass of the Pattern: \n')
+def calibrate(): 
+    # Input Sequence
+    # Choose Calibration Type GCODE (Line or Plane)
+    mode = input('Choose a calibration mode, L, P, or C: \n')
 
 
-# Run Iterations
-for i in range(numIterations): 
-    # Tare Load Cells
-    tare()
-    mass = measure_mass()
-    print(mass) # Should be 0 
+    if mode == "L": 
+        numIterations = 15
+    elif mode == "P" or mode == "C": 
+        numIterations = 10
 
-    # Tare until we get a value that is less than 0.3g
-    # while abs(mass) > 0.3: 
-    #     tare()
-    
-    # Run through first PSO iteration and generate parameter
-    optimize(func=fitness, xmax=xmax, xmin=xmin, xguess=xguess, numDimensions=numDimensions, iter=i, mode=mode)
+    desired_mass = input('Enter the Theoretical Mass of the Pattern: \n')
+
+
+    # Run Iterations
+    for i in range(0, numIterations): 
+        # Tare Load Cells
+        tare()
+        mass = measure_mass()
+        print(mass) # Should be 0 
+
+        # Tare until we get a value that is less than 0.3g
+        # while abs(mass) > 0.3: 
+        #     tare()
+        
+        # Run through first PSO iteration and generate parameter
+        optimize(func=fitness, xmax=xmax, xmin=xmin, xguess=xguess, numDimensions=numDimensions, iter=i, mode=mode)
 
 GPIO.cleanup()

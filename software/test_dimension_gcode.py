@@ -32,7 +32,8 @@ for i in range(1,2):
 
     if mode == 'L': 
         if distX > 0: 
-            x1 = round((iter-1)*15*ratio)
+            xOffset = 10
+            x1 = 10 + round((iter-1)*15*ratio)
             x2 = round(x1 + 10*ratio)
             x = [x1, x2]
             print(x)

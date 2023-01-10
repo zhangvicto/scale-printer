@@ -7,7 +7,7 @@ function startPSO() {
         mode: mode
     };
 
-    fetch('http://localhost:5000/api', {
+    fetch('http://localhost:5000/api/start', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
