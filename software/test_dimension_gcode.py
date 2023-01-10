@@ -44,12 +44,12 @@ for i in range(1,2):
             y = [None, None]
 
     if mode == 'P': 
-        if distX > 0: 
+        if distX: 
             x1 = round((iter-1)*20*ratio)
             x2 = round(x1 + 20*ratio)
             x = [x1, x2]
             print(x)
-            y2 = round(20*ratio)
+            y2 = round(20*ratio + distX/250*200)
             y = [0, y2]
             print(y)
         else: 
