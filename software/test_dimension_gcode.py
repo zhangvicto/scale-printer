@@ -57,7 +57,7 @@ for i in range(1,2):
             y = [None, None]
     if mode == 'C': 
         x = [None, None]
-            y = [None, None]
+        y = [None, None]
 
     dimensions = find_dim(x, y, distX, edge) # Find dim
     widths = dimensions[0]
