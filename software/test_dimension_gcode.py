@@ -53,7 +53,7 @@ for i in range(1,2):
             x2 = round(x1 + square_size*ratio)
             x = [x1, x2]
             print(x)
-            y1 = round(180*ratio) - (square_size + 5)
+            y1 = round((180 - (square_size + 5))*ratio)
             y2 = round(square_size*ratio + distX/250*200)
             y = [y1, y2]
             print(y)

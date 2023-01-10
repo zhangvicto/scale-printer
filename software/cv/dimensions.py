@@ -89,7 +89,7 @@ def analyze_edge(edges):
         print("Bed Pixel Size: " + str(max(difference)[0]))
 
     cv2.imwrite("lines.jpg", cEdges) # Send to file 
-    
+
     distanceX = max(difference)[0] # this is now the distance to be used for calculating the size of 
     print(distanceX)
     # Draw Probablistic Hough Lines
@@ -113,7 +113,6 @@ def find_dim(x, y, distanceX, edges):
     # Crop the image so we only see the printed piece 
     printed = edges[y[0]:y[1], x[0]:x[1]] 
     cv2.imwrite('printed.jpg', printed)
-    
     # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
 
     # Find Hough Lines of the printed shape
