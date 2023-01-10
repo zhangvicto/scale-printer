@@ -32,7 +32,7 @@ def image_process():
     img = cv2.imread('capture0.jpg')
     img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # print(img_rotate.shape[:2]) # output dimensions
-    img_cropped = img_rotate[0:440, 0:480] # crop
+    img_cropped = img_rotate[100:540, 0:480] # crop
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
