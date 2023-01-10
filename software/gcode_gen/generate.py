@@ -531,8 +531,7 @@ def createBox(min_x, min_y, size_x, size_y, basicSettings, optional):
                     gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step right
                     y -= (xMaxBound - x)
                     x = xMaxBound
-                    gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right
-    print(gcode)                        
+                    gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right                     
     return gcode
 
 # with open("test.gcode", "w") as f:
