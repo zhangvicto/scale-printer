@@ -137,7 +137,7 @@ def find_dim(x, y, distanceX, edges, iter):
         for i in range(0, len(lines)):
 
             # rho = lines[i][0][0]
-            theta = round(lines[i][0][1])
+            theta = lines[i][0][1]
             print('Angle:{}'.format(math.degrees(theta)))
 
             if theta <= math.radians(0) and theta <= math.radians(30): 
