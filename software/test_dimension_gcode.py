@@ -50,7 +50,7 @@ for i in range(1,2):
         if distX: 
             xOffset = 10
             y1 = xOffset + round((iter-1)*square_size*ratio)
-            y2 = round(x1 + square_size*ratio)
+            y2 = round(y1 + square_size*ratio)
             y = [y1, y2]
             print(y)
             x1 = round((180 - (square_size + 5))*ratio)
