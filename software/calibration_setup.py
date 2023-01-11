@@ -31,7 +31,7 @@ xguess = [230, 60, 40]
 
 numDimensions = len(xmax)
 
-def calibrate(): 
+def calibrate(data): 
     # Input Sequence
     # Choose Calibration Type GCODE (Line or Plane)
     mode = input('Choose a calibration mode, L, P, or C: \n')

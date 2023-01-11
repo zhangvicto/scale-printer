@@ -5,8 +5,11 @@ from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
 
 mode = 'P'
+mass_data = []
+dimension_data = []
 
 for i in range(1,9):
+
 
     iter = i
 
@@ -18,9 +21,18 @@ for i in range(1,9):
 
         f.write(gcode)
 
+
+    # Pass in Printing Parameters
     send_gcode(iter, './gcode_gen/test.gcode')
 
-    # # Find Dimension of the Print
+    # Once print finishes, check weight
+    mass = measure_mass()
+    if mass is not None: 
+        mass_data.append(mass)
+    else: 
+        mass_data.append(None)
+
+    # Find Dimension of the Print
     img = image_process() # Process Image
     edge = edges(img) # Canny Edge Detection
 
@@ -52,13 +64,14 @@ for i in range(1,9):
 
         if mode == 'P': 
             if distX: 
-                xOffset = 10
-                x1 = round((xOffset + (iter-1)*square_size)*ratio)
-                x2 = round(x1 + (square_size + xOffset)*ratio)
+                initial_gap = 10 if iter==1 else 0
+                gap = 10
+                x1 = round((initial_gap + gap/2 + (iter-1)*square_size)*ratio)
+                x2 = round(x1 + (square_size + gap)*ratio)
                 x = [x1, x2]
                 print(x)
                 yOffset = -5
-                y1 = round((200 - (square_size + xOffset + yOffset))*ratio)
+                y1 = round((200 - (square_size + gap + yOffset))*ratio)
                 y2 = round((200- yOffset)*ratio)
                 y = [y1, y2]
                 print(y)
@@ -75,3 +88,8 @@ for i in range(1,9):
     if dimensions is not None: 
         widths = dimensions[0]
         lengths = dimensions[1]
+        dimension_data.append(dimensions)
+    else: 
+        dimension_data.append(None)
+
+    print("Mass: {}. Dimensions: {}.".format(mass_data, dimension_data))

@@ -22,19 +22,20 @@ def send_gcode(iter, gcode_file):
   while not p.online:
     time.sleep(0.1)
 
-  p.startprint(gcode) # Star the print
+  p.startprint(gcode) # Start the print
 
   # Print Progress if printing, otherwise disconnect
   last_val = 0
+  print('Printing...')
   while p.printing:
     # Display progress
-    current = 100 * float(p.queueindex) / len(p.mainqueue)
+    current = round(100 * float(p.queueindex) / len(p.mainqueue))
 
     if last_val is not current:
-      print('progress: {}'.format(current))
+      # print('Progress: {}'.format(current))
 
       last_val = current
-
+    
   else:
     print('Print {} Complete'.format(iter))
     p.disconnect()

@@ -153,10 +153,9 @@ def genStart(iter, nozzleD, Te, Tb, Vp):
     # Intro line
     intro_length = 20
     introX1 = 40
-    # introY = 180 + iter*3 # intro line starting at 180 and increasing by 3mm for each iteration
-    # if introY > 200:
-    #     introX1 = 100 + 40
-    introY = 180
+    introY = 180 + iter*3 # intro line starting at 180 and increasing by 3mm for each iteration
+    if introY % 200 > intro_length and introY > 200:
+        introX1 += intro_length*math.floor(introY/200)
     introX2 = introX1 + intro_length
 
     # maybe try stacking it using Z
@@ -257,7 +256,7 @@ def genPlane(iter, settings, size):
 
     # Print plane
     gcode += "; printing plane start id:0 copy 0 \n"
-    gcode += createBox(TO_X, TO_Y, size, size, settings, {'fill': True})
+    gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
     gcode += "; stop printing plane id:0 copy 0\n"
 
     return gcode
