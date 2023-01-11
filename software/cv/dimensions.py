@@ -140,9 +140,9 @@ def find_dim(x, y, distanceX, edges, iter):
             theta = lines[i][0][1]
             print('Angle:{}'.format(math.degrees(theta)))
 
-            if theta <= math.radians(0) and theta <= math.radians(30): 
+            if theta <= math.radians(0) and theta <= math.radians(10): 
                 linesV.append(lines[i])
-            elif theta >= math.radians(60) and theta <= math.radians(90):
+            elif theta >= math.radians(80) and theta <= math.radians(110):
                 linesH.append(lines[i])
         
         draw_hough(linesH, printed, 'h-lines.jpg')
@@ -173,7 +173,10 @@ def find_dim(x, y, distanceX, edges, iter):
                     differenceV.append([max(distXV, distYV), i if distXV > distYV else j])
                 else: 
                     return [None, None] # Distance too short, check the camera.
-       
+        
+        print(differenceH)
+        print(differenceV)
+
         width = max(differenceV) #y
         length = max(differenceH) #x
 
