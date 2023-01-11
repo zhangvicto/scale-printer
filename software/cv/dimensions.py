@@ -108,7 +108,7 @@ def analyze_edge(edges):
     return distanceX
     
 # Find Dimension of the Printed Part  
-def find_dim(x, y, distanceX, edges): 
+def find_dim(x, y, distanceX, edges, iter): 
 
     length = 0
     width = 0
@@ -122,10 +122,7 @@ def find_dim(x, y, distanceX, edges):
     # printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
     lines = cv2.HoughLines(printed, 0.5, np.pi/180, 20)
     
-    print(lines)
-
-    draw_hough(lines, printed, 'printed-lines.jpg')
-    
+    # print(lines)
 
     # Draw Hough Lines
     if lines is not None:
@@ -175,10 +172,14 @@ def find_dim(x, y, distanceX, edges):
                 else: 
                     return [None, None] # Distance too short, check the camera.
        
-        width = max(differenceV)[0]
-        length = max(differenceH)[0]
+        width = max(differenceV) #y
+        length = max(differenceH) #x
 
-    print(width, length)
+        draw_hough(width, printed, 'final-print' + str(iter) + '.jpg')
+
+    ratio = distanceX/250
+    print('Pixels: {},{}'.format(width, length))
+    print('Millimeters: {},{}'.format(width*ratio, length*ratio))
     
     # Using Contours - IGNORE
     # contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -201,7 +202,7 @@ def find_dim(x, y, distanceX, edges):
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
 
-    return [width*distanceX/250, length*distanceX/250] # in mm
+    return [width[0]*distanceX/250, length[0]*distanceX/250] # in mm
 
 
 # Helper Functions

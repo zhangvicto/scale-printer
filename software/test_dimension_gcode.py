@@ -65,6 +65,6 @@ for i in range(1,2):
         x = [None, None]
         y = [None, None]
 
-    dimensions = find_dim(x, y, distX, edge) # Find dim
+    dimensions = find_dim(x, y, distX, edge, iter) # Find dim
     widths = dimensions[0]
     lengths = dimensions[1]
