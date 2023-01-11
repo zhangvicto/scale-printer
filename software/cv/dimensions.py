@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 import math
+from scipy import ndimage
 
 cannyThres1 = 40
 cannyThres2 = 180
@@ -36,7 +37,8 @@ def image_process():
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
-    cv2.imwrite('blur.jpg', img_blur) # write to a file
+    final = ndimage.rotate(img_blur, 5) # rotate
+    cv2.imwrite('final.jpg', img_blur) # write to a file
 
     # View Edges
     # edges = cv2.Canny(image=img_blur, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
@@ -48,7 +50,7 @@ def image_process():
     # time.sleep(1) # give time to prevent a green image
     # cv2.imwrite("output.jpg", img_cropped)
 
-    return img_blur
+    return final
 
 def edges(img):
     return cv2.Canny(img, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection

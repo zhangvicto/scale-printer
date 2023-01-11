@@ -21,8 +21,8 @@ for i in range(1,2):
     # send_gcode('./gcode_gen/test.gcode')
 
     # # Find Dimension of the Print
-    blurred = image_process() # Process Image
-    edge = edges(blurred) # Canny Edge Detection
+    img = image_process() # Process Image
+    edge = edges(img) # Canny Edge Detection
 
     distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
 
