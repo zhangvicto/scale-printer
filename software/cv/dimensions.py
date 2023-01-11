@@ -4,7 +4,7 @@ import time
 import math
 from scipy import ndimage
 
-cannyThres1 = 60
+cannyThres1 = 80
 cannyThres2 = 180
 
 def capture(numCapture): 
