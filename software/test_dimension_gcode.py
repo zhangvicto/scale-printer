@@ -6,7 +6,7 @@ from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
 mode = 'P'
 
-for i in range(1,6):
+for i in range(1,2):
 
     iter = i
 
