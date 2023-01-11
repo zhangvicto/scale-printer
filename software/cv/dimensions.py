@@ -124,12 +124,12 @@ def find_dim(x, y, distanceX, edges):
     
     print(lines)
 
-    draw_hough(lines, printed, 'printed-lines.jpg')
+    draw_hough(lines, printed, 0.5, 'printed-lines.jpg')
     
 
     # Draw Hough Lines
     if lines is not None:
-        draw_hough(lines, printed, 'printed-lines.jpg')
+        draw_hough(lines, printed, 0.5, 'printed-lines.jpg')
         print('Drawing Hough Lines...')
 
         # Classify the lines (hori or verti) 
@@ -145,8 +145,8 @@ def find_dim(x, y, distanceX, edges):
             elif theta > 60 and theta < 90:
                 linesV.append(lines[i])
         
-        draw_hough(linesH, printed, 'h-lines.jpg')
-        draw_hough(linesV, printed, 'v-lines.jpg')
+        draw_hough(linesH, printed, 0.5, 'h-lines.jpg')
+        draw_hough(linesV, printed, 0.5, 'v-lines.jpg')
 
         # Find largest distance between lines. This is likely the outer edges
         differenceH = []
@@ -206,7 +206,7 @@ def find_dim(x, y, distanceX, edges):
 # Helper Functions
 # ----------------------------------------------------------------------- # 
 
-def draw_hough(lines, edges, filename): 
+def draw_hough(lines, edges, line_width, filename): 
     cEdges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
 
     if lines is not None:
@@ -217,7 +217,7 @@ def draw_hough(lines, edges, filename):
             b = hough_coord(lines, i)[3]
             pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
             pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-            cv2.line(cEdges, pt1, pt2, (0,0,255), 1, cv2.LINE_AA) # Draw Hough Lines
+            cv2.line(cEdges, pt1, pt2, (0,0,255), line_width, cv2.LINE_AA) # Draw Hough Lines
 
     cv2.imwrite(filename, cEdges)
         
