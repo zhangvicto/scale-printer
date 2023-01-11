@@ -18,7 +18,7 @@ for i in range(1,9):
 
         f.write(gcode)
 
-    send_gcode('./gcode_gen/test.gcode')
+    send_gcode(iter, './gcode_gen/test.gcode')
 
     # # Find Dimension of the Print
     img = image_process() # Process Image
