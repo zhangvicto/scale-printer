@@ -147,8 +147,8 @@ def genStart(iter, nozzleD, Te, Tb, Vp):
     # gcode += "M190 S{} ; wait for bed temp\n".format(Tb)
     gcode += "M109 S{} ; wait for extruder temp\n".format(Te)
     gcode += "G28 W ; home all without mesh bed level\n"
-    if iter == 1: 
-        gcode += "G80 ; mesh bed leveling\n\n"
+    #if iter == 1: 
+    gcode += "G80 ; mesh bed leveling\n\n"
 
     # Intro line
     intro_length = 20
@@ -230,7 +230,7 @@ def genLine(iter, settings):
 def genPlane(iter, settings, size): 
     gcode = ''
     initial_gap = 10 #mm
-    gap = 10 #mm
+    gap = 15 #mm
     TO_X = initial_gap if iter ==1 else 0 + settings['lineSpacing'] + (iter - 1)*(size + gap) # start from line spacing
     TO_Y = 10 # start from 10
     TO_Z = HEIGHT_FIRSTLAYER
