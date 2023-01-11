@@ -37,7 +37,7 @@ def image_process():
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
-    final = ndimage.rotate(img_blur, -4) # rotate
+    final = ndimage.rotate(img_blur, -6) # rotate
     cv2.imwrite('final.jpg', img_blur) # write to a file
 
     # View Edges
