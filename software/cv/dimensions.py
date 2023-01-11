@@ -37,7 +37,7 @@ def image_process():
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
-    final = ndimage.rotate(img_blur, -1) # rotate
+    final = ndimage.rotate(img_blur, -1.5) # rotate
     cv2.imwrite('final.jpg', img_blur) # write to a file
 
     # View Edges
@@ -120,7 +120,7 @@ def find_dim(x, y, distanceX, edges, iter):
 
     # Find Hough Lines of the printed shape
     # printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
-    lines = cv2.HoughLines(printed, 1/2, np.pi/180, 20)
+    lines = cv2.HoughLines(printed, 0.5, np.pi/180, 20)
     print(lines)
 
     # print(lines)
@@ -129,7 +129,7 @@ def find_dim(x, y, distanceX, edges, iter):
     # Draw Hough Lines
     if lines is not None:
         # draw_hough(lines, printed, 'printed-lines.jpg')
-        print('Drawing Hough Lines...')
+        # print('Drawing Hough Lines...')
 
         # Classify the lines (hori or verti) 
         linesH = []
