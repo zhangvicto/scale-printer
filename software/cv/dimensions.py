@@ -119,8 +119,8 @@ def find_dim(x, y, distanceX, edges):
     # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
 
     # Find Hough Lines of the printed shape
-    printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
-    lines = cv2.HoughLinesP(printed_lines, 1, np.pi/180, 50)
+    # printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
+    lines = cv2.HoughLinesP(printed, 1, np.pi/180, 50)
     
     print(lines)
 
@@ -129,7 +129,7 @@ def find_dim(x, y, distanceX, edges):
             l = lines[i][0]
             cv2.line(printed, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
     
-    cv2.imwrite('printed-lines.jpg', printed_lines)
+    cv2.imwrite('printed-lines.jpg', printed)
     # draw_hough(lines, printed, 'printed-lines.jpg')
     
 
