@@ -1,4 +1,4 @@
-from load_cell.mass import measure_mass
+from load_cell.mass import measure_mass, tare
 from gcode_gen.generate import gcode_gen, genStart, genEnd, settings, square_size
 from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
@@ -13,26 +13,33 @@ for i in range(1,9):
 
     iter = i
 
-    with open("./gcode_gen/test.gcode", "w") as f:
+    # with open("./gcode_gen/test.gcode", "w") as f:
         
-        gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
-        gcode += gcode_gen(mode, iter, settings)
-        gcode += genEnd(iter)
+    #     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+    #     gcode += gcode_gen(mode, iter, settings)
+    #     gcode += genEnd(iter)
 
-        f.write(gcode)
+    #     f.write(gcode)
+    
+    # # Tare Weight before Starting Print
+    # tare()
 
+    # # Pass in Printing Parameters
+    # send_gcode(iter, './gcode_gen/test.gcode')
 
-    # Pass in Printing Parameters
-    send_gcode(iter, './gcode_gen/test.gcode')
-
+    
     # Once print finishes, check weight
     mass = measure_mass()
     if mass is not None: 
+        print("Measuring Mass. \n")
         mass_data.append(mass)
     else: 
+        print("Measuring Error Occurred. \n")
         mass_data.append(None)
 
+
     # Find Dimension of the Print
+    print("Starting CV Process. \n")
     img = image_process() # Process Image
     edge = edges(img) # Canny Edge Detection
 
