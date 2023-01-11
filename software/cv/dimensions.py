@@ -111,7 +111,7 @@ def find_dim(x, y, distanceX, edges):
     width = 0
     
     # Crop the image so we only see the printed piece 
-    printed = edges[x[0]:x[1], y[0]:y[1]] 
+    printed = edges[y[0]:y[1], x[0]:x[1]] 
     cv2.imwrite('printed.jpg', printed)
     # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
 

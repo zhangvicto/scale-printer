@@ -111,9 +111,9 @@ def gcode_gen(mode, iter, modified_settings): #x, y, indicate the position of th
     if mode == 'L': 
         gcode += genLine(iter, settings)
     elif mode == 'P':
-        gcode += genPlane(iter, settings)
+        gcode += genPlane(iter, settings, square_size)
     elif mode == 'C':
-        gcode += genCube(iter, settings)
+        gcode += genCube(iter, settings, square_size)
     else:
         print('Enter L for Line, P for Plane, C for Cube')
     
@@ -229,9 +229,10 @@ def genLine(iter, settings):
 
 def genPlane(iter, settings, size): 
     gcode = ''
+    initial_gap = 5 #mm
     gap = 5 #mm
-    TO_X = settings['lineSpacing'] + (iter - 1)*(size + gap) # start from line spacing and move 25mm 
-    TO_Y = 0 # start from 0
+    TO_X = initial_gap if iter ==1 else 0 + settings['lineSpacing'] + (iter - 1)*(size + gap) # start from line spacing
+    TO_Y = 5 # start from 5
     TO_Z = HEIGHT_FIRSTLAYER
 
     # Printing Z position 
@@ -250,7 +251,7 @@ def genPlane(iter, settings, size):
 
     return gcode
 
-def genCube(iter, settings): 
+def genCube(iter, settings, size): 
     gcode = ''
     return gcode
 
@@ -536,14 +537,14 @@ def createBox(min_x, min_y, size_x, size_y, basicSettings, optional):
                     gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right                     
     return gcode
 
-# with open("test.gcode", "w") as f:
-#     iter = 2
-#     configEnd = open("end.txt", "r").read()
-#     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
-#     gcode += gcode_gen('P', iter, settings)
-#     gcode += genEnd(iter)
-#     gcode += configEnd
+with open("test.gcode", "w") as f:
+    iter = 2
+    configEnd = open("end.txt", "r").read()
+    gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+    gcode += gcode_gen('P', iter, settings)
+    gcode += genEnd(iter)
+    gcode += configEnd
 
-#     f.write(gcode)
+    f.write(gcode)
 
-#     f.close()
+    f.close()

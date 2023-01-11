@@ -48,15 +48,15 @@ for i in range(1,2):
 
     if mode == 'P': 
         if distX: 
-            xOffset = 10
-            y1 = xOffset + round((iter-1)*square_size*ratio)
-            y2 = round(y1 + square_size*ratio)
-            y = [y1, y2]
-            print(y)
-            x1 = round((180 - (square_size + 5))*ratio)
-            x2 = round(square_size*ratio + distX/250*200)
+            xOffset = 15
+            x1 = xOffset + round((iter-1)*square_size*ratio)
+            x2 = round(x1 + square_size*ratio)
             x = [x1, x2]
             print(x)
+            y1 = round((200 - (square_size + 5))*ratio)
+            y2 = round(square_size*ratio + distX/250*200)
+            y = [y1, y2]
+            print(y)
         else: 
             x = [None, None]
             y = [None, None]
