@@ -48,7 +48,7 @@ for i in range(1,2):
 
     if mode == 'P': 
         if distX: 
-            xOffset = 5
+            xOffset = 8
             x1 = round((xOffset + (iter-1)*square_size)*ratio)
             x2 = round(x1 + (square_size + xOffset)*ratio)
             x = [x1, x2]
