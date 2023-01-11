@@ -93,7 +93,7 @@ def analyze_edge(edges):
     cv2.imwrite("lines.jpg", cEdges) # Send to file 
 
     distanceX = max(difference)[0] # this is now the distance to be used for calculating the size of 
-    print(cv2.imread("lines.jpg").shape)
+    # print(cv2.imread("lines.jpg").shape)
     print(distanceX)
     # Draw Probablistic Hough Lines
     # linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 50, None, 50, 10)
@@ -121,7 +121,7 @@ def find_dim(x, y, distanceX, edges, iter):
     # Find Hough Lines of the printed shape
     # printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
     lines = cv2.HoughLines(printed, 0.5, np.pi/180, 20)
-    print(lines)
+    # print(lines)
 
     # print(lines)
     draw_hough(lines, printed, 'printed-lines.jpg')
