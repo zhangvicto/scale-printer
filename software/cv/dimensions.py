@@ -37,7 +37,7 @@ def image_process():
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
-    final = ndimage.rotate(img_blur, -0.9) # rotate
+    final = ndimage.rotate(img_blur, -0.3) # rotate
     cv2.imwrite('final.jpg', final) # write to a file
 
     # View Edges
@@ -159,7 +159,7 @@ def find_dim(x, y, distanceX, edges, iter):
                 distYH = abs(hough_coord(linesH, j)[1] - hough_coord(linesH, i))[1]
 
                 if distXH or distYH > 40: 
-                    differenceH.append([max(distXH, distYH), i if distXH > distYH else j])
+                    differenceH.append([max(distXH, distYH), i, j])
                 else: 
                     return [None, None] # Distance too short, check the camera.
 
@@ -170,7 +170,7 @@ def find_dim(x, y, distanceX, edges, iter):
                 distYV = abs(hough_coord(linesV, j)[1] - hough_coord(linesV, i))[1]
                 
                 if distXV or distYV > 40: 
-                    differenceV.append([max(distXV, distYV), i if distXV > distYV else j])
+                    differenceV.append([max(distXV, distYV), i, j])
                 else: 
                     return [None, None] # Distance too short, check the camera.
         
@@ -180,7 +180,7 @@ def find_dim(x, y, distanceX, edges, iter):
         width = max(differenceV) #y
         length = max(differenceH) #x
 
-        draw_hough([lines[width[1]], lines[length[1]]], printed, 'final-print' + str(iter) + '.jpg')
+        draw_hough([lines[width[1]], lines[length[1]], lines[width[2]], lines[length[2]]], printed, 'final-print' + str(iter) + '.jpg')
 
     ratio = distanceX/255
     print('Pixels: {},{}'.format(width[0], length[0]))
