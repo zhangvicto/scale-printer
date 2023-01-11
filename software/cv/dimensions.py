@@ -156,7 +156,7 @@ def find_dim(x, y, distanceX, edges, iter):
                 distXH = abs(hough_coord(linesH, j)[0] - hough_coord(linesH, i))[0]
                 distYH = abs(hough_coord(linesH, j)[1] - hough_coord(linesH, i))[1]
 
-                if distXH or distYH > 100: 
+                if distXH or distYH > 40: 
                     differenceH.append([max(distXH, distYH), i if distXH > distYH else j])
                 else: 
                     return [None, None] # Distance too short, check the camera.
@@ -167,7 +167,7 @@ def find_dim(x, y, distanceX, edges, iter):
                 distXV = abs(hough_coord(linesV, j)[0] - hough_coord(linesV, i))[0]
                 distYV = abs(hough_coord(linesV, j)[1] - hough_coord(linesV, i))[1]
                 
-                if distXV or distYV > 100: 
+                if distXV or distYV > 40: 
                     differenceV.append([max(distXV, distYV), i if distXV > distYV else j])
                 else: 
                     return [None, None] # Distance too short, check the camera.
