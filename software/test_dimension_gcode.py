@@ -10,15 +10,15 @@ for i in range(1,2):
 
     iter = i
 
-    # with open("./gcode_gen/test.gcode", "w") as f:
+    with open("./gcode_gen/test.gcode", "w") as f:
         
-    #     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
-    #     gcode += gcode_gen(mode, iter, settings)
-    #     gcode += genEnd(iter)
+        gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+        gcode += gcode_gen(mode, iter, settings)
+        gcode += genEnd(iter)
 
-    #     f.write(gcode)
+        f.write(gcode)
 
-    # send_gcode('./gcode_gen/test.gcode')
+    send_gcode('./gcode_gen/test.gcode')
 
     # # Find Dimension of the Print
     blurred = image_process() # Process Image
@@ -48,13 +48,14 @@ for i in range(1,2):
 
     if mode == 'P': 
         if distX: 
-            xOffset = 15
-            x1 = xOffset + round((iter-1)*square_size*ratio)
-            x2 = round(x1 + square_size*ratio)
+            xOffset = 5
+            x1 = round(xOffset + (iter-1)*square_size*ratio)
+            x2 = round(x1 + (square_size + xOffset)*ratio)
             x = [x1, x2]
             print(x)
-            y1 = round((200 - (square_size + 5))*ratio)
-            y2 = round(square_size*ratio + distX/250*200)
+            yOffset = 10
+            y1 = round((200 - (square_size + xOffset + yOffset))*ratio)
+            y2 = round(200*ratio - yOffset)
             y = [y1, y2]
             print(y)
         else: 
