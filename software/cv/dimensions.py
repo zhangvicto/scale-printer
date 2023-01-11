@@ -123,10 +123,11 @@ def find_dim(x, y, distanceX, edges, iter):
     lines = cv2.HoughLines(printed, 1/2, np.pi/180, 20)
     
     # print(lines)
+    draw_hough(lines, printed, 'printed-lines.jpg')
 
     # Draw Hough Lines
     if lines is not None:
-        draw_hough(lines, printed, 'printed-lines.jpg')
+        # draw_hough(lines, printed, 'printed-lines.jpg')
         print('Drawing Hough Lines...')
 
         # Classify the lines (hori or verti) 
