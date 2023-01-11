@@ -123,18 +123,18 @@ def find_dim(x, y, distanceX, edges):
     lines = cv2.HoughLinesP(printed_lines, 1, np.pi/180, 50)
     
     print(lines)
-    
+
     if lines is not None:
         for i in range(0, len(lines)):
             l = lines[i][0]
-            cv2.line(printed, (l[0], l[1]), (l[2], l[3]), (0,0,255), 3, cv2.LINE_AA)
+            cv2.line(printed, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
     
-    cv2.imwrite('printed-lines.jpg', printed)
+    cv2.imwrite('printed-lines.jpg', printed_lines)
     # draw_hough(lines, printed, 'printed-lines.jpg')
     
 
     # Draw Hough Lines
-    if not lines == None:
+    if lines is not None:
         draw_hough(lines, printed, 'printed-lines.jpg')
         print('Drawing Hough Lines...')
 
