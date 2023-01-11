@@ -32,7 +32,7 @@ def image_process():
     img = cv2.imread('capture0.jpg')
     img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # print(img_rotate.shape[:2]) # output dimensions
-    img_cropped = img_rotate[110:520, 0:480] # crop
+    img_cropped = img_rotate[110:520, 0:465] # crop
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
@@ -111,15 +111,16 @@ def find_dim(x, y, distanceX, edges):
     width = 0
     
     # Crop the image so we only see the printed piece 
-    printed = edges[y[0]:y[1], x[0]:x[1]] 
+    printed = edges[x[0]:x[1], y[0]:y[1]] 
     cv2.imwrite('printed.jpg', printed)
     # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
 
     # Find Hough Lines of the printed shape
     lines = cv2.HoughLines(printed, 1, np.pi/180, 150)
-    
+    draw_hough(lines, printed, 'printed-lines.jpg')
+
     # Draw Hough Lines
-    if lines is not None:
+    if not lines == None:
         draw_hough(lines, printed, 'printed-lines.jpg')
         print('Drawing Hough Lines...')
 
