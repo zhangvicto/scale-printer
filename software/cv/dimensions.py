@@ -5,7 +5,7 @@ import math
 from scipy import ndimage
 
 cannyThres1 = 80
-cannyThres2 = 180
+cannyThres2 = 200
 
 def capture(numCapture): 
 
