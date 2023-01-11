@@ -115,13 +115,14 @@ def find_dim(x, y, distanceX, edges, iter):
     
     # Crop the image so we only see the printed piece 
     printed = edges[y[0]:y[1], x[0]:x[1]] 
-    cv2.imwrite('printed.jpg', printed)
+    # cv2.imwrite('printed.jpg', printed)
     # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
 
     # Find Hough Lines of the printed shape
     # printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
     lines = cv2.HoughLines(printed, 1/2, np.pi/180, 20)
-    
+    print(lines)
+
     # print(lines)
     draw_hough(lines, printed, 'printed-lines.jpg')
 
