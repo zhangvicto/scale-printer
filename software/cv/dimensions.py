@@ -177,7 +177,7 @@ def find_dim(x, y, distanceX, edges, iter):
         width = max(differenceV) #y
         length = max(differenceH) #x
 
-        draw_hough(width, printed, 'final-print' + str(iter) + '.jpg')
+        draw_hough([lines[width[1]], lines[length[1]]], printed, 'final-print' + str(iter) + '.jpg')
 
     ratio = distanceX/250
     print('Pixels: {},{}'.format(width, length))
