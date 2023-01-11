@@ -229,10 +229,10 @@ def genLine(iter, settings):
 
 def genPlane(iter, settings, size): 
     gcode = ''
-    initial_gap = 5 #mm
-    gap = 5 #mm
+    initial_gap = 10 #mm
+    gap = 10 #mm
     TO_X = initial_gap if iter ==1 else 0 + settings['lineSpacing'] + (iter - 1)*(size + gap) # start from line spacing
-    TO_Y = 5 # start from 5
+    TO_Y = 10 # start from 10
     TO_Z = HEIGHT_FIRSTLAYER
 
     # Printing Z position 

@@ -6,19 +6,19 @@ from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
 mode = 'P'
 
-for i in range(1,2):
+for i in range(1,6):
 
     iter = i
 
-    with open("./gcode_gen/test.gcode", "w") as f:
+    # with open("./gcode_gen/test.gcode", "w") as f:
         
-        gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
-        gcode += gcode_gen(mode, iter, settings)
-        gcode += genEnd(iter)
+    #     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+    #     gcode += gcode_gen(mode, iter, settings)
+    #     gcode += genEnd(iter)
 
-        f.write(gcode)
+    #     f.write(gcode)
 
-    send_gcode('./gcode_gen/test.gcode')
+    # send_gcode('./gcode_gen/test.gcode')
 
     # # Find Dimension of the Print
     img = image_process() # Process Image
