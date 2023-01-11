@@ -4,7 +4,7 @@ import time
 import math
 from scipy import ndimage
 
-cannyThres1 = 40
+cannyThres1 = 60
 cannyThres2 = 180
 
 def capture(numCapture): 
@@ -120,7 +120,7 @@ def find_dim(x, y, distanceX, edges, iter):
 
     # Find Hough Lines of the printed shape
     # printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
-    lines = cv2.HoughLines(printed, 0.5, np.pi/180, 20)
+    lines = cv2.HoughLines(printed, 1/2, np.pi/180, 20)
     
     # print(lines)
 
