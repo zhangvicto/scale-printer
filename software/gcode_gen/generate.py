@@ -153,15 +153,17 @@ def genStart(iter, nozzleD, Te, Tb, Vp):
     # Intro line
     intro_length = 20
     introX1 = 40
-    introY = 180 + iter*3 # intro line starting at 180 and increasing by 3mm for each iteration
-    if introY > 200:
-        introX1 = 100 + 40
+    # introY = 180 + iter*3 # intro line starting at 180 and increasing by 3mm for each iteration
+    # if introY > 200:
+    #     introX1 = 100 + 40
+    introY = 180
     introX2 = introX1 + intro_length
 
     # maybe try stacking it using Z
+    ZOffset = (iter-1)*settings['firstLayerHeight']
 
     # if iter == 1: # only on first print -- OLD
-    gcode += "G1 Z{} F720 \nG1 Y{} F1000 \nG92 E0 \nG1 X{} E9 F1000 ; intro line \nG1 X{} E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'], introY, introX1, introX2)
+    gcode += "G1 Z{} F720 \nG1 Y{} F1000 \nG92 E0 \nG1 X{} E9 F1000 ; intro line \nG1 X{} E9 F1000 ; intro line\n\n".format(settings['firstLayerHeight'] + ZOffset, introY, introX1, introX2)
 
     # Level again, set flow, set other
     gcode += "G92 E0 \nM221 S95\n\n; Don't change E values below. Excessive value can damage the printer.\n\n"
@@ -230,10 +232,19 @@ def genLine(iter, settings):
 def genPlane(iter, settings, size): 
     gcode = ''
     initial_gap = 10 #mm
-    gap = 15 #mm
-    TO_X = initial_gap if iter ==1 else 0 + settings['lineSpacing'] + (iter - 1)*(size + gap) # start from line spacing
+    gap = 10 #mm
+    
+    TO_X = initial_gap + (iter - 1)*(size + gap) # start from line spacing
+    
     TO_Y = 10 # start from 10
-    TO_Z = HEIGHT_FIRSTLAYER
+    total_X = iter*(size+gap) + initial_gap
+    if total_X % 250 > (size+gap) and total_X > 250: # if total Y is larger than the bed, move to next row
+        col_iter = math.floor(total_X/250) # column number for new row
+        TO_Y += col_iter*(size+gap) # set Y position
+        TO_X = initial_gap + (col_iter - 1)*(size + gap) # Recalculate X position using column number
+    
+    TO_Z = HEIGHT_FIRSTLAYER # set Z position
+
 
     # Printing Z position 
     gcode += moveToZ(TO_Z, settings)
@@ -418,7 +429,155 @@ def createBox(min_x, min_y, size_x, size_y, basicSettings, optional):
         math.floor((size_y * math.sin(math.radians(45))) / (optArgs["spacing"] / math.sin(math.radians(45))))
     )
 
-    print('Max Perims: {}'.format(max_perims))
+    # print('Max Perims: {}'.format(max_perims))
+
+    optArgs["num_perims"] = min(optArgs["num_perims"], max_perims)
+
+    if min_x != CUR_X or min_y != CUR_Y:
+        gcode += moveToXY(min_x, min_y, basicSettings, {"comment": " ; Move to box start\n"})
+
+    for i in range(optArgs["num_perims"]):
+        if i != 0:  # after first perimeter, step inwards to start next perimeter
+            x += optArgs["spacing"]
+            y += optArgs["spacing"]
+            gcode += moveToXY(x, y, basicSettings, {"comment": " ; Step inwards to print next perimeter\n"})
+        # draw line up
+        y += size_y - (i * optArgs["spacing"]) * 2
+        gcode += createLine(x, y, basicSettings, {"speed": optArgs["speed"], "extRatio": optArgs["extRatio"], "comment": " ; Draw perimeter (up)\n"})
+        # draw line right
+        x += size_x - (i * optArgs["spacing"]) * 2
+        gcode += createLine(x, y, basicSettings, {"speed": optArgs["speed"], "extRatio": optArgs["extRatio"], "comment": " ; Draw perimeter (right)\n"})
+        # draw line down
+        y -= size_y - (i * optArgs["spacing"]) * 2
+        gcode += createLine(x, y, basicSettings, {"speed": optArgs["speed"], "extRatio": optArgs["extRatio"], "comment": " ; Draw perimeter (down)\n"})
+        # draw line left
+        x -= size_x - (i * optArgs["spacing"]) * 2
+        gcode += createLine(x, y, basicSettings, {"speed": optArgs["speed"], "extRatio": optArgs["extRatio"], "comment": " ; Draw perimeter (down)\n"})
+
+        print('Draw Box')
+
+    if optArgs['fill']:
+        spacing_45 = optArgs['spacing'] / math.sin(math.radians(45))
+        encroachment = 0.25
+        xMinBound = min_x + (optArgs['spacing'] * (optArgs['num_perims'] - 1) + optArgs['spacing'] * encroachment)
+        xMaxBound = max_x - (optArgs['spacing'] * (optArgs['num_perims'] - 1) + optArgs['spacing'] * encroachment)
+        yMinBound = min_y + (optArgs['spacing'] * (optArgs['num_perims'] - 1) + optArgs['spacing'] * encroachment)
+        yMaxBound = max_y - (optArgs['spacing'] * (optArgs['num_perims'] - 1) + optArgs['spacing'] * encroachment)
+        xCount = math.floor((xMaxBound - xMinBound) / spacing_45)
+        yCount = math.floor((yMaxBound - yMinBound) / spacing_45)
+        xRemainder = (xMaxBound - xMinBound) % spacing_45
+        yRemainder = (yMaxBound - yMinBound) % spacing_45
+
+        x = xMinBound
+        y = yMinBound
+        gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'],  'comment': ' ; Move to fill start\n'}) # move to start
+
+        for i in range(yCount + xCount):
+            if i < min(yCount, xCount):
+                if i % 2 == 0:
+                    x += spacing_45
+                    y = yMinBound
+                    gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step right
+                    y += (x - xMinBound)
+                    x = xMinBound
+                    gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print up/left
+                else:
+                    y += spacing_45
+                    x = xMinBound
+                    gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step up
+                    x += (y - yMinBound)
+                    y = yMinBound
+                    gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right
+            elif i < max(xCount, yCount):
+                if xCount > yCount: # if box is wider than tall
+                    if i % 2 == 0:
+                        x += spacing_45
+                        y = yMinBound
+                        gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step right
+                        x -= yMaxBound - yMinBound
+                        y = yMaxBound
+                        gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print up/left
+                    else:
+                        if i == yCount:
+                            x += (spacing_45 - yRemainder)
+                        else:
+                            x += spacing_45
+                        y = yMaxBound
+                        gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step right
+                        x += yMaxBound - yMinBound
+                        y = yMinBound
+                        gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right
+                else: # if box is taller than wide
+                    if i % 2 == 0:
+                        x = xMaxBound
+                        if i == xCount:
+                            y += (spacing_45 - xRemainder)
+                        else:
+                            y += spacing_45
+                        gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step up
+                        x = xMinBound
+                        y += xMaxBound - xMinBound
+                        gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print up/left
+                    else:
+                        x = xMinBound
+                        y += spacing_45
+                        gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step up
+                        x = xMaxBound
+                        y -= xMaxBound - xMinBound
+                        gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right
+            else: 
+                if i % 2 == 0:
+                    if i == max(xCount, yCount):
+                        y += (spacing_45 - xRemainder)
+                    else:
+                        y += spacing_45
+                    x = xMaxBound
+                    gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step up
+                    x -= (yMaxBound - y)
+                    y = yMaxBound
+                    gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print up/left
+                else:
+                    if i == max(xCount, yCount):
+                        x += (spacing_45 - yRemainder)
+                    else:
+                        x += spacing_45
+                    y = yMaxBound
+                    gcode += moveToXY(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio']}) # step right
+                    y -= (xMaxBound - x)
+                    x = xMaxBound
+                    gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right                     
+    return gcode
+
+# Create Box with correct dimensions
+def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
+    global CUR_X, CUR_Y, CUR_Z, RETRACTED
+
+    gcode = ""
+    x = min_x + basicSettings['lineWidth'] / 2
+    y = min_y + basicSettings['lineWidth'] / 2
+    max_x = min_x + size_x - basicSettings['lineWidth'] / 2
+    max_y = min_y + size_y - basicSettings['lineWidth'] / 2
+
+    # handle optional function arguments passed as object
+    defaults = {
+        "fill": False,
+        "num_perims": basicSettings["anchorPerimeters"],
+        "spacing": basicSettings["anchorLineSpacing"],
+        "extRatio": basicSettings["anchorExtRatio"],
+        "speed": basicSettings["firstLayerSpeed"],
+    }
+
+    optArgs = dict()
+    optArgs.update(defaults)
+    if optional is not None:
+        optArgs.update(optional)
+
+    max_perims = min(
+        math.floor((size_x * math.sin(math.radians(45))) / (optArgs["spacing"] / math.sin(math.radians(45)))),
+        math.floor((size_y * math.sin(math.radians(45))) / (optArgs["spacing"] / math.sin(math.radians(45))))
+    )
+
+    # print('Max Perims: {}'.format(max_perims))
 
     optArgs["num_perims"] = min(optArgs["num_perims"], max_perims)
 
@@ -538,7 +697,7 @@ def createBox(min_x, min_y, size_x, size_y, basicSettings, optional):
     return gcode
 
 # with open("test.gcode", "w") as f:
-#     iter = 2
+#     iter = 8
 #     configEnd = open("end.txt", "r").read()
 #     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
 #     gcode += gcode_gen('P', iter, settings)

@@ -5,10 +5,11 @@ from printrun import gcoder
 import time
 import serial.tools.list_ports
 
-def send_gcode(gcode_file): 
+def send_gcode(iter, gcode_file): 
 
-  port = '/dev/ttyACM0' # default port
+  port = '/dev/ttyACM0' # Default port
 
+  # Auto Connect to Prusa
   for device in serial.tools.list_ports.comports(): 
     if 'Prusa' in device.description: 
       port = device.device
@@ -17,17 +18,25 @@ def send_gcode(gcode_file):
   gcode = [i.strip() for i in open(gcode_file)] # Process Gcode read from file
   gcode = gcoder.LightGCode(gcode) # Process Gcode
 
-  # startprint silently exits if not connected yet
+  # Startprint silently exits if not connected yet, this is important to initiate print
   while not p.online:
     time.sleep(0.1)
 
-  p.startprint(gcode) # this will start a print
+  p.startprint(gcode) # Star the print
 
   # Print Progress if printing, otherwise disconnect
+  last_val = 0
   while p.printing:
-    print('progress: {}'.format(100 * float(p.queueindex) / len(p.mainqueue)))
+    # Display progress
+    current = 100 * float(p.queueindex) / len(p.mainqueue)
+
+    if last_val is not current:
+      print('progress: {}'.format(current))
+
+      last_val = current
+
   else:
-    print('Print Complete')
+    print('Print {} Complete'.format(iter))
     p.disconnect()
       
 # List all com connected devices

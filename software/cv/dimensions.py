@@ -177,15 +177,22 @@ def find_dim(x, y, distanceX, edges, iter):
         print(differenceH)
         print(differenceV)
 
-        width = max(differenceV) #y
-        length = max(differenceH) #x
+        if differenceH == [] or differenceV == []: # if empty
+            width = None
+            length = None
 
-        draw_hough([lines[width[1]], lines[length[1]], lines[width[2]], lines[length[2]]], printed, 'final-print' + str(iter) + '.jpg')
+            return None
+        else: 
+            width = max(differenceV) #y
+            length = max(differenceH) #x
+            draw_hough([lines[width[1]], lines[length[1]], lines[width[2]], lines[length[2]]], printed, 'final-print' + str(iter) + '.jpg')
 
-    ratio = distanceX/255
-    print('Pixels: {},{}'.format(width[0], length[0]))
-    print('Millimeters: {},{}'.format(width[0]/ratio, length[0]/ratio))
-    
+            ratio = distanceX/255
+            print('Pixels: {},{}'.format(width[0], length[0]))
+            print('Millimeters: {},{}'.format(width[0]/ratio, length[0]/ratio))
+
+            return [width[0]*distanceX/250, length[0]*distanceX/250] # in mm
+        
     # Using Contours - IGNORE
     # contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
@@ -207,9 +214,7 @@ def find_dim(x, y, distanceX, edges, iter):
     # Now we find the largest contour and highlight it 
     # cv2.drawContours(img, contours, -1, color=(255,255,255), thickness=1)
 
-    return [width[0]*distanceX/250, length[0]*distanceX/250] # in mm
-
-
+            
 # Helper Functions
 # ----------------------------------------------------------------------- # 
 

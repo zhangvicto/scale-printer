@@ -6,7 +6,7 @@ from cv.dimensions import image_process, edges, analyze_edge, find_dim
 
 mode = 'P'
 
-for i in range(1,4):
+for i in range(1,9):
 
     iter = i
 
@@ -26,45 +26,52 @@ for i in range(1,4):
 
     distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
 
+    x=[]
+    y=[]
+
     # Calculate Print Location
-    ratio = distX/255 # Pixels per mm
-    print(ratio)
-    # Pixel = mm * ratio
+    if distX is not None:
+        ratio = distX/255 # Pixels per mm
+        print('Ratio: {}'.format(ratio))
+        # Pixel = mm * ratio
 
-    if mode == 'L': 
-        if distX > 0: 
-            xOffset = 20
-            x1 = xOffset + round((iter-1)*15*ratio)
-            x2 = round(x1 + 10*ratio)
-            x = [x1, x2]
-            print(x)
-            print(x)
-            y1 = round(180*ratio) - 20
-            y2 = round(180*ratio)
-            y = [y1, y2]
-        else: 
+        if mode == 'L': 
+            if distX > 0: 
+                xOffset = 20
+                x1 = xOffset + round((iter-1)*15*ratio)
+                x2 = round(x1 + 10*ratio)
+                x = [x1, x2]
+                print(x)
+                print(x)
+                y1 = round(180*ratio) - 20
+                y2 = round(180*ratio)
+                y = [y1, y2]
+            else: 
+                x = [None, None]
+                y = [None, None]
+
+        if mode == 'P': 
+            if distX: 
+                xOffset = 10
+                x1 = round((xOffset + (iter-1)*square_size)*ratio)
+                x2 = round(x1 + (square_size + xOffset)*ratio)
+                x = [x1, x2]
+                print(x)
+                yOffset = -5
+                y1 = round((200 - (square_size + xOffset + yOffset))*ratio)
+                y2 = round((200- yOffset)*ratio)
+                y = [y1, y2]
+                print(y)
+            else: 
+                x = [None, None]
+                y = [None, None]
+        
+        if mode == 'C': 
             x = [None, None]
             y = [None, None]
-
-    if mode == 'P': 
-        if distX: 
-            xOffset = 10
-            x1 = round((xOffset + (iter-1)*square_size)*ratio)
-            x2 = round(x1 + (square_size + xOffset)*ratio)
-            x = [x1, x2]
-            print(x)
-            yOffset = -5
-            y1 = round((200 - (square_size + xOffset + yOffset))*ratio)
-            y2 = round((200- yOffset)*ratio)
-            y = [y1, y2]
-            print(y)
-        else: 
-            x = [None, None]
-            y = [None, None]
-    if mode == 'C': 
-        x = [None, None]
-        y = [None, None]
 
     dimensions = find_dim(x, y, distX, edge, iter) # Find dim
-    widths = dimensions[0]
-    lengths = dimensions[1]
+
+    if dimensions is not None: 
+        widths = dimensions[0]
+        lengths = dimensions[1]
