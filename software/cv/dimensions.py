@@ -120,17 +120,11 @@ def find_dim(x, y, distanceX, edges):
 
     # Find Hough Lines of the printed shape
     # printed_lines = cv2.Canny(image=printed,threshold1=cannyThres1, threshold2=cannyThres2)
-    lines = cv2.HoughLinesP(printed, 0.5, np.pi/180, 50)
+    lines = cv2.HoughLines(printed, 0.5, np.pi/180, 10)
     
     print(lines)
 
-    if lines is not None:
-        for i in range(0, len(lines)):
-            l = lines[i][0]
-            cv2.line(printed, (l[0], l[1]), (l[2], l[3]), (0,0,255), 1, cv2.LINE_AA)
-    
-    cv2.imwrite('printed-lines.jpg', printed)
-    # draw_hough(lines, printed, 'printed-lines.jpg')
+    draw_hough(lines, printed, 'printed-lines.jpg')
     
 
     # Draw Hough Lines
