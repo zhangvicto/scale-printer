@@ -139,6 +139,7 @@ def find_dim(x, y, distanceX, edges):
 
             # rho = lines[i][0][0]
             theta = lines[i][0][1]
+            print('Angle:{}'.format(theta))
 
             if theta < 0 and theta < 30: 
                 linesH.append(lines[i])
