@@ -32,7 +32,7 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs shoul
     # STARTING THE ITERATION
     # For each particle, print and collect data
     particle_i = 0 
-    
+
     for particle in particles:
 
         # Generate Gcode 
@@ -59,7 +59,7 @@ def optimize(func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs shoul
             x = [0, 0]
             y = [0, 0]
 
-        dimensions = find_dim(x, y, distX, edge) # Find dim
+        dimensions = find_dim(x, y, distX, edge, iter) # Find dim
         widths = dimensions[0]
         lengths = dimensions[1]
 
