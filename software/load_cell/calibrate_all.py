@@ -32,6 +32,8 @@ def calibrate_all(known_weights):
     i = 0 
     for weight_ref in known_weights: 
         # Tare
+        hx711.reset()
+
         try:
             hx711.zero(readings_to_average)
         except Exception as e:
@@ -41,11 +43,11 @@ def calibrate_all(known_weights):
         input("Please put {}g weight on the bed.".format(weight_ref))
         time.sleep(1) # sleep to prevent none values
 
-        raw = hx711.read_raw(readings_to_average) # Read the Raw Values of Each Load Cell
+        raw = hx711.read_raw(readings_to_average*3) # Read the Raw Values of Each Load Cell
 
         # prevent none values
         while None in raw: 
-            raw = hx711.read_raw(readings_to_average)
+            raw = hx711.read_raw(readings_to_average*3)
 
         weight_sum = sum(raw) # Sum up all weight readings
         avg_multiples.append((weight_sum/(weight_ref))) # Calculate the multiple

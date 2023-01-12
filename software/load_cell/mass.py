@@ -47,7 +47,7 @@ def measure_mass():
             raw_vals = hx711.read_raw(readings_to_average=readings_to_average)
 
             # This function call will not perform a new measurement, it will just use what was acquired during read_raw()
-            while not None in raw_vals: 
+            while None in raw_vals: 
                 weights = hx711.get_weight() 
                 values.append(weights) # Add measurement to array
 

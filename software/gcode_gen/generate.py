@@ -115,7 +115,7 @@ def gcode_gen(mode, iter, modified_settings): #x, y, indicate the position of th
     elif mode == 'C':
         gcode += genCube(iter, settings, square_size)
     else:
-        print('Enter L for Line, P for Plane, C for Cube')
+        mode = input('Enter L for Line, P for Plane, C for Cube')
     
     return gcode
 
@@ -245,7 +245,7 @@ def genPlane(iter, settings, size):
         TO_X = initial_gap + (col_iter - 1)*(size + gap) # Recalculate X position using column number
     
     TO_Z = HEIGHT_FIRSTLAYER # set Z position
-    height = 5 # number of layers
+    layers = 4 # number of layers
 
     # Printing Z position 
     gcode += moveToZ(TO_Z, settings)
@@ -259,7 +259,7 @@ def genPlane(iter, settings, size):
     # Print plane
     gcode += "; printing plane start id:0 copy 0 \n"
     
-    for i in range(0, height+1): 
+    for i in range(0, layers+1): 
         gcode += moveToZ((i+1)*settings['layerHeight'], settings) # move up
         gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
     gcode += "; stop printing plane id:0 copy 0\n"
@@ -458,7 +458,7 @@ def createBox(min_x, min_y, size_x, size_y, basicSettings, optional):
         x -= size_x - (i * optArgs["spacing"]) * 2
         gcode += createLine(x, y, basicSettings, {"speed": optArgs["speed"], "extRatio": optArgs["extRatio"], "comment": " ; Draw perimeter (down)\n"})
 
-        print('Draw Box')
+        # print('Draw Box')
 
     if optArgs['fill']:
         spacing_45 = optArgs['spacing'] / math.sin(math.radians(45))
@@ -606,7 +606,7 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
         x -= size_x - (i * optArgs["spacing"]) * 2
         gcode += createLine(x, y, basicSettings, {"speed": optArgs["speed"], "extRatio": optArgs["extRatio"], "comment": " ; Draw perimeter (down)\n"})
 
-        print('Draw Box')
+        # print('Draw Box')
 
     if optArgs['fill']:
         spacing_45 = optArgs['spacing'] / math.sin(math.radians(45))

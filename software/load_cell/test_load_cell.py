@@ -52,11 +52,11 @@ try:
         read_duration = perf_counter() - start
         sample_rate = readings_to_average/read_duration
         print('\nread duration: {:.3f} seconds, rate: {:.1f} Hz'.format(read_duration, sample_rate))
-        # print(
-        #     'raw',
-        #     ['{:.3f}'.format(x) if x is not None else None for x in raw_vals])
-        # print(' wt',
-        #       ['{:.3f}'.format(x) if x is not None else None for x in weights])
+        print(
+            'raw',
+            ['{:.3f}'.format(x) if x is not None else None for x in raw_vals])
+        print(' wt',
+              ['{:.3f}'.format(x) if x is not None else None for x in weights])
 
         print(total)
         # uncomment below loop to see raw 2's complement and read integers
