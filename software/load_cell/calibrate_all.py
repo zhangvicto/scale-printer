@@ -67,6 +67,7 @@ def calibrate_all(known_weights):
     # Avg the individual Weights and Print
     individual = np.transpose(individual_multiples)
 
+    print("Average Multiples: {}".format(avg_multiples))
     print("Average: {}".format(sum(avg_multiples)/len(avg_multiples)))
 
     i = 1
