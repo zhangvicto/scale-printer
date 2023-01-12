@@ -62,10 +62,12 @@ def calibrate_all(known_weights):
         input("Please take the weight off.\n")
 
     # Standard Dev of Values in Multiples
-    print(statistics.stdev(avg_multiples)) # Avg Value of the multiple across four cells
+    # print(statistics.stdev(avg_multiples)) # Avg Value of the multiple across four cells
 
     # Avg the individual Weights and Print
     individual = np.transpose(individual_multiples)
+
+    print("Average: {}".format(sum(avg_multiples)/len(avg_multiples)))
 
     i = 1
     for multiple in individual: 
