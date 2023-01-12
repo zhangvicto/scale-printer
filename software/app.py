@@ -14,7 +14,7 @@ def api():
     # Get the data from the request
     data = request.get_json()
     # If data is not empty call calibration function
-    calibrate(data) # pass in data array
+    calibrate(data['mode'], data['numIterations']) # pass in data array
     # Call calibration function
     # calibrate(data)
     # Return success

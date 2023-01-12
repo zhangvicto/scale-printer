@@ -25,8 +25,15 @@ hx711.set_weight_multiples(weight_multiples=weight_multiples)
 def tare(): 
     try:
         hx711.zero(readings_to_average=readings_to_average*3) # 30 readings
-    except Exception as e:
+
+        raw = hx711.read_raw(readings_to_average=readings_to_average*3)
+        weights = hx711.get_weight()
+        
+        return sum(weights) # fake 0
+
+    except Exception as e: 
         print(e)
+
 
 def measure_mass():
     values = []

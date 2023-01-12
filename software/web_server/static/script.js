@@ -3,8 +3,16 @@
 //Simple RESTful API
 function startPSO() {
     let mode = document.getElementById('mode').value;
+    let numIterations = document.getElementById('numIterations').value;
+    let tempE = document.getElementById('tempE').value;
+    let tempB = document.getElementById('tempB').value;
+
     let data = {
-        mode: mode
+        mode: mode,
+        numIterations: numIterations,
+        tempE: tempE,
+        tempB: tempB,
+        psoCommand: start
     };
 
     fetch('http://localhost:5000/api/start', {

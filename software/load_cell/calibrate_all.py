@@ -12,7 +12,7 @@ dout_pins = [22, 4, 17, 27]
 
 hx711 = HX711(dout_pins=dout_pins,
               sck_pin=sck_pin,
-              channel_A_gain=64,
+              channel_A_gain=128,
               channel_select='A',
               all_or_nothing=False,
               log_level='CRITICAL')
@@ -30,7 +30,7 @@ def calibrate_all(known_weights):
     avg_multiples = []
     individual_multiples = []
     i = 0 
-    for weight in known_weights: 
+    for weight_ref in known_weights: 
         # Tare
         try:
             hx711.zero(readings_to_average)
@@ -38,20 +38,21 @@ def calibrate_all(known_weights):
             print(e)
             
         # Input Prompt
-        input("Please put {}g weight on the bed.".format(weight))
+        input("Please put {}g weight on the bed.".format(weight_ref))
         time.sleep(1) # sleep to prevent none values
 
         raw = hx711.read_raw(readings_to_average) # Read the Raw Values of Each Load Cell
+
         # prevent none values
         while None in raw: 
             raw = hx711.read_raw(readings_to_average)
 
-        raw_sum = sum(raw) # Sum up all raw readings
-        avg_multiples.append((raw_sum/(weight*4))) # Calculate the multiple
+        weight_sum = sum(raw) # Sum up all weight readings
+        avg_multiples.append((weight_sum/(weight_ref))) # Calculate the multiple
 
         individual_cell_multiple = []
         for value in raw: 
-            multiple_diff = (avg_multiples[i] - weight/value)/avg_multiples[i] # Relative difference of individual load cell vs. the average
+            multiple_diff = (avg_multiples[i] - value/weight_ref)/avg_multiples[i] # Relative difference of individual load cell vs. the average
             individual_cell_multiple.append(avg_multiples[i]*(1 + multiple_diff))  # Adjustment to the individual multiple
 
         individual_multiples.append(individual_cell_multiple) # Add all four multiples with adjustment
@@ -73,5 +74,5 @@ def calibrate_all(known_weights):
         
 
 # Run Script to find best, for future auto run calibration at start
-weights = [5, 10, 20, 100]
+weights = [1, 2, 5, 10]
 calibrate_all(weights)

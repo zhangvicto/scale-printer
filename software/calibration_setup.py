@@ -10,6 +10,8 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
 # Variables MIN MAX
 # Extruder Temp
+
+
 TeMax = 260
 TeMin = 200
 
@@ -31,7 +33,7 @@ xguess = [230, 60, 40]
 
 numDimensions = len(xmax)
 
-def calibrate(data): 
+def calibrate(mode, numIterations): 
     # Input Sequence
     # Choose Calibration Type GCODE (Line or Plane)
     mode = input('Choose a calibration mode, L, P, or C: \n')
