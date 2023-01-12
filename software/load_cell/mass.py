@@ -9,13 +9,13 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 readings_to_average = 10
 sck_pin = 6
 dout_pins = [22, 4, 17, 27] # 1, 2, 3, 4
-# weight_multiples = [465.08, 459.72, 459.72, 459.72] # 128 gain
-weight_multiples = [242.78, 239.83, 227.31, 237.63] # 64 gain
+weight_multiples = [465.08, 459.72, 459.72, 459.72] # 128 gain
+# weight_multiples = [249.2455357142855, 239.83, 227.31, 237.63] # 64 gain
 
 # create hx711 instance
 hx711 = HX711(dout_pins=dout_pins,
             sck_pin=sck_pin,
-            channel_A_gain=64,
+            channel_A_gain=128,
             channel_select='A',
             all_or_nothing=False,
             log_level='CRITICAL')
