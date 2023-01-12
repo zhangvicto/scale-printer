@@ -262,6 +262,7 @@ def genPlane(iter, settings, size):
     for i in range(0, layers+1): 
         gcode += moveToZ((i+1)*settings['layerHeight'], settings) # move up
         gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
+        gcode += retract()
     gcode += "; stop printing plane id:0 copy 0\n"
 
     return gcode
