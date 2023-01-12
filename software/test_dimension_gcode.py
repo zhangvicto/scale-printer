@@ -14,7 +14,7 @@ for i in range(1,9):
     iter = i
     time_start = perf_counter()
 
-    creep = 0.0005*5000/(3*60) # grams/sec
+    creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
 
     with open("./gcode_gen/test.gcode", "w") as f:
         

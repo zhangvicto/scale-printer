@@ -38,7 +38,6 @@ def tare():
 
 def measure_mass():
     values = []
-    mass = []
 
     try:
         start = perf_counter()
@@ -47,18 +46,15 @@ def measure_mass():
             # Read Raw Data
             raw_vals = hx711.read_raw(readings_to_average*3)
 
-            while not None in raw_vals: 
-                weights = hx711.get_weight() 
-                values.append(weights) # Add measurement to array
+            weights = hx711.get_weight() 
+            
+            values.append(sum(weights)) # Add measurement to array
 
             # read_duration = perf_counter() - start
 
     except Exception as e:
         print(e)
 
-    # print(values) # weight
-    if values: 
-        for value in values: 
-            mass.append(sum(value))
+    print(values)
 
-    return sum(mass)/len(mass) # Avg of measurement over four seconds
+    return sum(values)/len(values) # Avg of measurement over four seconds
