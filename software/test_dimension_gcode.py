@@ -26,7 +26,9 @@ for i in range(1,9):
     
     # Tare Weight before Starting Print
     time_zero = perf_counter() - time_start
+    print(time_zero)
     zero_weight = tare()
+    print(zero_weight)
 
     # Account for Creep
     initial_zero = zero_weight - time_zero*creep
