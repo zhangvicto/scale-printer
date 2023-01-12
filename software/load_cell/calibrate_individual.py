@@ -18,5 +18,5 @@ hx711 = HX711(dout_pins=dout_pins,
 # reset ADC, zero it
 hx711.reset()
 
-weight_multiple = hx711.run_calibration(known_weights=[5, 10, 20, 100])
+weight_multiple = hx711.run_calibration(known_weights=[1, 2, 5, 10, 20, 100])
 print(f'Weight multiple = {weight_multiple}')
