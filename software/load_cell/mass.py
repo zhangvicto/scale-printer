@@ -29,7 +29,8 @@ def tare():
         raw = hx711.read_raw(readings_to_average=readings_to_average*3)
         weights = hx711.get_weight()
         
-        return sum(weights) # fake 0
+        if None not in raw: 
+            return sum(weights) # fake 0
 
     except Exception as e: 
         print(e)
@@ -44,10 +45,9 @@ def measure_mass():
 
         while perf_counter() - start <  4: # 4 sec timer
             # Read Raw Data
-            raw_vals = hx711.read_raw(readings_to_average=readings_to_average)
+            raw_vals = hx711.read_raw(readings_to_average*3)
 
-            # This function call will not perform a new measurement, it will just use what was acquired during read_raw()
-            while None in raw_vals: 
+            while not None in raw_vals: 
                 weights = hx711.get_weight() 
                 values.append(weights) # Add measurement to array
 

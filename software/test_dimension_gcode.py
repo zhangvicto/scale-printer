@@ -2,7 +2,7 @@ from load_cell.mass import measure_mass, tare
 from gcode_gen.generate import gcode_gen, genStart, genEnd, settings, square_size
 from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
-
+from time import perf_counter
 
 mode = 'P'
 mass_data = []
@@ -12,6 +12,9 @@ for i in range(1,9):
 
 
     iter = i
+    time_start = perf_counter()
+
+    creep = 0.0005*5000/(3*60) # grams/sec
 
     with open("./gcode_gen/test.gcode", "w") as f:
         
@@ -22,17 +25,24 @@ for i in range(1,9):
         f.write(gcode)
     
     # Tare Weight before Starting Print
-    tare()
+    time_zero = perf_counter() - time_start
+    zero_weight = tare()
+
+    # Account for Creep
+    initial_zero = zero_weight - time_zero*creep
 
     # Pass in Printing Parameters
     send_gcode(iter, './gcode_gen/test.gcode')
 
     
+    measure_time = perf_counter() - time_zero
+
     # Once print finishes, check weight
     mass = measure_mass()
     if mass is not None: 
+        mass_real = mass - measure_time*creep - initial_zero
         print("Measuring Mass. \n")
-        mass_data.append(mass)
+        mass_data.append(mass_real)
     else: 
         print("Measuring Error Occurred. \n")
         mass_data.append(None)
