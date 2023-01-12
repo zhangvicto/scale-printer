@@ -21,7 +21,7 @@ SPEED_PERIMETER = 50*60
 SPEED_RETRACT = 30*60
 SPEED_UNRETRACT = 30*60
 PRINT_DIR = 0 
-HEIGHT_LAYER = 0.3
+HEIGHT_LAYER = 0.2
 HEIGHT_FIRSTLAYER = 0.2
 
 EXTRUSION_RATIO = LINE_WIDTH * HEIGHT_LAYER / (pow(FILAMENT_DIAMETER/2, 2) * math.pi)
@@ -229,6 +229,8 @@ def genLine(iter, settings):
     return gcode
 
 def genPlane(iter, settings, size): 
+    global CUR_Z
+
     gcode = ''
     initial_gap = 10 #mm
     gap = 10 #mm
@@ -243,7 +245,7 @@ def genPlane(iter, settings, size):
         TO_X = initial_gap + (col_iter - 1)*(size + gap) # Recalculate X position using column number
     
     TO_Z = HEIGHT_FIRSTLAYER # set Z position
-
+    height = 5 # number of layers
 
     # Printing Z position 
     gcode += moveToZ(TO_Z, settings)
@@ -256,7 +258,10 @@ def genPlane(iter, settings, size):
 
     # Print plane
     gcode += "; printing plane start id:0 copy 0 \n"
-    gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
+    
+    for i in range(0, height+1): 
+        gcode += moveToZ((i+1)*settings['layerHeight'], settings) # move up
+        gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
     gcode += "; stop printing plane id:0 copy 0\n"
 
     return gcode
@@ -552,10 +557,10 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
     global CUR_X, CUR_Y, CUR_Z, RETRACTED
 
     gcode = ""
-    x = min_x + basicSettings['lineWidth'] / 2
-    y = min_y + basicSettings['lineWidth'] / 2
-    max_x = min_x + size_x - basicSettings['lineWidth'] / 2
-    max_y = min_y + size_y - basicSettings['lineWidth'] / 2
+    x = min_x - basicSettings['lineWidth']/2
+    y = min_y - basicSettings['lineWidth']/2
+    max_x = min_x + size_x - basicSettings['lineWidth']/2
+    max_y = min_y + size_y - basicSettings['lineWidth']/2
 
     # handle optional function arguments passed as object
     defaults = {
