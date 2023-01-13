@@ -47,6 +47,8 @@ def measure_mass():
             raw_vals = hx711.read_raw(readings_to_average*3)
 
             weights = hx711.get_weight() 
+
+            print(weights)
             
             values.append(sum(weights)) # Add measurement to array
 

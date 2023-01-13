@@ -13,13 +13,19 @@ def index():
 def api():
     # Get the data from the request
     data = request.get_json()
+    
     # If data is not empty call calibration function
-    calibrate(data['mode'], data['numIterations']) # pass in data array
-    # Call calibration function
-    # calibrate(data)
+    if data is not None: 
+        calibrate(data['mode'], data['numIterations']) # pass in data array
+   
     # Return success
     return jsonify({'success': True})
 
+@app.route("/api/monitor")
+def monitor(): 
+    data = request.get_json()
+
+    return jsonify({'success': True})
 
 # Use this 
 # flask run --host=0.0.0.0

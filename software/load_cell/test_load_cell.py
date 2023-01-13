@@ -10,14 +10,14 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 readings_to_average = 10
 sck_pin = 6
 dout_pins = [22, 4, 17, 27] # 1, 2, 3, 4
-weight_multiples = [452.01468253967175, 451.2896825396776, 459.4241071428569, 438.38125] # 128 gain
-# weight_multiples = [242.78, 239.83, 227.31, 237.63] # 64 gain
+# weight_multiples = [452.01468253967175, 451.2896825396776, 459.4241071428569, 438.38125] # 128 gain
+weight_multiples = [242.78, 239.83, 227.31, 237.63] # 64 gain
 
 
 # create hx711 instance
 hx711 = HX711(dout_pins=dout_pins,
               sck_pin=sck_pin,
-              channel_A_gain=128,
+              channel_A_gain=64,
               channel_select='A',
               all_or_nothing=False,
               log_level='CRITICAL')
@@ -40,7 +40,7 @@ try:
         start = perf_counter()
 
         # perform read operation, returns signed integer values as delta from zero()
-        # readings aare filtered for bad data and then averaged
+        # readings are filtered for bad data and then averaged
         raw_vals = hx711.read_raw(readings_to_average=readings_to_average)
 
         # request weights using multiples set previously with set_weight_multiples()

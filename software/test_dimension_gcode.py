@@ -16,6 +16,8 @@ for i in range(1,9):
 
     creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
 
+
+    # Generate Gcode
     with open("./gcode_gen/test.gcode", "w") as f:
         
         gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
@@ -27,8 +29,13 @@ for i in range(1,9):
     # Tare Weight before Starting Print
     time_zero = perf_counter() - time_start
     print(time_zero)
+
+    # Taring
     zero_weight = tare()
-    print(zero_weight)
+    while zero_weight is None: 
+        zero_weight = tare()
+    else: 
+        print(zero_weight)
 
     # Account for Creep
     initial_zero = zero_weight - time_zero*creep
@@ -36,7 +43,6 @@ for i in range(1,9):
     # Pass in Printing Parameters
     send_gcode(iter, './gcode_gen/test.gcode')
 
-    
     measure_time = perf_counter() - time_zero
 
     # Once print finishes, check weight
