@@ -10,7 +10,6 @@ dimension_data = []
 
 for i in range(1,9):
 
-
     iter = i
     time_start = perf_counter()
 

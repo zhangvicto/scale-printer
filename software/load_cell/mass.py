@@ -42,7 +42,7 @@ def measure_mass():
     try:
         start = perf_counter()
 
-        while perf_counter() - start <  4: # 4 sec timer
+        while perf_counter() - start <  3: # 4 sec timer
             # Read Raw Data
             raw_vals = hx711.read_raw(readings_to_average*3)
 
