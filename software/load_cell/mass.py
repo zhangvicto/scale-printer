@@ -35,10 +35,12 @@ def tare():
         
         sleep(0.2)
         
-        weights = hx711.get_weight()
-        
-        if None not in raw: 
-            return sum(weights) # fake 0
+        while None in raw:
+            raw = hx711.read_raw(readings_to_average=readings_to_average*3)
+        else: 
+            weights = hx711.get_weight()
+
+        return sum(weights) # actual 0
 
     except Exception as e: 
         print(e)

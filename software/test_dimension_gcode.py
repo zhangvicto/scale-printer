@@ -30,10 +30,7 @@ for i in range(1,9):
 
     # Taring
     zero_weight = tare()
-    while zero_weight is None: 
-        zero_weight = tare()
-    else: 
-        print(zero_weight)
+    print(zero_weight)
 
     # Account for Creep
     initial_zero = zero_weight - time_zero*creep
