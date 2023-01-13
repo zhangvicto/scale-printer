@@ -13,7 +13,7 @@ for i in range(1,9):
     iter = i
     time_start = perf_counter()
 
-    creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
+    # creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
 
     # Generate Gcode
     with open("./gcode_gen/test.gcode", "w") as f:
@@ -27,23 +27,25 @@ for i in range(1,9):
     # Tare Weight before Starting Print
     time_zero = perf_counter() - time_start
     print(time_zero)
-
+    
+    zero_weight = 0 
     # Taring
-    zero_weight = tare()
+    if iter == 1: 
+        zero_weight = tare()
     print(zero_weight)
 
     # Account for Creep
-    initial_zero = zero_weight - time_zero*creep
+    initial_zero = zero_weight #- time_zero*creep
 
     # Pass in Printing Parameters
     send_gcode(iter, './gcode_gen/test.gcode')
 
-    measure_time = perf_counter() - time_zero
+    # measure_time = perf_counter() - time_zero
 
     # Once print finishes, check weight
     mass = measure_mass()
     if mass is not None: 
-        mass_real = mass - measure_time*creep - initial_zero
+        mass_real = mass - initial_zero #measure_time*creep 
         print("Measuring Mass. \n")
         mass_data.append(mass_real)
     else: 
@@ -112,4 +114,4 @@ for i in range(1,9):
     else: 
         dimension_data.append(None)
 
-    print("Mass: {}. Dimensions: {}.".format(mass_data, dimension_data))
+    print("Mass: {}. Dimensions: {}. Time Elasped: {}.".format(mass_data, dimension_data, perf_counter() - time_start))
