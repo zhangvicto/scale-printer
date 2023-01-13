@@ -1,7 +1,7 @@
 #https://pypi.org/project/hx711-multi/
 
 from hx711_multi import HX711
-from time import perf_counter
+from time import perf_counter, sleep
 import RPi.GPIO as GPIO  # import GPIO
 
 GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
@@ -23,10 +23,18 @@ hx711.set_weight_multiples(weight_multiples=weight_multiples)
 
 
 def tare(): 
+    # reset ADC, zero it
+    hx711.reset()
+
     try:
         hx711.zero(readings_to_average=readings_to_average*3) # 30 readings
-
+        
+        sleep(0.2)
+        
         raw = hx711.read_raw(readings_to_average=readings_to_average*3)
+        
+        sleep(0.2)
+        
         weights = hx711.get_weight()
         
         if None not in raw: 
@@ -45,9 +53,10 @@ def measure_mass():
         while perf_counter() - start <  3: # 4 sec timer
             # Read Raw Data
             raw_vals = hx711.read_raw(readings_to_average*3)
-
+            
+            sleep(0.2)
+           
             weights = hx711.get_weight() 
-
             print(weights)
             
             values.append(sum(weights)) # Add measurement to array

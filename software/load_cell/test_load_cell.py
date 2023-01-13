@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from hx711_multi import HX711
-from time import perf_counter
+from time import perf_counter, sleep
 import RPi.GPIO as GPIO  # import GPIO
 
 # init GPIO (should be done outside HX711 module in case you are using other GPIO functionality)
@@ -22,6 +22,8 @@ hx711 = HX711(dout_pins=dout_pins,
               all_or_nothing=False,
               log_level='CRITICAL')
 # reset ADC, zero it
+hx711.reset()
+sleep(0.2)
 hx711.reset()
 
 try:

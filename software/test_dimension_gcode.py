@@ -15,7 +15,6 @@ for i in range(1,9):
 
     creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
 
-
     # Generate Gcode
     with open("./gcode_gen/test.gcode", "w") as f:
         
