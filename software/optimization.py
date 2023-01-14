@@ -1,92 +1,186 @@
 from pso.optimize_helpers import Particle, accuracy, consist
 import numpy as np
-from load_cell.mass import measure_mass
-from gcode_gen.generate import gcode_gen, settings
+from load_cell.mass import measure_mass, tare
+from gcode_gen.generate import gcode_gen, genStart, genEnd, settings, square_size
 from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
+from time import perf_counter
 
 # Settings
-numParticles = 10 # not sure
+numParticles = 10
 
-# Array of particle objects
-particles = []
-
-x_best_g = []
 # Inertia weights?
 
-desired_mass = 
 
+# Desired Mass
+mass_desired = 1.31 # grams
 
 # Execute iteration
-def optimize(func, xmax, xmin, xguess, numDimensions, iter, mode): #inputs should be the fitness of last iteration
+def optimize(mode, xmax, xmin, xguess, numDimensions, iteration): #inputs should be the fitness of last iteration
     
     # global optimum
-    global x_best_g, particles
+    particles = []
+    mass_data = []
+    dimension_data = []
 
     # Create Particle Array
     for i in range(0, numParticles):
         # Add new particle to particle array
-        particle = Particle(xmax[i], xmin[i], xguess[i], numDimensions)
+        particle = Particle(xmax, xmin, xguess, numDimensions)
         particles.append(particle)
 
     # STARTING THE ITERATION
+    
     # For each particle, print and collect data
     particle_i = 0 
-
+    
     for particle in particles:
 
-        # Generate Gcode 
-        gcode = gcode_gen(mode, iter, settings)
+        iter = particle_i
+        time_start = perf_counter()
 
-        # Send to Printer
-        send_gcode(gcode_file=gcode)
+        # MEASUREMENT STUFF
+
+        # creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
+
+        # Generate Gcode
+        with open("./gcode_gen/test.gcode", "w") as f:
             
+            gcode = genStart(iter=iter, nozzleD=0.4, Te=210, Tb=0, Vp=settings['moveSpeed'])
+            gcode += gcode_gen(mode, iter, settings)
+            gcode += genEnd(iter)
+
+            f.write(gcode)
+        
+        # Tare Weight before Starting Print
+        time_zero = perf_counter() - time_start
+        print(time_zero)
+        
+        zero_weight = 0 
+        # Taring
+        if iter == 1: 
+            zero_weight = tare()
+        print(zero_weight)
+
+        # Account for Creep
+        initial_zero = zero_weight #- time_zero*creep
+
+        # Pass in Printing Parameters
+        send_gcode(iter, './gcode_gen/test.gcode')
+
+        # measure_time = perf_counter() - time_zero
+
         # Once print finishes, check weight
         mass = measure_mass()
+        if mass is not None: 
+            mass_real = mass - initial_zero # measure_time*creep 
+            print("Measuring Mass. \n")
+            mass_data.append(mass_real)
+        else: 
+            print("Measuring Error Occurred. \n")
+            mass_data.append(None)
+
 
         # Find Dimension of the Print
-        blurred = image_process() # Process Image
-        edge = edges(blurred) # Canny Edge Detection
+        print("Starting CV Process. \n")
+        img = image_process() # Process Image
+        edge = edges(img) # Canny Edge Detection
 
         distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
-        
+
+        x=[]
+        y=[]
+
         # Calculate Print Location
-        if mode == 'L': 
-            x = [(iter-1)*15/250*distX, iter*15/250*distX]
-            y = [0, 180]
-        # TBD
-        if mode == 'P' or mode == 'C': 
-            x = [0, 0]
-            y = [0, 0]
+        if distX is not None:
+            ratio = distX/255 # Pixels per mm
+            print('Ratio: {}'.format(ratio))
+            # Pixel = mm * ratio
+
+            if mode == 'L': 
+                if distX > 0: 
+                    xOffset = 20
+                    x1 = xOffset + round((iter-1)*15*ratio)
+                    x2 = round(x1 + 10*ratio)
+                    x = [x1, x2]
+                    print(x)
+                    print(x)
+                    y1 = round(180*ratio) - 20
+                    y2 = round(180*ratio)
+                    y = [y1, y2]
+                else: 
+                    x = [None, None]
+                    y = [None, None]
+
+            if mode == 'P': 
+                if distX: 
+                    initial_gap = 10
+                    gap = 10
+                    x1 = round((initial_gap + gap/2 + (iter-1)*square_size)*ratio)
+                    x2 = round(x1 + (square_size + gap)*ratio)
+                    x = [x1, x2]
+                    print(x)
+                    yOffset = -5
+                    y1 = round((200 - (square_size + gap + yOffset))*ratio)
+                    y2 = round((200- yOffset)*ratio)
+                    y = [y1, y2]
+                    print(y)
+                else: 
+                    x = [None, None]
+                    y = [None, None]
+            
+            if mode == 'C': 
+                x = [None, None]
+                y = [None, None]
 
         dimensions = find_dim(x, y, distX, edge, iter) # Find dim
-        widths = dimensions[0]
-        lengths = dimensions[1]
 
-        # Evaluate and Compare global optimum to local optimum
-        particle.evaluate(func(mass, widths, lengths, 0.33, 0.5, 200))
+        if dimensions is not None: 
+            widths = dimensions[0]
+            lengths = dimensions[1]
+            dimension_data.append(dimensions)
+        else: 
+            dimension_data.append(None)
+        
+        # Print all data
+        print("Mass: {}. Dimensions: {}. Time Elasped: {}.".format(mass_data, dimension_data, perf_counter() - time_start))
 
-        if particle.f_best_p > x_best_g: # Compare fitness
+
+        # PSO STUFF
+
+        # Evaluate and compare particle global optimum to local optimum
+        # Calculate Current Fitness
+        fitness(mode, dimensions[0], dimensions[1], mass, mass_desired, square_size, square_size)
+
+        if particle.f_best_p < x_best_g: # Compare fitness
             x_best_g = particle.f_best_p[:] # Splice array and set global op to current particle
 
         # Generate new values for the next iteration based on previous iteration
         particle.updateVelocity(x_best_g)
         particle.updatePosition()
-
+        
+        # NEXT PARTICLE
         particle_i += 1
 
-    return particles
+    
+    print('Iteration {} complete.'.format(iteration))
+
+    return particle.x_best_p
 
 
 # Fitness Functions
-def fitness(mode, mass, widths, lengths, mass_desired, width_desired, length_desired): # width is a list of measurements for the plane or cube
+def fitness(mode, widths, lengths, mass, mass_desired, width_desired, length_desired): # width is a list of measurements for the plane or cube
     if mode == "L": 
         return 0.2*consist(widths, lengths) + 0.2*accuracy(average(widths), width_desired)+ 0.1*accuracy(average(lengths), length_desired) + 0.5*accuracy(mass, mass_desired)
 
-    elif mode == "P" or mode == "C": 
+    elif mode == "P": 
+        return 0.1*accuracy(widths, width_desired)+ 0.1*accuracy(lengths, length_desired) + 0.7*accuracy(mass, mass_desired)
+    
+    elif mode == "C":
         return 0
     
 def average(list): 
     for i in list: 
         sum =+ i
     return sum/list.len()
+

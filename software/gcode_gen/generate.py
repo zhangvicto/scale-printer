@@ -254,7 +254,7 @@ def genPlane(iter, settings, size):
     
     # Initial xy pos, move to x and y individually to avoid collision
     gcode += moveToXY(to_x=0, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
-    gcode += moveToXY(to_x=CUR_X, to_y=0, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    gcode += moveToXY(to_x=CUR_X, to_y=-3, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
     
     # Printing Z position 
     gcode += moveToZ(TO_Z, settings)
@@ -595,6 +595,7 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
 
     if min_x != CUR_X or min_y != CUR_Y:
         # move in y, then move in x
+        gcode += moveToXY(CUR_X, (min_y - 3), basicSettings, {"comment": " ; Move to box start\n"})
         gcode += moveToXY(CUR_X, min_y, basicSettings, {"comment": " ; Move to box start\n"})
         gcode += moveToXY(min_x, CUR_Y, basicSettings, {"comment": " ; Move to box start\n"})
 

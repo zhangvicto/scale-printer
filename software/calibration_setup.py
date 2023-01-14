@@ -2,7 +2,6 @@ import RPi.GPIO as GPIO
 from optimization import optimize, fitness
 from load_cell.mass import tare, measure_mass
 
-# init GPIO (should be done outside HX711 module in case you are using other GPIO functionality)
 GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
 #MAIN BLOCK
@@ -33,11 +32,10 @@ xguess = [230, 60, 40]
 
 numDimensions = len(xmax)
 
-def calibrate(mode, numIterations): 
+def calibrate(numIterations): 
     # Input Sequence
     # Choose Calibration Type GCODE (Line or Plane)
     mode = input('Choose a calibration mode, L, P, or C: \n')
-
 
     if mode == "L": 
         numIterations = 15
@@ -49,6 +47,9 @@ def calibrate(mode, numIterations):
 
     # Run Iterations
     for i in range(0, numIterations): 
+
+        print('Starting Iteration {}'.format(i))
+        
         # Tare Load Cells
         tare()
         mass = measure_mass()
@@ -57,8 +58,16 @@ def calibrate(mode, numIterations):
         # Tare until we get a value that is less than 0.3g
         # while abs(mass) > 0.3: 
         #     tare()
-        
+        if i == 0: 
+            xguess_i = xguess
+        elif last_guess is not None and not xguess:
+            xguess_i = last_guess
+
         # Run through first PSO iteration and generate parameter
-        optimize(func=fitness, xmax=xmax, xmin=xmin, xguess=xguess, numDimensions=numDimensions, iter=i, mode=mode)
+        last_guess = optimize(mode, xmax, xmin, xguess_i, numDimensions, i)
+
+        input('Please remove prints and press enter to continue: \n')
+
+calibrate(10)
 
 GPIO.cleanup()

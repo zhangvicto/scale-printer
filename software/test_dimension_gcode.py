@@ -18,7 +18,7 @@ for i in range(1,9):
     # Generate Gcode
     with open("./gcode_gen/test.gcode", "w") as f:
         
-        gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+        gcode = genStart(iter=iter, nozzleD=0.4, Te=210, Tb=0, Vp=settings['moveSpeed'])
         gcode += gcode_gen(mode, iter, settings)
         gcode += genEnd(iter)
 
@@ -45,7 +45,7 @@ for i in range(1,9):
     # Once print finishes, check weight
     mass = measure_mass()
     if mass is not None: 
-        mass_real = mass - initial_zero #measure_time*creep 
+        mass_real = mass - initial_zero # measure_time*creep 
         print("Measuring Mass. \n")
         mass_data.append(mass_real)
     else: 
@@ -86,7 +86,7 @@ for i in range(1,9):
 
         if mode == 'P': 
             if distX: 
-                initial_gap = 10 if iter==1 else 0
+                initial_gap = 10
                 gap = 10
                 x1 = round((initial_gap + gap/2 + (iter-1)*square_size)*ratio)
                 x2 = round(x1 + (square_size + gap)*ratio)

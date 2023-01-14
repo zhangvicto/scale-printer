@@ -15,16 +15,13 @@ class Particle:
 
         # Generate Initial Values
         for i in range(0, numDimensions): 
-            pos = np.random.uniform(max(xguess[i]-r(xmax[i], xmin[i])*p(xmax[i], xmin[i], xguess[i])/2, xmin), min(xguess-range(xmax[i], xmin)*p(xmax[i], xmin[i], xguess[i])/2, xmax[i]))
+            pos = np.random.uniform(max(xguess[i]-r(xmax[i], xmin[i])*p(xmax[i], xmin[i], xguess[i])/2, xmin[i]), min(xguess[i]-range(xmax[i], xmin[i])*p(xmax[i], xmin[i], xguess[i])/2, xmax[i]))
             self.v_i.append(pos)
             
             vel = np.random.uniform(-abs(xmax[i]-xmin[i]), abs(xmax[i]-xmin[i]))
             self.x_i.append(vel)
 
         # Functions
-        # Evaluate Fitness
-        def evaluate(self, func): 
-            self.f_best_p = func()
 
         # Generate Velocity for next iteration
         def updateVelocity(self, x_best_g): 
