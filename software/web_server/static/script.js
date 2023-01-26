@@ -20,11 +20,12 @@ function startPSO() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
     })
     .then((res) => {
-        return res.text();
+        return res.text()
     })
     .then((text) => {
+        console.log(text)
     }
 }

@@ -53,13 +53,19 @@
     <h5>Flow Multiplier: </h5><input type="number" id="flow">
     
     <!-- Number of Iterations -->
-
     <h4>Enter the Number of Iterations:</h4>
     <input type="number" id="iterations">
     
     <!-- Start Print -->
     <button onClick=startPSO()> Begin Calibration </button>
     <button onClick=clear()> Reset </button>
+
+    <!--  Error Display -->
+    <h4>Errors</h4>
+    <div>
+        <p id="error"></p> <!-- Replace with Error messages -->
+    </div>
+    <button onClick=stop()> Stop </button>
 
 	<script src="script.js"></script>
   </body>
