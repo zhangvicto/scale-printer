@@ -710,14 +710,14 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
                     gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right                     
     return gcode
 
-with open("test.gcode", "w") as f:
-    iter = 1
-    configEnd = open("end.txt", "r").read()
-    gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
-    gcode += gcode_gen('P', iter, settings)
-    gcode += genEnd(iter)
-    gcode += configEnd
+# with open("test.gcode", "w") as f:
+#     iter = 1
+#     configEnd = open("end.txt", "r").read()
+#     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+#     gcode += gcode_gen('P', iter, settings)
+#     gcode += genEnd(iter)
+#     gcode += configEnd
 
-    f.write(gcode)
+#     f.write(gcode)
 
-    f.close()
+#     f.close()
