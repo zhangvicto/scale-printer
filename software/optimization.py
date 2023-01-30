@@ -33,6 +33,7 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
         iter = particle_i
         time_start = perf_counter()
 
+
         # MEASUREMENT STUFF
 
         # creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
@@ -46,33 +47,43 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
 
             f.write(gcode)
         
+        print("Gcode Generated. \n")
+
         # Tare Weight before Starting Print
-        time_zero = perf_counter() - time_start
-        print(time_zero)
+        # time_zero = perf_counter() - time_start
+        # print("Initial weight offset: {}".format(time_zero))
         
         zero_weight = 0 
-        # Taring
-        if iter == 1: 
-            zero_weight = tare()
-        print(zero_weight)
 
-        # Account for Creep
+        # Taring
+        if iter == 0: 
+            zero_weight = tare()
+        print("Initial weight offset: {}".format(zero_weight))
+
+        # Account for Creep - ignoring creep for now
         initial_zero = zero_weight #- time_zero*creep
 
         # Pass in Printing Parameters
+        print("Sending Gcode to Printer. \n")
         send_gcode(iter, './gcode_gen/test.gcode')
 
         # measure_time = perf_counter() - time_zero
 
         # Once print finishes, check weight
         mass = measure_mass()
+        
         if mass is not None: 
-            mass_real = mass - initial_zero # measure_time*creep 
+            mass_real = mass - last_mass - initial_zero # find weight of print
             print("Measuring Mass. \n")
             mass_data.append(mass_real)
         else: 
             print("Measuring Error Occurred. \n")
             mass_data.append(None)
+
+        last_mass = mass
+
+
+        # CV STUFF
 
         # Find Dimension of the Print
         print("Starting CV Process. \n")
