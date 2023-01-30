@@ -44,8 +44,11 @@ def calibrate(numIterations):
     elif mode == "P" or mode == "C": 
         numIterations = 10
 
-    xguess = input('Enter the initial guess: \n')
+    Te_guess = input('Enter the initial extruder temperature guess: \n')
+    Vp_guess = input('Enter the initial print speed guess: \n')
+    Ef_guess = input('Enter the initial extrusion flow guess: \n')
 
+    xguess = [Te_guess, Vp_guess, Ef_guess]
 
     # Run Iterations
     for i in range(0, numIterations): 
