@@ -48,7 +48,7 @@ def calibrate(numIterations):
     Vp_guess = input('Enter the initial print speed guess: \n')
     Ef_guess = input('Enter the initial extrusion flow guess: \n')
 
-    xguess = [Te_guess, Vp_guess, Ef_guess]
+    xguess = [int(Te_guess), int(Vp_guess), int(Ef_guess)]
 
     # Run Iterations
     for i in range(0, numIterations): 
