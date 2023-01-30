@@ -257,8 +257,8 @@ def genPlane(iter, settings, size):
     gcode += moveToZ(TO_Z + 3, settings) # go up 3mm to avoid collision
 
     # Initial xy pos
-    gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
-    # gcode += moveToXY(to_x=CUR_X, to_y=TO_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    gcode += moveToXY(to_x=CUR_X, to_y=TO_Y - 2, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    gcode += moveToXY(to_x=TO_X, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
     gcode += moveToZ(TO_Z, settings) # go to Z position
 
     # Set Acceleration
@@ -596,10 +596,7 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
     optArgs["num_perims"] = min(optArgs["num_perims"], max_perims)
 
     if min_x != CUR_X or min_y != CUR_Y:
-        # move in y, then move in x
-        # gcode += moveToXY(CUR_X, (min_y - 3), basicSettings, {"comment": " ; Move to box start\n"})
-        gcode += moveToXY(CUR_X, min_y, basicSettings, {"comment": " ; Move to box start\n"})
-        gcode += moveToXY(min_x, CUR_Y, basicSettings, {"comment": " ; Move to box start\n"})
+        gcode += moveToXY(min_x, min_y, basicSettings, {"comment": " ; Move to box start\n"})
 
     for i in range(optArgs["num_perims"]):
         if i != 0:  # after first perimeter, step inwards to start next perimeter
