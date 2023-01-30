@@ -10,7 +10,6 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 # Variables MIN MAX
 # Extruder Temp
 
-
 TeMax = 260
 TeMin = 200
 
@@ -28,9 +27,12 @@ EfMin = 0.8
 
 xmax = [TeMax, VpMax, EfMax]
 xmin = [TeMin, VpMin, EfMin]
-xguess = [230, 60, 40]
+# xguess = [190, 60, 40]
 
 numDimensions = len(xmax)
+
+# Desired Mass
+mass_desired = 1.07 # grams
 
 def calibrate(numIterations): 
     # Input Sequence
@@ -42,7 +44,7 @@ def calibrate(numIterations):
     elif mode == "P" or mode == "C": 
         numIterations = 10
 
-    desired_mass = input('Enter the Theoretical Mass of the Pattern: \n')
+    xguess = input('Enter the initial guess: \n')
 
 
     # Run Iterations
@@ -53,18 +55,17 @@ def calibrate(numIterations):
         # Tare Load Cells
         tare()
         mass = measure_mass()
-        print(mass) # Should be 0 
+        print(mass) # Should be near 0 
 
-        # Tare until we get a value that is less than 0.3g
-        # while abs(mass) > 0.3: 
-        #     tare()
         if i == 0: 
             xguess_i = xguess
         elif last_guess is not None and not xguess:
             xguess_i = last_guess
 
         # Run through first PSO iteration and generate parameter
-        last_guess = optimize(mode, xmax, xmin, xguess_i, numDimensions, i)
+        last_guess = optimize(mode, xmax, xmin, xguess_i, mass_desired, numDimensions, i)
+
+        print(last_guess)
 
         input('Please remove prints and press enter to continue: \n')
 

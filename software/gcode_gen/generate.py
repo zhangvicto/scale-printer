@@ -13,7 +13,7 @@ BED_X = 200
 BED_Y = 250
 FILAMENT_DIAMETER = 1.75 # mm
 NOZZLE_DIAMETER = 0.4 # mm
-LINE_WIDTH = 0.5 # mm
+LINE_WIDTH = 0.45 # mm
 SPEED_FIRSTLAYER = 40*60
 SPEED_TRAVEL = 80*60
 Z_SPEED = 12*60
@@ -248,17 +248,16 @@ def genPlane(iter, settings, size):
         TO_Y += col_iter*(size+gap) # set Y position
         TO_X = initial_gap + (col_iter - 1)*(size + gap) # Recalculate X position using column number
     TO_Z = HEIGHT_FIRSTLAYER # set Z position
-    layers = 4 # number of layers
+    layers = 3 # number of layers
 
     # Start Printing
-    
-    # Initial xy pos, move to x and y individually to avoid collision
-    gcode += moveToXY(to_x=0, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
-    gcode += moveToXY(to_x=CUR_X, to_y=-3, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
-    
-    # Printing Z position 
-    gcode += moveToZ(TO_Z, settings)
+    # Move Up in Z 
+    gcode += moveToZ(TO_Z + 3, settings) # go up 3mm to avoid collision
 
+    # Initial xy pos, move to x and y individually to avoid collision
+    gcode += moveToXY(to_x=TO_X, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    gcode += moveToXY(to_x=CUR_X, to_y=TO_Y-3, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    
     # Set Acceleration
     gcode += "M204 S800\n"
 
@@ -266,7 +265,7 @@ def genPlane(iter, settings, size):
     gcode += "; printing plane start id:0 copy 0 \n"
     
     for i in range(0, layers+1): 
-        gcode += moveToZ((i+1)*settings['layerHeight'], settings) # move up
+        gcode += moveToZ((i+1)*settings['layerHeight'], settings) # move to layer height
         gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
         gcode += retract()
     gcode += "; stop printing plane id:0 copy 0\n"
@@ -711,14 +710,14 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
                     gcode += createLine(x, y, basicSettings, {'speed': optArgs['speed'], 'extRatio': optArgs['extRatio'], 'comment': ' ; Fill\n'}) # print down/right                     
     return gcode
 
-# with open("test.gcode", "w") as f:
-#     iter = 8
-#     configEnd = open("end.txt", "r").read()
-#     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
-#     gcode += gcode_gen('P', iter, settings)
-#     gcode += genEnd(iter)
-#     gcode += configEnd
+with open("test.gcode", "w") as f:
+    iter = 1
+    configEnd = open("end.txt", "r").read()
+    gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+    gcode += gcode_gen('P', iter, settings)
+    gcode += genEnd(iter)
+    gcode += configEnd
 
-#     f.write(gcode)
+    f.write(gcode)
 
-#     f.close()
+    f.close()

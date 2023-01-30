@@ -9,14 +9,8 @@ from time import perf_counter
 # Settings
 numParticles = 10
 
-# Inertia weights?
-
-
-# Desired Mass
-mass_desired = 1.31 # grams
-
 # Execute iteration
-def optimize(mode, xmax, xmin, xguess, numDimensions, iteration): #inputs should be the fitness of last iteration
+def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): #inputs should be the fitness of last iteration
     
     # global optimum
     particles = []
@@ -79,7 +73,6 @@ def optimize(mode, xmax, xmin, xguess, numDimensions, iteration): #inputs should
         else: 
             print("Measuring Error Occurred. \n")
             mass_data.append(None)
-
 
         # Find Dimension of the Print
         print("Starting CV Process. \n")
@@ -152,12 +145,14 @@ def optimize(mode, xmax, xmin, xguess, numDimensions, iteration): #inputs should
         # Calculate Current Fitness
         fitness(mode, dimensions[0], dimensions[1], mass, mass_desired, square_size, square_size)
 
-        if particle.f_best_p < x_best_g: # Compare fitness
+        if particle.f_best_p < x_best_g: # Compare fitness to
             x_best_g = particle.f_best_p[:] # Splice array and set global op to current particle
 
         # Generate new values for the next iteration based on previous iteration
         particle.updateVelocity(x_best_g)
         particle.updatePosition()
+
+        print(particle.x_best_p)
         
         # NEXT PARTICLE
         particle_i += 1
@@ -171,7 +166,7 @@ def optimize(mode, xmax, xmin, xguess, numDimensions, iteration): #inputs should
 # Fitness Functions
 def fitness(mode, widths, lengths, mass, mass_desired, width_desired, length_desired): # width is a list of measurements for the plane or cube
     if mode == "L": 
-        return 0.2*consist(widths, lengths) + 0.2*accuracy(average(widths), width_desired)+ 0.1*accuracy(average(lengths), length_desired) + 0.5*accuracy(mass, mass_desired)
+        return 0.2*consist([widths, lengths]) + 0.2*accuracy(average(widths), width_desired)+ 0.1*accuracy(average(lengths), length_desired) + 0.5*accuracy(mass, mass_desired)
 
     elif mode == "P": 
         return 0.1*accuracy(widths, width_desired)+ 0.1*accuracy(lengths, length_desired) + 0.7*accuracy(mass, mass_desired)
@@ -182,5 +177,5 @@ def fitness(mode, widths, lengths, mass, mass_desired, width_desired, length_des
 def average(list): 
     for i in list: 
         sum =+ i
+    
     return sum/list.len()
-
