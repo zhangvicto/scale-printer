@@ -17,7 +17,7 @@ TeMin = 200
 TbMax = 90
 TbMin = 40
 
-# Print Speed
+# Print Speed - feedrate
 VpMax = 200
 VpMin = 20
 
@@ -25,8 +25,8 @@ VpMin = 20
 EfMax = 2
 EfMin = 0.8
 
-xmax = [TeMax, VpMax, EfMax]
-xmin = [TeMin, VpMin, EfMin]
+xmax = [TeMax, VpMax*60, EfMax]
+xmin = [TeMin, VpMin*60, EfMin]
 # xguess = [190, 60, 40]
 
 numDimensions = len(xmax)
@@ -48,7 +48,7 @@ def calibrate(numIterations):
     Vp_guess = input('Enter the initial print speed guess: \n')
     Ef_guess = input('Enter the initial extrusion flow guess: \n')
 
-    xguess = [int(Te_guess), int(Vp_guess), int(Ef_guess)]
+    xguess = [int(Te_guess), int(Vp_guess)*60, int(Ef_guess)]
 
     # Run Iterations
     for i in range(0, numIterations): 
