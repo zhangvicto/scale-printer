@@ -8,7 +8,7 @@ CUR_Z = 0
 
 RETRACTED = False
 
-# Variables
+# Default Settings
 BED_X = 200
 BED_Y = 250
 FILAMENT_DIAMETER = 1.75 # mm
@@ -92,9 +92,9 @@ settings = {
 line_length = 100
 
 # PLANE
-# [ ] [ ] [ ] [ ]
-# [ ] [ ] [ ] [ ]
-# [ ] [ ] [ ] [ ]
+# [ ] [ ] [ ]
+# [ ] [ ] [ ]
+# [ ] [ ] [ ]
 square_size = 30
 
 # Cube
@@ -106,6 +106,8 @@ def gcode_gen(mode, iter, modified_settings): #x, y, indicate the position of th
 
     gcode = ''
     settings.update(modified_settings)
+
+    print(settings)
 
     # generate line or plane
     if mode == 'L': 
@@ -120,7 +122,7 @@ def gcode_gen(mode, iter, modified_settings): #x, y, indicate the position of th
     return gcode
 
 # PRUSA SPECIFIC GCODE GENERATION
-def genStart(iter, nozzleD, Te, Tb, Vp): 
+def genStart(iter, nozzleD, Te, Tb): 
     global CUR_X, CUR_Y, CUR_Z
 
     x = datetime.datetime.now()
