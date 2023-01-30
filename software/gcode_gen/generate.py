@@ -256,10 +256,11 @@ def genPlane(iter, settings, size):
     # Move Up in Z 
     gcode += moveToZ(TO_Z + 3, settings) # go up 3mm to avoid collision
 
-    # Initial xy pos, move to x and y individually to avoid collision
-    gcode += moveToXY(to_x=TO_X, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
-    gcode += moveToXY(to_x=CUR_X, to_y=TO_Y-3, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
-    
+    # Initial xy pos
+    gcode += moveToXY(to_x=TO_X, to_y=TO_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    # gcode += moveToXY(to_x=CUR_X, to_y=TO_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    gcode += moveToZ(TO_Z, settings) # go to Z position
+
     # Set Acceleration
     gcode += "M204 S800\n"
 

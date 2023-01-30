@@ -32,7 +32,7 @@ xmin = [TeMin, VpMin*60, EfMin]
 numDimensions = len(xmax)
 
 # Desired Mass
-mass_desired = 1.07 # grams
+mass_desired = 1.07 # in grams, includes weight of wipe
 
 def calibrate(numIterations): 
     # Input Sequence
