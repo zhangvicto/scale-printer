@@ -236,7 +236,7 @@ def genLine(iter, settings):
     return gcode
 
 def genPlane(iter, settings, size): 
-    global CUR_Z
+    global CUR_X, CUR_Y, CUR_Z
 
     # Variables
     gcode = ''
@@ -271,6 +271,7 @@ def genPlane(iter, settings, size):
         gcode += moveToZ((i+1)*settings['layerHeight'], settings) # move to layer height
         gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
         gcode += retract()
+
     gcode += "; stop printing plane id:0 copy 0\n"
 
     return gcode
@@ -293,8 +294,7 @@ def moveToZ(to_z, settings):
 
 def moveToXY(to_x, to_y, settings, optional): 
 
-    global CUR_X 
-    global CUR_Y
+    global CUR_X, CUR_Y
 
     gcode = ''
     distance = getDistance(CUR_X, CUR_Y, to_x, to_y)
@@ -597,7 +597,7 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
 
     if min_x != CUR_X or min_y != CUR_Y:
         # move in y, then move in x
-        gcode += moveToXY(CUR_X, (min_y - 3), basicSettings, {"comment": " ; Move to box start\n"})
+        # gcode += moveToXY(CUR_X, (min_y - 3), basicSettings, {"comment": " ; Move to box start\n"})
         gcode += moveToXY(CUR_X, min_y, basicSettings, {"comment": " ; Move to box start\n"})
         gcode += moveToXY(min_x, CUR_Y, basicSettings, {"comment": " ; Move to box start\n"})
 
