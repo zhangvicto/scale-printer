@@ -50,4 +50,4 @@ def send_gcode(iter, gcode_file):
 # p.resume()
 # p.disconnect() # this is how you disconnect from the printer once you are done. This will also stop running prints.
 
-send_gcode(0, './gcode_gen/test.gcode')
+send_gcode(0, '../gcode_gen/test.gcode')
