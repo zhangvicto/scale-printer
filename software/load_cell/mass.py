@@ -45,30 +45,38 @@ def tare():
         print(e)
 
 
+# need to add filtering...
 def measure_mass():
     values = []
 
     try:
-        start = perf_counter()
-
-        while perf_counter() - start <  3: # 4 sec timer
-            # Read Raw Data
-            
-            raw_vals = hx711.read_raw(readings_to_average*3)
-            
-            sleep(0.2)
-           
-            if None not in raw_vals:
+        for i in range(4): # get 4 readings
+            while None in hx711.read_raw(readings_to_average*3):
+                    print("None in raw")
+            else: 
                 weights = hx711.get_weight() 
-            # print(weights)
-            
-            values.append(sum(weights)) # Add measurement to array
+                values.append(sum(weights)) # Add measurement to array
 
-            # read_duration = perf_counter() - start
+        # start = perf_counter()
+
+        # while perf_counter() - start <  3: # 4 sec timer
+        #     # Read Raw Data
+            
+        #     raw_vals = hx711.read_raw(readings_to_average*3)
+            
+        #     sleep(0.2)
+
+        #     weights = hx711.get_weight() 
+        #     # print(weights)
+            
+        #     values.append(sum(weights)) # Add measurement to array
+
+        #     # read_duration = perf_counter() - start
 
     except Exception as e:
         print(e)
 
+    print("Average Weight Measurement: {}".format(sum(values)/len(values)))
     # print(values)
 
-    return "Average Weight Measurement: {}".format(sum(values)/len(values)) # Avg of measurement over four seconds
+    return sum(values)/len(values) # Avg of measurement over four seconds
