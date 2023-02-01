@@ -4,8 +4,15 @@ import time
 import math
 from scipy import ndimage
 
-cannyThres1 = 80
-cannyThres2 = 200
+# Tuning parameters 
+# LIGHTS ON/OFF
+lights = True
+if lights:
+    cannyThres1 = 50
+    cannyThres2 = 150
+else: 
+    cannyThres1 = 80
+    cannyThres2 = 200
 
 def capture(numCapture): 
 
@@ -31,13 +38,13 @@ def image_process():
     # cv2.imwrite('capture.jpg', blend(images))
     
     img = cv2.imread('capture0.jpg')
-    img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+    img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE) 
     # print(img_rotate.shape[:2]) # output dimensions
     img_cropped = img_rotate[118:515, 5:472] # crop
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
-    final = ndimage.rotate(img_blur, -0.3) # rotate
+    final = ndimage.rotate(img_blur, -0.3) # rotate, next version use hough line to measurement angle of rotation
     cv2.imwrite('final.jpg', final) # write to a file
 
     # View Edges
@@ -92,9 +99,11 @@ def analyze_edge(edges):
 
     cv2.imwrite("lines.jpg", cEdges) # Send to file 
 
-    distanceX = max(difference)[0] # this is now the distance to be used for calculating the size of 
+    distanceX = max(difference)[0] if max(difference)[0] > 460 else 460 # this is now the distance to be used for calculating the size of 
+    # 460 should be more or less the distance
+
     # print(cv2.imread("lines.jpg").shape)
-    print(distanceX)
+    # print(distanceX)
     # Draw Probablistic Hough Lines
     # linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 50, None, 50, 10)
 
@@ -115,6 +124,7 @@ def find_dim(x, y, distanceX, edges, iter):
     
     # Crop the image so we only see the printed piece 
     printed = edges[y[0]:y[1], x[0]:x[1]] 
+
     # cv2.imwrite('printed.jpg', printed)
     # (x0, y0) and (x1, y1) are the coordinates that describe the opposite edges of the desired area for analysis
 
@@ -174,8 +184,9 @@ def find_dim(x, y, distanceX, edges, iter):
                 else: 
                     return [None, None] # Distance too short, check the camera.
         
-        print(differenceH)
-        print(differenceV)
+        # print(differenceH)
+        # print(differenceV)
+
 
         if differenceH == [] or differenceV == []: # if empty
             width = None

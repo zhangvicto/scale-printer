@@ -1,7 +1,7 @@
 from pso.optimize_helpers import Particle, accuracy, consist
-import numpy as np
+# import numpy as np
 from load_cell.mass import measure_mass, tare
-from gcode_gen.generate import gcode_gen, genStart, genEnd, settings, square_size
+from gcode_gen.generate import gcode_gen, genStart, genEnd, square_size
 from gcode_sender.printcore_gcode_sender import send_gcode
 from cv.dimensions import image_process, edges, analyze_edge, find_dim
 from time import perf_counter
@@ -77,7 +77,6 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
         mass = measure_mass()
         mass_real = mass - last_mass - initial_zero # find weight of print
         mass_data.append(mass_real)
-
 
         last_mass = mass
 

@@ -13,6 +13,8 @@ def index():
 def api():
     # Get the data from the request
     data = request.get_json()
+
+    print(data)
     
     # If data is not empty call calibration function
     if data is not None: 
