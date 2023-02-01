@@ -58,7 +58,7 @@ def measure_mass():
             
             sleep(0.2)
            
-            while None in raw_vals:
+            if None not in raw_vals:
                 weights = hx711.get_weight() 
             # print(weights)
             
