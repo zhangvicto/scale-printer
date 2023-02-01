@@ -16,6 +16,7 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
     particles = []
     mass_data = []
     dimension_data = []
+    x_best_g = []
 
     # Create Particle Array
     for i in range(0, numParticles):
@@ -58,7 +59,7 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
         zero_weight = 0 
 
         # Taring
-        if iter == 0: 
+        if iter == 1: 
             zero_weight = tare()
         print("Initial weight offset: {}".format(zero_weight))
 
@@ -105,8 +106,8 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
                     x1 = xOffset + round((iter-1)*15*ratio)
                     x2 = round(x1 + 10*ratio)
                     x = [x1, x2]
-                    print(x)
-                    print(x)
+                    # print(x)
+                    # print(x)
                     y1 = round(180*ratio) - 20
                     y2 = round(180*ratio)
                     y = [y1, y2]
@@ -121,12 +122,12 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
                     x1 = round((initial_gap + gap/2 + (iter-1)*square_size)*ratio)
                     x2 = round(x1 + (square_size + gap)*ratio)
                     x = [x1, x2]
-                    print(x)
+                    # print(x)
                     yOffset = -5
                     y1 = round((200 - (square_size + gap + yOffset))*ratio)
                     y2 = round((200- yOffset)*ratio)
                     y = [y1, y2]
-                    print(y)
+                    # print(y)
                 else: 
                     x = [None, None]
                     y = [None, None]
@@ -152,16 +153,21 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
 
         # Evaluate and compare particle global optimum to local optimum
         # Calculate Current Fitness
-        fitness(mode, dimensions[0], dimensions[1], mass, mass_desired, square_size, square_size)
+        particle.f_best_p = fitness(mode, dimensions[0], dimensions[1], mass, mass_desired, square_size, square_size)
+        print("Fitness: {}".format(particle.fitness))
 
-        if particle.f_best_p < x_best_g: # Compare fitness to
-            x_best_g = particle.f_best_p[:] # Splice array and set global op to current particle
+        if iter == 1:
+            x_best_g = particle.x_best_p[:] # Set global optimum to first particle
+            f_best_g = particle.f_best_p # set global optimum to first particle
+        else: 
+            if particle.f_best_p < f_best_g: # Compare particle fitness to group fitness
+                x_best_g = particle.x_best_p[:] # Splice array and set global op to current particle
 
         # Generate new values for the next iteration based on previous iteration
         particle.updateVelocity(x_best_g)
         particle.updatePosition()
 
-        print(particle.x_best_p)
+        print("Particle Position: {}".format(particle.x_best_p))
         
         # NEXT PARTICLE
         particle_i += 1
