@@ -713,7 +713,7 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
 # with open("test.gcode", "w") as f:
 #     iter = 1
 #     configEnd = open("end.txt", "r").read()
-#     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0, Vp=settings['moveSpeed'])
+#     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0)
 #     gcode += gcode_gen('P', iter, settings)
 #     gcode += genEnd(iter)
 #     gcode += configEnd
