@@ -27,7 +27,9 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
     
     # For each particle, print and collect data
     particle_i = 0 # particle index
-    
+
+    last_mass = 0 
+
     for particle in particles:
 
         iter = particle_i + 1
@@ -70,15 +72,11 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
         # measure_time = perf_counter() - time_zero
 
         # Once print finishes, check weight
+        print("Measuring Mass. \n")
         mass = measure_mass()
-        
-        if mass is not None: 
-            mass_real = mass - last_mass - initial_zero # find weight of print
-            print("Measuring Mass. \n")
-            mass_data.append(mass_real)
-        else: 
-            print("Measuring Error Occurred. \n")
-            mass_data.append(None)
+        mass_real = mass - last_mass - initial_zero # find weight of print
+        mass_data.append(mass_real)
+
 
         last_mass = mass
 

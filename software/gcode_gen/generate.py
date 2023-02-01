@@ -107,7 +107,7 @@ def gcode_gen(mode, iter, modified_settings): #x, y, indicate the position of th
     gcode = ''
     settings.update(modified_settings)
 
-    print(settings)
+    # print(settings)
 
     # generate line or plane
     if mode == 'L': 
@@ -250,7 +250,7 @@ def genPlane(iter, settings, size):
         TO_Y += col_iter*(size+gap) # set Y position
         TO_X = initial_gap + (col_iter - 1)*(size + gap) # Recalculate X position using column number
     TO_Z = HEIGHT_FIRSTLAYER # set Z position
-    layers = 3 # number of layers
+    layers = 4 # number of layers
 
     # Start Printing
     # Move Up in Z 
@@ -270,7 +270,7 @@ def genPlane(iter, settings, size):
     # Print plane
     gcode += "; printing plane start id:0 copy 0 \n"
     
-    for i in range(0, layers+1): 
+    for i in range(0, layers): 
         gcode += moveToZ((i+1)*settings['layerHeight'], settings) # move to layer height
         gcode += createBoxTrue(TO_X, TO_Y, size, size, settings, {'fill': True})
         gcode += retract()

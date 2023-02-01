@@ -52,10 +52,16 @@ def measure_mass():
     try:
         for i in range(4): # get 4 readings
             while None in hx711.read_raw(readings_to_average*3):
-                    print("None in raw")
+                continue
+                # print("None in raw")
+                
             else: 
                 weights = hx711.get_weight() 
-                values.append(sum(weights)) # Add measurement to array
+                while sum(weights) > 300 or sum(weights) < -300: 
+                    weights = hx711.get_weight() 
+                
+                else: 
+                    values.append(sum(weights)) # Add measurement to array
 
         # start = perf_counter()
 
