@@ -181,12 +181,12 @@ def genStart(iter, nozzleD, Te, Tb):
     gcode += "M900 K0 ; Filament gcode LA 1.5\n"
     gcode += "M107\n"
 
-    #Layer Change
+    # Layer Change
     gcode += ";LAYER_CHANGE\n;Z:0.2\n;HEIGHT:0.2\n;BEFORE_LAYER_CHANGE\nG92 E0.0\n;0.2\n\n\n"
 
     return gcode
 
-def genEnd(iter): 
+def genEnd(): 
     # Park and Reset Flow
     # Park Location, in mm
     x = 100
@@ -242,7 +242,7 @@ def genPlane(iter, settings, size):
     gcode = ''
     initial_gap = 10 #mm
     gap = 10 #mm
-    TO_X = initial_gap + (iter - 1)*(size + gap) # start from line spacing
+    TO_X = initial_gap + (iter-1)*(size + gap) # start from line spacing
     TO_Y = 10 # start from 10
     total_X = iter*(size+gap) + initial_gap
     if total_X % 250 > (size+gap) and total_X > 250: # if total Y is larger than the bed, move to next row
@@ -257,8 +257,11 @@ def genPlane(iter, settings, size):
     gcode += moveToZ(TO_Z + 3, settings) # go up 3mm to avoid collision
 
     # Initial xy pos
-    gcode += moveToXY(to_x=CUR_X, to_y=TO_Y - 2, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
-    gcode += moveToXY(to_x=TO_X, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    gcode += moveToXY(to_x=0, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    gcode += moveToXY(to_x=CUR_X, to_y=TO_Y-3, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+
+    # gcode += moveToXY(to_x=CUR_X, to_y=TO_Y - 2, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
+    # gcode += moveToXY(to_x=TO_X, to_y=CUR_Y, settings=settings, optional={'comment': ' ; Moving to plane position\n'})
     gcode += moveToZ(TO_Z, settings) # go to Z position
 
     # Set Acceleration
@@ -715,7 +718,7 @@ def createBoxTrue(min_x, min_y, size_x, size_y, basicSettings, optional):
 #     configEnd = open("end.txt", "r").read()
 #     gcode = genStart(iter=iter, nozzleD=0.4, Te=230, Tb=0)
 #     gcode += gcode_gen('P', iter, settings)
-#     gcode += genEnd(iter)
+#     gcode += genEnd()
 #     gcode += configEnd
 
 #     f.write(gcode)

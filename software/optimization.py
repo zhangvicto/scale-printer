@@ -26,11 +26,11 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
     # STARTING THE ITERATION
     
     # For each particle, print and collect data
-    particle_i = 0 
+    particle_i = 0 # particle index
     
     for particle in particles:
 
-        iter = particle_i
+        iter = particle_i + 1
         time_start = perf_counter()
 
 
@@ -43,7 +43,7 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
             
             gcode = genStart(iter=iter, nozzleD=0.4, Te=xguess[0], Tb=0) # bed is disabled
             gcode += gcode_gen(mode, iter, {'moveSpeed': xguess[1], 'extMult': xguess[2]}) # generate gcode with custom parameters
-            gcode += genEnd(iter)
+            gcode += genEnd()
 
             f.write(gcode)
         
