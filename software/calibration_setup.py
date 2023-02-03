@@ -11,10 +11,10 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 # Extruder Temp
 
 TeMax = 260
-TeMin = 200
+TeMin = 190
 
 # Bed Temp - unused due to broken bed
-TbMax = 90
+TbMax = 80
 TbMin = 40
 
 # Print Speed - feedrate
