@@ -17,7 +17,7 @@ weight_multiples = [13056.945625, 12197.703125, 11915.913035714253, 11894.808035
 # create hx711 instance
 hx711 = HX711(dout_pins=dout_pins,
               sck_pin=sck_pin,
-              channel_A_gain=128,
+              channel_A_gain=64,
               channel_select='A',
               all_or_nothing=False,
               log_level='CRITICAL')
