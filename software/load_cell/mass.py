@@ -57,7 +57,7 @@ def measure_mass():
                 
             else: 
                 weights = hx711.get_weight() 
-                while sum(weights) > 300 or sum(weights) < -300: 
+                while sum(weights) > 300 or sum(weights) < 0: 
                     weights = hx711.get_weight() 
                 
                 else: 
