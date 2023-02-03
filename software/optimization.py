@@ -153,7 +153,7 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
         # Evaluate and compare particle global optimum to local optimum
         # Calculate Current Fitness
         particle.f_best_p = fitness(mode, dimensions[0], dimensions[1], mass, mass_desired, square_size, square_size)
-        print("Fitness: {}".format(particle.fitness))
+        print("Fitness: {}".format(particle.f_best_p))
 
         if iter == 1:
             x_best_g = particle.x_best_p[:] # Set global optimum to first particle

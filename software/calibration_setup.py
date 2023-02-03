@@ -44,9 +44,21 @@ def calibrate(numIterations):
     elif mode == "P" or mode == "C": 
         numIterations = 10
 
+    # Initial Guess, and if out of bounds, use default
     Te_guess = input('Enter the initial extruder temperature guess: \n')
+    if int(Te_guess) < 190 or int(Te_guess) > 260: 
+        print("Invalid temperature guess, using 190")
+        Te_guess = 190
     Vp_guess = input('Enter the initial print speed guess: \n')
+    
+    if int(Vp_guess) < 20 or int(Vp_guess) > 200: 
+        print("Invalid print speed guess, using 50")
+        Vp_guess = 50
     Ef_guess = input('Enter the initial extrusion flow guess: \n')
+    
+    if int(Ef_guess) < 0.8 or int(Ef_guess) > 2: 
+        print("Invalid extrusion flow guess, using 1")
+        Ef_guess = 1
 
     xguess = [int(Te_guess), int(Vp_guess)*60, int(Ef_guess)]
     
