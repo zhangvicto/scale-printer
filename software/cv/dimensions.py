@@ -8,8 +8,8 @@ from scipy import ndimage
 # LIGHTS ON/OFF
 lights = True
 if lights:
-    cannyThres1 = 50
-    cannyThres2 = 150
+    cannyThres1 = 60
+    cannyThres2 = 170
 else: 
     cannyThres1 = 80
     cannyThres2 = 200
@@ -27,7 +27,7 @@ def capture(numCapture):
 
 def image_process(): 
     # Capture 5 images
-    numCapture = 5
+    numCapture = 1
     for i in range(0, numCapture): 
         capture(i)
 
@@ -268,7 +268,7 @@ def hough_coord(lines, i):
 
 # Execute Script, comment on final
 # ----------------------------------------------------------------------- # 
-iter = 1
+iter = 2
 img = image_process() # Process Image
 edge = edges(img) # Canny Edge Detection
 distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
