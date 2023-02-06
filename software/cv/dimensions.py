@@ -46,9 +46,9 @@ def image_process():
 
     # Histogram Equalization
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-    # img_cl1 = clahe.apply(img_gray)
+    img_cl1 = clahe.apply(img_gray)
 
-    img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
+    img_blur = cv2.GaussianBlur(img_cl1, (3,3), 0)
     final = ndimage.rotate(img_blur, -0.3) # Rotate, next version use hough line to measurement angle of rotation
     cv2.imwrite('final.jpg', final) # Write to a file
 
