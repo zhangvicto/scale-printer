@@ -41,6 +41,17 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
 
         # creep = 0.0005*5000/(3*60)*4 # grams/sec * 4 load cells
 
+        zero_weight = 0 
+
+        # Taring
+        if iter == 1: 
+            zero_weight = tare()
+        # print("Initial weight offset: {}".format(zero_weight))
+
+        # Account for Creep - ignoring creep for now
+        initial_zero = zero_weight #- time_zero*creep
+
+
         # Generate Gcode
         with open("./gcode_gen/test.gcode", "w") as f:
             
@@ -55,16 +66,6 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
         # Tare Weight before Starting Print
         # time_zero = perf_counter() - time_start
         # print("Initial weight offset: {}".format(time_zero))
-        
-        zero_weight = 0 
-
-        # Taring
-        if iter == 1: 
-            zero_weight = tare()
-        print("Initial weight offset: {}".format(zero_weight))
-
-        # Account for Creep - ignoring creep for now
-        initial_zero = zero_weight #- time_zero*creep
 
         # Pass in Printing Parameters
         print("Sending Gcode to Printer. \n")

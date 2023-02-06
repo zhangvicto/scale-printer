@@ -12,6 +12,9 @@ class Particle:
         self.v_i = [] # velocity
         self.x_best_p = [] # personal(local) best position
         self.f_best_p = [] # local best fitness
+        self.xmax = xmax
+        self.xmin = xmin
+        self.numDimensions = numDimensions
 
         # Generate Initial Values
         for i in range(0, numDimensions): 
@@ -21,24 +24,24 @@ class Particle:
             vel = np.random.uniform(-abs(xmax[i]-xmin[i]), abs(xmax[i]-xmin[i]))
             self.x_i.append(vel)
 
-        # Functions
+    # Functions
 
-        # Generate Velocity for next iteration
-        def updateVelocity(self, x_best_g): 
-            for i in range(0, numDimensions): 
-                self.v_i[i] = kv*self.v_i[i] + kp*np.random.uniform(0, 1)*(self.x_best_p[i]-self.x_i[i]) + kg*np.random.uniform(0, 1)*(x_best_g[i]-self.x_i[i])
-            
-        def updatePosition(self): 
-            for i in range(0, numDimensions): 
-                self.x_i[i] =+ self.v_i[i]
+    # Generate Velocity for next iteration
+    def updateVelocity(self, x_best_g): 
+        for i in range(0, self.numDimensions): 
+            self.v_i[i] = kv*self.v_i[i] + kp*np.random.uniform(0, 1)*(self.x_best_p[i]-self.x_i[i]) + kg*np.random.uniform(0, 1)*(x_best_g[i]-self.x_i[i])
+        
+    def updatePosition(self): 
+        for i in range(0, self.numDimensions): 
+            self.x_i[i] =+ self.v_i[i]
 
-                if self.x_i[i] > xmax[i]: 
-                    self.x_i[i] = xmax[i]
-                    print('Max reached')
+            if self.x_i[i] > self.xmax[i]: 
+                self.x_i[i] = self.xmax[i]
+                print('Max reached')
 
-                if self.x_i[i] < xmin[i]: 
-                    self.x_i[i] = xmin[i]
-                    print('Min reached')
+            if self.x_i[i] < self.xmin[i]: 
+                self.x_i[i] = self.xmin[i]
+                print('Min reached')
                     
 def r(max, min): 
     return abs(max - min)

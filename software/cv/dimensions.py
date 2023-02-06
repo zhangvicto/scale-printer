@@ -202,7 +202,7 @@ def find_dim(x, y, distanceX, edges, iter):
             print('Pixels: {},{}'.format(width[0], length[0]))
             print('Millimeters: {},{}'.format(width[0]/ratio, length[0]/ratio))
 
-            return [width[0]*distanceX/250, length[0]*distanceX/250] # in mm
+            return [width[0]/ratio, length[0]/ratio] # in mm
         
     # Using Contours - IGNORE
     # contours, h = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)

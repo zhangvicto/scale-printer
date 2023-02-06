@@ -54,9 +54,10 @@ def measure_mass():
         else: 
             weights = hx711.get_weight() 
             total = sum(weights)
-            while total > 300 or total - last_total > 1: # Filter out outliers and ensure that samples are with in 1g of each other
-                print(total)
+            print(total)
+            while total > 300 or total < -10 or total - last_total > 1: # Filter out outliers and ensure that samples are with in 1g of each other
                 weights = hx711.get_weight() 
+                print(sum(weights))
 
                 last_total = total
             else: 
