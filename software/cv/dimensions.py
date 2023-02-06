@@ -268,35 +268,35 @@ def hough_coord(lines, i):
 
 # Execute Script, comment on final
 # ----------------------------------------------------------------------- # 
-iter = 2
-img = image_process() # Process Image
-edge = edges(img) # Canny Edge Detection
-distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
+# iter = 2
+# img = image_process() # Process Image
+# edge = edges(img) # Canny Edge Detection
+# distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
 
-# Calculate Print Location
-square_size = 30
-x=[]
-y=[]
+# # Calculate Print Location
+# square_size = 30
+# x=[]
+# y=[]
 
-if distX is not None:
-    ratio = distX/255 # Pixels per mm
-    print('Ratio: {}'.format(ratio))
-    # Pixel = mm * ratio
+# if distX is not None:
+#     ratio = distX/255 # Pixels per mm
+#     print('Ratio: {}'.format(ratio))
+#     # Pixel = mm * ratio
 
-    if distX: 
-        initial_gap = 10
-        gap = 10
-        x1 = round((initial_gap + gap/2 + (iter-1)*square_size)*ratio)
-        x2 = round(x1 + (square_size + gap)*ratio)
-        x = [x1, x2]
-        # print(x)
-        yOffset = -5
-        y1 = round((200 - (square_size + gap + yOffset))*ratio)
-        y2 = round((200- yOffset)*ratio)
-        y = [y1, y2]
-        # print(y)
-    else: 
-        x = [None, None]
-        y = [None, None]
+#     if distX: 
+#         initial_gap = 10
+#         gap = 10
+#         x1 = round((initial_gap + gap/2 + (iter-1)*square_size)*ratio)
+#         x2 = round(x1 + (square_size + gap)*ratio)
+#         x = [x1, x2]
+#         # print(x)
+#         yOffset = -5
+#         y1 = round((200 - (square_size + gap + yOffset))*ratio)
+#         y2 = round((200- yOffset)*ratio)
+#         y = [y1, y2]
+#         # print(y)
+#     else: 
+#         x = [None, None]
+#         y = [None, None]
 
-find_dim(x, y, distX, edge, iter)
+# find_dim(x, y, distX, edge, iter)
