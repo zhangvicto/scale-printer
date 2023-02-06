@@ -48,14 +48,16 @@ def measure_mass():
 
     for i in range(2): # get 2 readings
         while None in hx711.read_raw(readings_to_average): # Average 10 readings
-            continue
+            print(hx711.get_weight())
             # print("None in raw")
             
         else: 
             weights = hx711.get_weight() 
+
             total = sum(weights)
+
             print(total)
-            while total > 300 or total < -10 or total - last_total > 1: # Filter out outliers and ensure that samples are with in 1g of each other
+            while total > 300 or total < -10 or (total - last_total) > 1: # Filter out outliers and ensure that samples are with in 1g of each other
                 weights = hx711.get_weight() 
                 print(sum(weights))
 
