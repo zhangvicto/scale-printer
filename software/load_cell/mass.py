@@ -26,16 +26,14 @@ def tare():
     hx711.reset()
 
     try:
-        hx711.zero(readings_to_average=readings_to_average*3) # 30 readings
+        hx711.zero(readings_to_average*3) # 30 readings
         
         sleep(0.2)
         
-        raw = hx711.read_raw(readings_to_average=readings_to_average*3)
-        
-        sleep(0.2)
-        
+        raw = hx711.read_raw(readings_to_average*3)
+
         while None in raw:
-            raw = hx711.read_raw(readings_to_average=readings_to_average*3)
+            raw = hx711.read_raw(readings_to_average)
         else: 
             weights = hx711.get_weight()
 
@@ -44,25 +42,25 @@ def tare():
     except Exception as e: 
         print(e)
 
-
-# need to add filtering...
 def measure_mass():
     values = []
+    last_total = 0
 
-    try:
-        for i in range(4): # get 4 readings
-            while None in hx711.read_raw(readings_to_average*3):
-                continue
-                # print("None in raw")
-                
-            else: 
+    for i in range(2): # get 2 readings
+        while None in hx711.read_raw(readings_to_average): # Average 10 readings
+            continue
+            # print("None in raw")
+            
+        else: 
+            weights = hx711.get_weight() 
+            total = sum(weights)
+            while total > 300 or total - last_total > 1: # Filter out outliers and ensure that samples are with in 1g of each other
+                print(total)
                 weights = hx711.get_weight() 
-                total = sum(weights)
-                while total > 300 or total < -20: # Filter out outliers 
-                    weights = hx711.get_weight() 
-                
-                else: 
-                    values.append(total) # Add measurement to array
+
+                last_total = total
+            else: 
+                values.append(total) # Add measurement to array
 
         # start = perf_counter()
 
@@ -79,9 +77,6 @@ def measure_mass():
         #     values.append(sum(weights)) # Add measurement to array
 
         #     # read_duration = perf_counter() - start
-
-    except Exception as e:
-        print(e)
 
     print("Average Weight Measurement: {}".format(sum(values)/len(values)))
     # print(values)
