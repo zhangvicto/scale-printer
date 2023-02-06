@@ -16,17 +16,17 @@ else:
 
 def capture(numCapture): 
 
-    cap = cv2.VideoCapture(0) #setup
-    ret, frame = cap.read() # take image and store in variable
-    time.sleep(1.5) # give time to prevent a green image
+    cap = cv2.VideoCapture(0) # Setup
+    ret, frame = cap.read() # Take image and store in variable
+    time.sleep(1.5) # Give time to prevent a green image
     if ret:
-        cv2.imwrite('capture' + str(numCapture) + '.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100]) # write to a file
-        cap.release() # release
+        cv2.imwrite('capture' + str(numCapture) + '.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100]) # Write to a file
+        cap.release() # Release
     else: 
-        cap.release() # release
+        cap.release() # Release
 
 def image_process(): 
-    # Capture x images
+    # Capture 5 images
     numCapture = 5
     for i in range(0, numCapture): 
         capture(i)
@@ -37,15 +37,20 @@ def image_process():
     #     images.append(cv2.imread('capture'+str(numCapture)+'.jpg'))
     # cv2.imwrite('capture.jpg', blend(images))
     
-    img = cv2.imread('capture0.jpg')
-    img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE) 
-    # print(img_rotate.shape[:2]) # output dimensions
-    img_cropped = img_rotate[118:515, 5:472] # crop
+    img = cv2.imread('capture0.jpg') # Read first Capture
+    img_rotate = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE) # Rotate by 90 DEG
+    # print(img_rotate.shape[:2]) # Output dimensions
+    img_cropped = img_rotate[118:515, 5:472] # Crop
 
     img_gray = cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY)
+
+    # Histogram Equalization
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    # img_cl1 = clahe.apply(img_gray)
+
     img_blur = cv2.GaussianBlur(img_gray, (3,3), 0)
-    final = ndimage.rotate(img_blur, -0.3) # rotate, next version use hough line to measurement angle of rotation
-    cv2.imwrite('final.jpg', final) # write to a file
+    final = ndimage.rotate(img_blur, -0.3) # Rotate, next version use hough line to measurement angle of rotation
+    cv2.imwrite('final.jpg', final) # Write to a file
 
     # View Edges
     # edges = cv2.Canny(image=img_blur, threshold1=cannyThres1, threshold2=cannyThres2) # Canny Edge Detection
@@ -97,7 +102,7 @@ def analyze_edge(edges):
 
         print("Bed Pixel Size: " + str(max(difference)[0]))
 
-    cv2.imwrite("lines.jpg", cEdges) # Send to file 
+    cv2.imwrite("lines.jpg", cEdges) # Store
 
     distanceX = max(difference)[0] if max(difference)[0] > 460 else 460 # this is now the distance to be used for calculating the size of 
     # 460 should be more or less the distance
@@ -268,7 +273,35 @@ def hough_coord(lines, i):
 
 # Execute Script, comment on final
 # ----------------------------------------------------------------------- # 
-# blurred = image_process()
-# edge = edges(blurred)
-# distX = analyze_edge(edge)
-# find_dim([0, 1*15/250*distX], [0, 180], distX, edge)
+iter = 1
+img = image_process() # Process Image
+edge = edges(img) # Canny Edge Detection
+distX = analyze_edge(edge) # Get the bed x-axis length in terms of pixels
+
+# Calculate Print Location
+square_size = 30
+x=[]
+y=[]
+
+if distX is not None:
+    ratio = distX/255 # Pixels per mm
+    print('Ratio: {}'.format(ratio))
+    # Pixel = mm * ratio
+
+    if distX: 
+        initial_gap = 10
+        gap = 10
+        x1 = round((initial_gap + gap/2 + (iter-1)*square_size)*ratio)
+        x2 = round(x1 + (square_size + gap)*ratio)
+        x = [x1, x2]
+        # print(x)
+        yOffset = -5
+        y1 = round((200 - (square_size + gap + yOffset))*ratio)
+        y2 = round((200- yOffset)*ratio)
+        y = [y1, y2]
+        # print(y)
+    else: 
+        x = [None, None]
+        y = [None, None]
+
+find_dim(x, y, distX, edge, iter)

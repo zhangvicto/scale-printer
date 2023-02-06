@@ -57,11 +57,12 @@ def measure_mass():
                 
             else: 
                 weights = hx711.get_weight() 
-                while sum(weights) > 300 or sum(weights) < -20: 
+                total = sum(weights)
+                while total > 300 or total < -20: # Filter out outliers 
                     weights = hx711.get_weight() 
                 
                 else: 
-                    values.append(sum(weights)) # Add measurement to array
+                    values.append(total) # Add measurement to array
 
         # start = perf_counter()
 
