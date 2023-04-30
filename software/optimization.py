@@ -172,7 +172,6 @@ def optimize(mode, xmax, xmin, xguess, mass_desired, numDimensions, iteration): 
         # NEXT PARTICLE
         particle_i += 1
 
-    
     print('Iteration {} complete.'.format(iteration))
 
     return particle.x_best_p

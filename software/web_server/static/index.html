@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
+    <title>Calibration</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
   <body>
     <main>
-        <h1>Material Parameter Optimization V1</h1>  
+        <h1>Material Parameters Optimization V1</h1>  
     </main>
     
     <!-- Select Type of Calibration Medthod -->
-    <h4>Select Your Calibration Method</h4>
+    <h4>1. Select Your Calibration Method</h4>
     <select id="mode">
         <option value="line">Line</option>
         <option value="plane">Plane</option>
@@ -22,7 +22,7 @@
     </select>
 
     <!-- Print Settings -->
-    <h4>Select Your Print Setting</h4>
+    <h4>2. Select Your Print Setting</h4>
     <h5>Line Width: </h5> <input type="number" id="line-width">
     <h5>Retraction Distance: </h5><input type="number" id="retract-dist">
     <h5>Retraction Speed: </h5><input type="number" id="retract-speed">
@@ -34,11 +34,11 @@
 
     
     <!-- Serch Space, Min Max -->
-    <h4>Define the Search Space</h4>
-    <h5>Min Extruder Temperature: </h5><input type="number" id="min-temp-e">
-    <h5>Max Extruder Temperature: </h5><input type="number" id="max-temp-e">
-    <h5>Min Bed Temperature: </h5><input type="number" id="min-temp-b">
-    <h5>Max Bed Temperature: </h5><input type="number" id="max-temp-b">
+    <h4>3. Define the Search Space</h4>
+    <h5>Min Extruder Temperature: </h5><input type="number" id="min-temp-e" value="190">
+    <h5>Max Extruder Temperature: </h5><input type="number" id="max-temp-e" value="280">
+    <h5>Min Bed Temperature: </h5><input type="number" id="min-temp-b" value="25">
+    <h5>Max Bed Temperature: </h5><input type="number" id="max-temp-b" value="80">
     <h5>Min Speed: </h5><input type="number" id="min-speed">
     <h5>Max Speed: </h5><input type="number" id="max-speed">
     <h5>Min Flow Multiplier: </h5><input type="number" id="min-flow">
@@ -46,14 +46,14 @@
     
     
     <!-- Initial Guess -->
-    <h4>Enter the Initial Guess Values </h4>
+    <h4>4. Enter the Initial Guess Values </h4>
     <h5>Extruder Temperature: </h5><input type="number" id="temp-e">
     <h5>Bed Temperature: </h5><input type="number" id="temp-b">
     <h5>Print Speed: </h5><input type="number" id="speed">
     <h5>Flow Multiplier: </h5><input type="number" id="flow">
     
     <!-- Number of Iterations -->
-    <h4>Enter the Number of Iterations:</h4>
+    <h4>5. Enter the Number of Iterations:</h4>
     <input type="number" id="iterations">
     
     <!-- Start Print -->
@@ -61,7 +61,7 @@
     <button onClick=clear()> Reset </button>
 
     <!--  Error Display -->
-    <h4>Errors</h4>
+    <h4>Errors Window</h4>
     <div>
         <p id="error"></p> <!-- Replace with Error messages -->
     </div>

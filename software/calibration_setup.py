@@ -72,7 +72,9 @@ def calibrate(numIterations):
         # Tare Load Cells
         tare()
         mass = measure_mass()
-        print("Tared Mass: {}".format(mass)) # Should be near 0 
+        while mass > 1 and i == 1: 
+            tare()
+        # print("Tared Mass: {}".format(mass)) # Should be near 0 
 
         if i == 0: 
             xguess_i = xguess
