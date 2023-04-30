@@ -9,8 +9,8 @@ GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
 readings_to_average = 10
 sck_pin = 6
-dout_pins = [4, 17] # 1, 2, 3, 4 [22, 4, 17, 27]
-weight_multiples = [6561.210267857154, 6155.000297619006, 5987.672569444473, 6004.160069444496] # 128 gain
+dout_pins = [22, 4] # 1, 2, 3, 4 [22, 4, 17, 27]
+weight_multiples = [6561.2, 6155.0, 5987.7, 6004.2] # 128 gain
 # weight_multiples = [242.78, 239.83, 227.31, 237.63] # 64 gain
 
 
