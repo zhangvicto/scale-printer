@@ -49,7 +49,7 @@ try:
         # This function call will not perform a new measurement, it will just use what was acquired during read_raw()
         weights = hx711.get_weight()
 
-        total = sum(weights)
+        #total = sum(weights)
 
         read_duration = perf_counter() - start
         
@@ -61,7 +61,7 @@ try:
         print(' wt',
               ['{:.3f}'.format(x) if x is not None else None for x in weights])
 
-        print(total)
+        #print(total)
         # uncomment below loop to see raw 2's complement and read integers
         # for adc in hx711._adcs:
         #     print(adc.raw_reads)  # these are the 2's complemented values read bitwise from the hx711
