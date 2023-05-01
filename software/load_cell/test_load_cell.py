@@ -48,8 +48,10 @@ try:
         # request weights using multiples set previously with set_weight_multiples()
         # This function call will not perform a new measurement, it will just use what was acquired during read_raw()
         weights = hx711.get_weight()
-
-        total = sum(weights)
+        
+        if None not in weights: 
+            total = sum(weights)
+            print("Total Weight: {}".format(total))
 
         read_duration = perf_counter() - start
         
@@ -60,8 +62,7 @@ try:
             ['{:.3f}'.format(x) if x is not None else None for x in raw_vals])
         print(' wt',
               ['{:.3f}'.format(x) if x is not None else None for x in weights])
-
-        print(total)
+        
         # uncomment below loop to see raw 2's complement and read integers
         # for adc in hx711._adcs:
         #     print(adc.raw_reads)  # these are the 2's complemented values read bitwise from the hx711
