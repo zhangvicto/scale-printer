@@ -7,7 +7,7 @@ import RPi.GPIO as GPIO  # import GPIO
 # init GPIO (should be done outside HX711 module in case you are using other GPIO functionality)
 GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
-readings_to_average = 10
+readings_to_average = 5
 sck_pin = 6
 dout_pins = [22, 4] # 1, 2, 3, 4 [22, 4, 17, 27]
 weight_multiples = [6561.2, 6155.0, 5987.7, 6004.2] # 128 gain
@@ -63,9 +63,9 @@ try:
 
         #print(total)
         # uncomment below loop to see raw 2's complement and read integers
-        # for adc in hx711._adcs:
-        #     print(adc.raw_reads)  # these are the 2's complemented values read bitwise from the hx711
-        #     print(adc.reads)  # these are the raw values after being converted to signed integers
+        for adc in hx711._adcs:
+            print(adc.raw_reads)  # these are the 2's complemented values read bitwise from the hx711
+            print(adc.reads)  # these are the raw values after being converted to signed integers
 except KeyboardInterrupt:
     print('Keyboard interrupt..')
 except Exception as e:
