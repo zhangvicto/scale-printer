@@ -7,7 +7,7 @@ import RPi.GPIO as GPIO  # import GPIO
 # init GPIO (should be done outside HX711 module in case you are using other GPIO functionality)
 GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
 
-readings_to_average = 5
+readings_to_average = 10
 sck_pin = 6
 dout_pins = [22, 4, 17, 27] # 1, 2, 3, 4 [22, 4, 17, 27]
 weight_multiples = [6458.992, 6061.833, 5946.966, 6169.193] # 128 gain
@@ -49,7 +49,7 @@ try:
         # This function call will not perform a new measurement, it will just use what was acquired during read_raw()
         weights = hx711.get_weight()
 
-        #total = sum(weights) if None not in weights
+        total = sum(weights)
 
         read_duration = perf_counter() - start
         
@@ -61,11 +61,11 @@ try:
         print(' wt',
               ['{:.3f}'.format(x) if x is not None else None for x in weights])
 
-        #print(total)
+        print(total)
         # uncomment below loop to see raw 2's complement and read integers
-        for adc in hx711._adcs:
-            print(adc.raw_reads)  # these are the 2's complemented values read bitwise from the hx711
-            print(adc.reads)  # these are the raw values after being converted to signed integers
+        # for adc in hx711._adcs:
+        #     print(adc.raw_reads)  # these are the 2's complemented values read bitwise from the hx711
+        #     print(adc.reads)  # these are the raw values after being converted to signed integers
 except KeyboardInterrupt:
     print('Keyboard interrupt..')
 except Exception as e:
